@@ -1,6 +1,8 @@
-from .color import Color
-   
-class print_banner():
+from util.color import Color
+import os
+
+
+def print_banner():
   Color.pl(r""" {W}
                   .::::::::.                    
              :=+#%@@@@@@@@@@@@@@%#+=.             
@@ -24,3 +26,4 @@ class print_banner():
   Color.pl(r"""{R}                 =@@@@@@..@@@@@@=   {W}   \ {R}\____________\{W}\ {R}\__\      |\________\{W}\ {R}\_______\ """)     
   Color.pl(r"""{R}                 =@@@@@@==@@@@@@=   {W}    \|____________| \|__|       \|_______| \|_______| """)    
   Color.pl(r"""{R}                 =@@@@@@@@@@@@@@=                                           {O} By Jason Teo """)                           
+  Color.pl("-----------------------------------------------------------------------------------------")

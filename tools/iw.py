@@ -11,7 +11,7 @@ class Iw(Dependency):
 
     @classmethod
     def mode(cls, iface, mode_name):
-        from ..util.process import Process
+        from util.process import Process
 
         if mode_name == "monitor":
             return Process.call(f'iw {iface} set monitor control')
@@ -20,7 +20,7 @@ class Iw(Dependency):
 
     @classmethod
     def get_interfaces(cls, mode=None):
-        from ..util.process import Process
+        from util.process import Process
         import re
 
         ireg = re.compile(r"\s+Interface\s[a-zA-Z\d]+")

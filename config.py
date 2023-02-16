@@ -59,7 +59,7 @@ class Configuration(object):
     wpa_handshake_dir = None
     wpa_strip_handshake = None
 
-    @classmethod
+    @classmethod #[USED]
     def initialize(cls, load_interface=True):
         """
             Sets up default initial configuration values.
@@ -120,13 +120,14 @@ class Configuration(object):
         cls.wordlist = None
         wordlists = [
             './wordlist-probable.txt',  # Local file (ran from cloned repo)
-            '/usr/share/dict/wordlist-probable.txt',  # setup.py with prefix=/usr
-            '/usr/local/share/dict/wordlist-probable.txt',  # setup.py with prefix=/usr/local
-            # Other passwords found on Kali
-            '/usr/share/wfuzz/wordlist/fuzzdb/wordlists-user-passwd/passwds/phpbb.txt',
-            '/usr/share/fuzzdb/wordlists-user-passwd/passwds/phpbb.txt',
-            '/usr/share/wordlists/fern-wifi/common.txt'
+            # '/usr/share/dict/wordlist-probable.txt',  # setup.py with prefix=/usr
+            # '/usr/local/share/dict/wordlist-probable.txt',  # setup.py with prefix=/usr/local
+            # # Other passwords found on Kali
+            # '/usr/share/wfuzz/wordlist/fuzzdb/wordlists-user-passwd/passwds/phpbb.txt',
+            # '/usr/share/fuzzdb/wordlists-user-passwd/passwds/phpbb.txt',
+            # '/usr/share/wordlists/fern-wifi/common.txt'
         ]
+        
         for wlist in wordlists:
             if os.path.exists(wlist):
                 cls.wordlist = wlist
@@ -163,11 +164,11 @@ class Configuration(object):
         if load_interface:
             cls.get_monitor_mode_interface()
 
-    @classmethod
+    @classmethod #[USED]
     def get_monitor_mode_interface(cls):
         if cls.interface is None:
             # Interface wasn't defined, select it!
-            from .tools.airmon import Airmon
+            from tools.airmon import Airmon
             cls.interface = Airmon.ask()
             if cls.random_mac:
                 Macchanger.random()
@@ -383,12 +384,12 @@ class Configuration(object):
                 os.remove(cls.temp_dir + f)
             os.rmdir(cls.temp_dir)
 
-    @classmethod
+    @classmethod #[USED]
     def exit_gracefully(cls, code=0):
         """ Deletes temp and exist with the given code """
         cls.delete_temp()
         Macchanger.reset_if_changed()
-        from .tools.airmon import Airmon
+        from tools.airmon import Airmon
         if cls.interface is not None and Airmon.base_interface is not None:
             if not cls.daemon:
                 Color.pl('{!} {O}Note:{W} Leaving interface in {G}Monitor Mode{W}!')

@@ -3,9 +3,9 @@
 
 from time import sleep, time
 
-from ..config import Configuration
-from ..tools.airodump import Airodump
-from ..color import Color
+from config import Configuration
+from tools.airodump import Airodump
+from util.color import Color
 
 
 class Scanner(object):

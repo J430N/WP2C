@@ -7,8 +7,8 @@ import os
 
 from subprocess import Popen, PIPE
 
-from ..color import Color
-from ..config import Configuration
+from util.color import Color
+from config import Configuration
 
 
 class Process(object):

@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .wpa import AttackWPA
-from ..config import Configuration
+from attack.wpa import AttackWPA
+from config import Configuration
 # from ..model.target import WPSState
-from ..color import Color
+from util.color import Color
 
 
 class AttackAll(object):

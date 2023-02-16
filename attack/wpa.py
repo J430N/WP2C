@@ -1,15 +1,15 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from ..model.attack import Attack
-from ..tools.aircrack import Aircrack
-from ..tools.airodump import Airodump
-from ..tools.aireplay import Aireplay
-from ..config import Configuration
-from ..color import Color
-from ..util.timer import Timer
-from ..model.handshake import Handshake
-from ..model.wpa_result import CrackResultWPA
+from model.attack import Attack
+from tools.aircrack import Aircrack
+from tools.airodump import Airodump
+from tools.aireplay import Aireplay
+from config import Configuration
+from util.color import Color
+from util.timer import Timer
+from model.handshake import Handshake
+from model.wpa_result import CrackResultWPA
 
 import time
 import os
@@ -204,6 +204,7 @@ class AttackWPA(Attack):
         # Create handshake dir
         if not os.path.exists(Configuration.wpa_handshake_dir):
             os.makedirs(Configuration.wpa_handshake_dir)
+            print("Hs dir created")
 
         # Generate filesystem-safe filename from bssid, essid and date
         if handshake.essid and type(handshake.essid) is str:
@@ -246,7 +247,7 @@ class AttackWPA(Attack):
 
 if __name__ == '__main__':
     Configuration.initialize(True)
-    from ..model.target import Target
+    from model.target import Target
 
     fields = 'A4:2B:8C:16:6B:3A, 2015-05-27 19:28:44, 2015-05-27 19:28:46,  11,  54e,WPA, WPA, , -58,        2' \
              ',        0,   0.  0.  0.  0,   9, Test Router Please Ignore, '.split(',')

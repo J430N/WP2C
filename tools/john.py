@@ -2,10 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from .dependency import Dependency
-from ..config import Configuration
-from ..color import Color
-from ..util.process import Process
-from ..tools.hashcat import HcxPcapngTool
+from config import Configuration
+from util.color import Color
+from util.process import Process
+from tools.hashcat import HcxPcapngTool
 
 import os
 

@@ -16,28 +16,28 @@ class Dependency(object):
 
     @classmethod
     def exists(cls):
-        from ..util.process import Process
+        from util.process import Process
         return Process.exists(cls.dependency_name)
 
     @classmethod
     def run_dependency_check(cls):
-        from ..color import Color
+        from util.color import Color
 
-        from .aircrack import Aircrack
-        from .ip import Ip
-        from .iw import Iw
-        from .tshark import Tshark
-        from .macchanger import Macchanger
-        from .hashcat import Hashcat, HcxDumpTool, HcxPcapngTool
+        from tools.aircrack import Aircrack
+        from tools.ip import Ip
+        from tools.iw import Iw
+        from tools.tshark import Tshark
+        from tools.macchanger import Macchanger
+        from tools.hashcat import Hashcat, HcxPcapngTool
 
         apps = [
             # Aircrack
-            Aircrack,  # Airodump, Airmon, Aireplay,
+            Aircrack,
             # wireless/net tools
             Iw, Ip,
             Tshark,
             # Hashcat
-            Hashcat, HcxDumpTool, HcxPcapngTool,
+            Hashcat, HcxPcapngTool,
             # Misc
             Macchanger
         ]
@@ -45,14 +45,14 @@ class Dependency(object):
         missing_required = any(app.fails_dependency_check() for app in apps)
 
         if missing_required:
-            Color.pl('{!} {O}At least 1 Required app is missing. Wifite needs Required apps to run{W}')
+            Color.pl('{!} {O}At least 1 required app is missing. WP2C needs required apps to run{W}')
             import sys
             sys.exit(-1)
 
     @classmethod
     def fails_dependency_check(cls):
-        from ..color import Color
-        from ..util.process import Process
+        from util.color import Color
+        from util.process import Process
 
         if Process.exists(cls.dependency_name):
             return False

@@ -8,9 +8,9 @@ import signal
 from .dependency import Dependency
 from .ip import Ip
 from .iw import Iw
-from ..config import Configuration
-from ..color import Color
-from ..util.process import Process
+from config import Configuration
+from util.color import Color
+from util.process import Process
 
 
 class AirmonIface(object):

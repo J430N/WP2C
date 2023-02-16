@@ -4,15 +4,15 @@
 import os
 from json import loads
 
-from ..config import Configuration
-from ..model.handshake import Handshake
-from ..model.wpa_result import CrackResultWPA
-from ..tools.aircrack import Aircrack
-from ..tools.cowpatty import Cowpatty
-from ..tools.hashcat import Hashcat, HcxPcapngTool
-from ..tools.john import John
+from config import Configuration
+from model.handshake import Handshake
+from model.wpa_result import CrackResultWPA
+from tools.aircrack import Aircrack
+from tools.cowpatty import Cowpatty
+from tools.hashcat import Hashcat, HcxPcapngTool
+from tools.john import John
 from util.color import Color
-from ..util.process import Process
+from util.process import Process
 
 
 # TODO: Bring back the 'print' option, for easy copy/pasting. Just one-liners people can paste into terminal.

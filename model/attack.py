@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import time
-from ..config import Configuration
+from config import Configuration
 
 
 class Attack(object):

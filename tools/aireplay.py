@@ -2,9 +2,9 @@
 # -*- coding: utf-8 -*-
 
 from .dependency import Dependency
-from ..config import Configuration
-from ..util.process import Process
-from ..util.timer import Timer
+from config import Configuration
+from util.process import Process
+from util.timer import Timer
 
 import os
 import time
@@ -118,7 +118,7 @@ class Aireplay(Thread, Dependency):
                 fid.truncate()
 
             if Configuration.verbose > 1 and lines.strip() != '':
-                from ..color import Color
+                from util.color import Color
                 Color.pl('\n{P} [?] aireplay output:\n     %s{W}' % lines.strip().replace('\n', '\n     '))
 
             for line in lines.split('\n'):
@@ -371,7 +371,7 @@ class Aireplay(Thread, Dependency):
         (out, err) = Process.call(cmd, cwd=Configuration.temp(), shell=True)
         if out.strip() == f'Wrote packet to: {forged_file}':
             return forged_file
-        from ..color import Color
+        from util.color import Color
         Color.pl('{!} {R}failed to forge packet from .xor file{W}')
         Color.pl('output:\n"%s"' % out)
         return None

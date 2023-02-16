@@ -2,12 +2,10 @@
 # -*- coding: utf-8 -*-
 
 from .dependency import Dependency
-from .tshark import Tshark
-# from .wash import Wash
-from ..util.process import Process
-from ..config import Configuration
-from ..model.target import Target, WPSState
-from ..model.client import Client
+from util.process import Process
+from config import Configuration
+from model.target import Target, WPSState
+from model.client import Client
 
 import os
 import time
@@ -352,7 +350,7 @@ class Airodump(Dependency):
             self.decloaking = True
             self.decloaked_times[target.bssid] = now
             if Configuration.verbose > 1:
-                from ..color import Color
+                from util.color import Color
                 Color.pe('{C} [?] Deauthing %s (broadcast & %d clients){W}' % (target.bssid, len(target.clients)))
 
             # Deauth broadcast
@@ -372,7 +370,7 @@ if __name__ == '__main__':
 
         sleep(7)
 
-        from ..color import Color
+        from util.color import Color
 
         targets = airodump.get_targets()
         for idx, target in enumerate(targets, start=1):

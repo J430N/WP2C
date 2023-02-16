@@ -14,7 +14,7 @@ class Ip(Dependency):
     @classmethod
     def up(cls, interface):
         """Put interface up"""
-        from ..util.process import Process
+        from util.process import Process
 
         (out, err) = Process.call(f'ip link set {interface} up')
         if len(err) > 0:
@@ -23,7 +23,7 @@ class Ip(Dependency):
     @classmethod
     def down(cls, interface):
         """Put interface down"""
-        from ..util.process import Process
+        from util.process import Process
 
         (out, err) = Process.call(f'ip link set {interface} down')
         if len(err) > 0:
@@ -31,7 +31,7 @@ class Ip(Dependency):
 
     @classmethod
     def get_mac(cls, interface):
-        from ..util.process import Process
+        from util.process import Process
 
         (out, err) = Process.call(f'ip link show {interface}')
         if match := re.search(r'([a-fA-F\d]{2}[-:]){5}[a-fA-F\d]{2}', out):
