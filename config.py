@@ -9,7 +9,7 @@ from tools.macchanger import Macchanger
 
 
 class Configuration(object):
-    """ Stores configuration variables and functions for Wifite. """
+    """ Stores configuration variables and functions for WP2C. """
 
     initialized = False  # Flag indicating config has been initialized
     verbose = 0
@@ -22,8 +22,8 @@ class Configuration(object):
     cracked_file = None
     crack_handshake = None
     daemon = None
-    dont_use_pmkid = None
-    encryption_filter = None
+    # dont_use_pmkid = None
+    # encryption_filter = None
     existing_commands = None
     five_ghz = None
     ignore_cracked = None
@@ -33,12 +33,13 @@ class Configuration(object):
     inf_wait_time = None
     interface = None
     kill_conflicting_processes = None
+    display_banner = None # Test!!!!!!!!!
     manufacturers = None
     min_power = None
     no_deauth = None
     no_nullpin = None
     num_deauths = None
-    pmkid_timeout = None
+    # pmkid_timeout = None
     print_stack_traces = None
     random_mac = None
     require_fakeauth = None
@@ -46,7 +47,7 @@ class Configuration(object):
     show_bssids = None
     show_cracked = None
     show_manufacturers = None
-    skip_crack = None
+    # skip_crack = None
     target_bssid = None
     target_channel = None
     target_essid = None
@@ -65,10 +66,6 @@ class Configuration(object):
             Sets up default initial configuration values.
             Also sets config values based on command-line arguments.
         """
-        # TODO: categorize configuration into
-        # separate classes (under config/*.py)
-        # E.g. Configuration.wps.enabled,
-        # Configuration.wps.timeout, etc
 
         # Only initialize this class once
         if cls.initialized:
@@ -79,14 +76,16 @@ class Configuration(object):
         cls.print_stack_traces = True
 
         cls.kill_conflicting_processes = False
-
+        
+        cls.display_banner = False #Test!!!!!!!!!!!!!!
+        
         cls.scan_time = 0  # Time to wait before attacking all targets
 
         cls.tx_power = 0  # Wifi transmit power (0 is default)
         cls.interface = None
         cls.min_power = 0  # Minimum power for an access point to be considered a target. Default is 0
         cls.attack_max = 0
-        cls.skip_crack = False
+        # cls.skip_crack = False
         cls.target_channel = None  # User-defined channel to scan
         cls.target_essid = None  # User-defined AP name
         cls.target_bssid = None  # User-defined AP BSSID
@@ -105,7 +104,7 @@ class Configuration(object):
         cls.num_deauths = 1  # Number of deauth packets to send to each target.
         cls.daemon = False  # Don't put back interface back in managed mode
 
-        cls.encryption_filter = ['WEP', 'WPA', 'WPS']
+        # cls.encryption_filter = ['WEP', 'WPA', 'WPS']
 
         # WPA variables
         cls.wpa_filter = False  # Only attack WPA networks
@@ -178,10 +177,10 @@ class Configuration(object):
         """ Sets configuration values based on Argument.args object """
         from args import Arguments
 
-        args = Arguments(cls).args #Display all arguments
+        args = Arguments(cls).args
         cls.parse_settings_args(args)
         cls.parse_wpa_args(args)
-        cls.parse_encryption()
+        # cls.parse_encryption()
 
 
         # Commands
@@ -195,7 +194,7 @@ class Configuration(object):
     @classmethod
     def parse_settings_args(cls, args):
         """Parses basic settings/configurations from arguments."""
-
+        
         if args.random_mac:
             cls.random_mac = True
             Color.pl('{+} {C}option:{W} using {G}random mac address{W} when scanning & attacking')
@@ -260,9 +259,9 @@ class Configuration(object):
             cls.min_power = args.min_power
             Color.pl(f'{{+}} {{C}}option:{{W}} Minimum power {{G}}{cls.min_power:d}{{W}} for target to be shown')
 
-        if args.skip_crack:
-            cls.skip_crack = True
-            Color.pl('{+} {C}option:{W} Skip cracking captured handshakes/pmkid {G}enabled{W}')
+        # if args.skip_crack:
+        #     cls.skip_crack = True
+        #     Color.pl('{+} {C}option:{W} Skip cracking captured handshakes/pmkid {G}enabled{W}')
 
         if args.attack_max and args.attack_max > 0:
             cls.attack_max = args.attack_max
@@ -302,6 +301,10 @@ class Configuration(object):
         if args.kill_conflicting_processes:
             cls.kill_conflicting_processes = True
             Color.pl('{+} {C}option:{W} kill conflicting processes {G}enabled{W}')
+            
+        if args.display_banner:
+            cls.display_banner = True
+            Color.pl('{+} {C}option:{W} Display WP2C banner {G}enabled{W}')    
 
     @classmethod
     def parse_wpa_args(cls, args):
@@ -312,14 +315,14 @@ class Configuration(object):
         if args.wordlist:
             if not os.path.exists(args.wordlist):
                 cls.wordlist = None
-                Color.pl('{+} {C}option:{O} wordlist {R}%s{O} was not found, wifite will NOT attempt to crack '
+                Color.pl('{+} {C}option:{O} wordlist {R}%s{O} was not found, WP2C will NOT attempt to crack '
                          'handshakes' % args.wordlist)
             elif os.path.isfile(args.wordlist):
                 cls.wordlist = args.wordlist
                 Color.pl('{+} {C}option:{W} using wordlist {G}%s{W} for cracking' % args.wordlist)
             elif os.path.isdir(args.wordlist):
                 cls.wordlist = None
-                Color.pl('{+} {C}option:{O} wordlist {R}%s{O} is a directory, not a file. Wifite will NOT attempt to '
+                Color.pl('{+} {C}option:{O} wordlist {R}%s{O} is a directory, not a file. WP2C will NOT attempt to '
                          'crack handshakes' % args.wordlist)
 
         if args.wpa_deauth_timeout:
@@ -343,20 +346,20 @@ class Configuration(object):
             cls.wpa_strip_handshake = True
             Color.pl('{+} {C}option:{W} will {G}strip{W} non-handshake packets')
 
-    @classmethod
-    def parse_encryption(cls):
-        """Adjusts encryption filter (WEP and/or WPA and/or WPS)"""
-        cls.encryption_filter = []
-        if cls.wpa_filter:
-            cls.encryption_filter.append('WPA')
+    # @classmethod
+    # def parse_encryption(cls):
+    #     """Adjusts encryption filter (WEP and/or WPA and/or WPS)"""
+    #     cls.encryption_filter = []
+    #     if cls.wpa_filter:
+    #         cls.encryption_filter.append('WPA')
 
-        if len(cls.encryption_filter) == 3:
-            Color.pl('{+} {C}option:{W} targeting {G}all encrypted networks{W}')
-        elif not cls.encryption_filter:
-            # Default to scan all types
-            cls.encryption_filter = ['WEP', 'WPA', 'WPS']
-        else:
-            Color.pl('{+} {C}option:{W} targeting {G}%s-encrypted{W} networks' % '/'.join(cls.encryption_filter))
+    #     if len(cls.encryption_filter) == 3:
+    #         Color.pl('{+} {C}option:{W} targeting {G}all encrypted networks{W}')
+    #     elif not cls.encryption_filter:
+    #         # Default to scan all types
+    #         cls.encryption_filter = ['WEP', 'WPA', 'WPS']
+    #     else:
+    #         Color.pl('{+} {C}option:{W} targeting {G}%s-encrypted{W} networks' % '/'.join(cls.encryption_filter))
 
     @classmethod
     def temp(cls, subfile=''):
@@ -369,7 +372,7 @@ class Configuration(object):
     def create_temp():
         """ Creates and returns a temporary directory """
         from tempfile import mkdtemp
-        tmp = mkdtemp(prefix='wifite')
+        tmp = mkdtemp(prefix='WP2C')
         if not tmp.endswith(os.sep):
             tmp += os.sep
         return tmp
@@ -408,7 +411,7 @@ class Configuration(object):
 
         if Airmon.killed_network_manager:
             Color.pl('{!} You can restart NetworkManager when finished ({C}service NetworkManager start{W})')
-            # Airmon.start_network_manager()
+            Airmon.start_network_manager() #Commented out before, test can work or not
 
         exit(code)
 
@@ -429,8 +432,3 @@ class Configuration(object):
                 continue
             result += Color.s('{G}%s {W} {C}%s{W}\n' % (key.ljust(max_len), val))
         return result
-
-
-if __name__ == '__main__':
-    Configuration.initialize(False)
-    print((Configuration.dump()))

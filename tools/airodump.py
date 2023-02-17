@@ -148,7 +148,7 @@ class Airodump(Dependency):
             if fil.startswith('replay_') and fil.endswith('.cap') or fil.endswith('.xor'):
                 os.remove(os.path.join(temp_dir, fil))
 
-    def get_targets(self, old_targets=None, apply_filter=True, target_archives=None):
+    def get_targets(self, old_targets=None, target_archives=None): # Removed apply_filter=True, 
         """ Parses airodump's CSV file, returns list of Targets """
 
         if old_targets is None:
@@ -195,9 +195,9 @@ class Airodump(Dependency):
         #         # No tshark, or it failed. Fall-back to wash
         #         Wash.check_for_wps_and_update_targets(capfile, new_targets)
 
-        if apply_filter:
-            # Filter targets based on encryption, WPS capability & power
-            new_targets = Airodump.filter_targets(new_targets, skip_wps=self.skip_wps)
+        # if apply_filter:
+        #     # Filter targets based on encryption, WPS capability & power
+        #     new_targets = Airodump.filter_targets(new_targets, skip_wps=self.skip_wps)
 
         # Sort by power
         new_targets.sort(key=lambda x: x.power, reverse=True)
@@ -273,28 +273,28 @@ class Airodump(Dependency):
 
         return targets
 
-    @staticmethod
-    def filter_targets(targets, skip_wps=False):
-        """ Filters targets based on Configuration """
-        result = []
-        # Filter based on Encryption
-        for target in targets:
-            # Filter targets if --power
-            # TODO Filter a target based on the current power - not on the max power
-            # as soon as losing targets in a single scan does not cause excessive output
-            if Configuration.min_power > 0 and target.max_power < Configuration.min_power:
-                continue
+    # @staticmethod
+    # def filter_targets(targets, skip_wps=False):
+    #     """ Filters targets based on Configuration """
+    #     result = []
+    #     # Filter based on Encryption
+    #     for target in targets:
+    #         # Filter targets if --power
+    #         # TODO Filter a target based on the current power - not on the max power
+    #         # as soon as losing targets in a single scan does not cause excessive output
+    #         if Configuration.min_power > 0 and target.max_power < Configuration.min_power:
+    #             continue
 
-            if Configuration.clients_only and len(target.clients) == 0:
-                continue
-            if 'WEP' in Configuration.encryption_filter and 'WEP' in target.encryption:
-                result.append(target)
-            elif 'WPA' in Configuration.encryption_filter and 'WPA' in target.encryption:
-                result.append(target)
-            elif 'WPS' in Configuration.encryption_filter and target.wps in [WPSState.UNLOCKED, WPSState.LOCKED]:
-                result.append(target)
-            elif skip_wps:
-                result.append(target)
+    #         if Configuration.clients_only and len(target.clients) == 0:
+    #             continue
+    #         if 'WEP' in Configuration.encryption_filter and 'WEP' in target.encryption:
+    #             result.append(target)
+    #         if 'WPA' in Configuration.encryption_filter and 'WPA' in target.encryption:
+    #             result.append(target)
+    #         elif 'WPS' in Configuration.encryption_filter and target.wps in [WPSState.UNLOCKED, WPSState.LOCKED]:
+    #             result.append(target)
+    #         elif skip_wps:
+    #             result.append(target)
 
         # Filter based on BSSID/ESSID
         bssid = Configuration.target_bssid
@@ -360,20 +360,3 @@ class Airodump(Dependency):
             # Deauth clients
             for client in target.clients:
                 Process(deauth_cmd + ['-a', target.bssid, '-c', client.bssid, iface])
-
-
-if __name__ == '__main__':
-    ''' Example usage. wlan0mon should be in Monitor Mode '''
-    with Airodump() as airodump:
-
-        from time import sleep
-
-        sleep(7)
-
-        from util.color import Color
-
-        targets = airodump.get_targets()
-        for idx, target in enumerate(targets, start=1):
-            Color.pl('   {G}%s %s' % (str(idx).rjust(3), target.to_str()))
-
-    Configuration.delete_temp()

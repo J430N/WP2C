@@ -349,7 +349,7 @@ class Airmon(Dependency):
                 for pid, pname in pid_pnames
             ])
             Color.pl('{!} {O}Conflicting processes: %s' % names_and_pids)
-            Color.pl('{!} {O}If you have problems: {R}kill -9 PID{O} or re-run wifite with {R}--kill{O}{W}')
+            Color.pl('{!} {O}If you have problems: {R}kill -9 PID{O} or re-run WP2C with {R}--kill{O}{W}')
             return
 
         Color.pl('{!} {O}Killing {R}%d {O}conflicting processes' % len(pid_pnames))
@@ -414,31 +414,3 @@ class Airmon(Dependency):
                 return
         else:
             Color.pl(' {R}Cannot start NetworkManager: {O}systemctl{R} or {O}service{R} not found{W}')
-
-
-if __name__ == '__main__':
-    stdout = '''
-Found 2 processes that could cause trouble.
-If airodump-ng, aireplay-ng or airtun-ng stops working after
-a short period of time, you may want to run 'airmon-ng check kill'
-
-  PID Name
- 5563 avahi-daemon
- 5564 avahi-daemon
-
-PHY	Interface	Driver		Chipset
-
-phy0	wlx00c0ca4ecae0	rtl8187		Realtek Semiconductor Corp. RTL8187
-Interface 15mon is too long for linux so it will be renamed to the old style (wlan#) name.
-
-                (mac80211 monitor mode vif enabled on [phy0]wlan0mon
-                (mac80211 station mode vif disabled for [phy0]wlx00c0ca4ecae0)
-    '''
-    start_iface = Airmon._parse_airmon_start(stdout)
-    print(('start_iface from stdout:', start_iface))
-
-    Configuration.initialize(False)
-    iface = Airmon.ask()
-    (disabled_iface, enabled_iface) = Airmon.stop(iface)
-    print(('Disabled:', disabled_iface))
-    print(('Enabled:', enabled_iface))

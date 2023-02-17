@@ -278,6 +278,3 @@ class CrackHelper:
             return CrackResultWPA(hs['bssid'], hs['essid'], hs['filename'], key)
         else:
             return None
-
-if __name__ == '__main__':
-    CrackHelper.run()

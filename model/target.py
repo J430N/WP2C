@@ -152,7 +152,6 @@ class Target(object):
         if self.channel == '-1':
             raise Exception('Ignoring target with Negative-One (-1) channel')
 
-        # Filter broadcast/multicast BSSIDs, see https://github.com/derv82/wifite2/issues/32
         bssid_broadcast = re.compile(r'^(ff:ff:ff:ff:ff:ff|00:00:00:00:00:00)$', re.IGNORECASE)
         if bssid_broadcast.match(self.bssid):
             raise Exception('Ignoring target with Broadcast BSSID (%s)' % self.bssid)
@@ -247,12 +246,3 @@ class Target(object):
 
         result += Color.s('{W}')
         return result
-
-
-if __name__ == '__main__':
-    fields = 'AA:BB:CC:DD:EE:FF,2015-05-27 19:28:44,2015-05-27 19:28:46,1,54,WPA2,CCMP ' \
-             'TKIP,PSK,-58,2,0,0.0.0.0,9,HOME-ABCD,'.split(',')
-    t = Target(fields)
-    t.clients.append('asdf')
-    t.clients.append('asdf')
-    print((t.to_str()))

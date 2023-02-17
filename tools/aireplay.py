@@ -433,13 +433,3 @@ class Aireplay(Thread, Dependency):
 
         output = fakeauth_proc.stdout()
         return 'association successful' in output.lower()
-
-
-if __name__ == '__main__':
-    t = WEPAttackType(4)
-    print((t.name, type(t.name), t.value))
-    t = WEPAttackType('caffelatte')
-    print((t.name, type(t.name), t.value))
-
-    t = WEPAttackType(t)
-    print((t.name, type(t.name), t.value))

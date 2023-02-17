@@ -40,10 +40,10 @@ class AttackWPA(Attack):
         handshake.analyze()
 
         # Check for the --skip-crack flag
-        if Configuration.skip_crack:
-            Color.pl('{+} Not cracking handshake because {C}skip-crack{W} was used{W}')
-            self.success = False
-            return False
+        # if Configuration.skip_crack:
+        #     Color.pl('{+} Not cracking handshake because {C}skip-crack{W} was used{W}')
+        #     self.success = False
+        #     return False
 
         # Check wordlist
         if Configuration.wordlist is None:
@@ -204,7 +204,6 @@ class AttackWPA(Attack):
         # Create handshake dir
         if not os.path.exists(Configuration.wpa_handshake_dir):
             os.makedirs(Configuration.wpa_handshake_dir)
-            print("Hs dir created")
 
         # Generate filesystem-safe filename from bssid, essid and date
         if handshake.essid and type(handshake.essid) is str:
@@ -243,18 +242,3 @@ class AttackWPA(Attack):
                           'Handshake capture',
                           'Deauthing {O}%s{W}' % target_name)
             Aireplay.deauth(target.bssid, client_mac=client, timeout=2)
-
-
-if __name__ == '__main__':
-    Configuration.initialize(True)
-    from model.target import Target
-
-    fields = 'A4:2B:8C:16:6B:3A, 2015-05-27 19:28:44, 2015-05-27 19:28:46,  11,  54e,WPA, WPA, , -58,        2' \
-             ',        0,   0.  0.  0.  0,   9, Test Router Please Ignore, '.split(',')
-    target = Target(fields)
-    wpa = AttackWPA(target)
-    try:
-        wpa.run()
-    except KeyboardInterrupt:
-        Color.pl('')
-    Configuration.exit_gracefully(0)

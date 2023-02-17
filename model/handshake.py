@@ -22,7 +22,7 @@ class Handshake(object):
             Sets this instances 'bssid' and 'essid' instance fields.
         """
 
-        # We can get BSSID from the .cap filename if Wifite captured it.
+        # We can get BSSID from the .cap filename if WP2C captured it.
         # ESSID is stripped of non-printable characters, so we can't rely on that.
         if self.bssid is None:
             hs_regex = re.compile(r'^.*handshake_\w+_([\dA-F\-]{17})_.*\.cap$', re.IGNORECASE)
@@ -203,32 +203,3 @@ class Handshake(object):
             hs = Handshake(capfile, bssid=Configuration.target_bssid, essid=Configuration.target_essid)
             hs.analyze()
             Color.pl('')
-
-
-if __name__ == '__main__':
-    print("\n-------------------------------")
-    print('With BSSID & ESSID specified:')
-    hs = Handshake('./tests/files/handshake_has_1234.cap', bssid='18:d6:c7:6d:6b:18', essid='YZWifi')
-    hs.analyze()
-    print(('has_hanshake() =', hs.has_handshake()))
-
-    print("\n-------------------------------")
-    print('\nWith BSSID, but no ESSID specified:')
-    hs = Handshake('./tests/files/handshake_has_1234.cap', bssid='18:d6:c7:6d:6b:18')
-    hs.analyze()
-    print(('has_hanshake() =', hs.has_handshake()))
-
-    print("\n-------------------------------")
-    print('\nWith ESSID, but no BSSID specified:')
-    hs = Handshake('./tests/files/handshake_has_1234.cap', essid='YZWifi')
-    hs.analyze()
-    print(('has_hanshake() =', hs.has_handshake()))
-
-    print("\n-------------------------------")
-    print('\nWith neither BSSID nor ESSID specified:')
-    hs = Handshake('./tests/files/handshake_has_1234.cap')
-    try:
-        hs.analyze()
-        print(('has_hanshake() =', hs.has_handshake()))
-    except Exception as e:
-        Color.pl('{O}Error during Handshake.analyze(): {R}%s{W}' % e)

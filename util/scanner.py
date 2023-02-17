@@ -272,19 +272,3 @@ class Scanner(object):
                 chosen_targets.append(self.targets[choice - 1])
 
         return chosen_targets
-
-
-if __name__ == '__main__':
-    # 'Test' script will display targets and selects the appropriate one
-    Configuration.initialize()
-    targets = []
-    try:
-        s = Scanner()
-        s.find_targets()
-        targets = s.select_targets()
-    except Exception as e:
-        Color.pl('\r {!} {R}Error{W}: %s' % str(e))
-        Configuration.exit_gracefully(0)
-    for t in targets:
-        Color.pl('    {W}Selected: %s' % t)
-    Configuration.exit_gracefully(0)

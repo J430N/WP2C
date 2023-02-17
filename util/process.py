@@ -190,32 +190,3 @@ class Process(object):
             if 'No such process' in e.__str__():
                 return
             raise e  # process cannot be killed
-
-
-if __name__ == '__main__':
-    Configuration.initialize(False)
-    p = Process('ls')
-    print((p.stdout()))
-    print((p.stderr()))
-    p.interrupt()
-
-    # Calling as list of arguments
-    (out, err) = Process.call(['ls', '-lah'])
-    print(out)
-    print(err)
-
-    print('\n---------------------\n')
-
-    # Calling as string
-    (out, err) = Process.call('ls -l | head -2')
-    print(out)
-    print(err)
-
-    print(('"reaver" exists: %s' % Process.exists('reaver')))
-
-    # Test on never-ending process
-    p = Process('yes')
-    print('Running yes...')
-    time.sleep(1)
-    print('yes should stop now')
-    # After program loses reference to instance in 'p', process dies.

@@ -134,34 +134,3 @@ class Aircrack(Dependency):
         os.remove(key_file)
 
         return key
-
-
-if __name__ == '__main__':
-    (hexkey, asciikey) = Aircrack._hex_and_ascii_key('A1B1C1D1E1')
-    assert hexkey == 'A1:B1:C1:D1:E1', 'hexkey was "%s", expected "A1:B1:C1:D1:E1"' % hexkey
-    assert asciikey is None, 'asciikey was "%s", expected None' % asciikey
-
-    (hexkey, asciikey) = Aircrack._hex_and_ascii_key('6162636465')
-    assert hexkey == '61:62:63:64:65', 'hexkey was "%s", expected "61:62:63:64:65"' % hexkey
-    assert asciikey == 'abcde', 'asciikey was "%s", expected "abcde"' % asciikey
-
-    from time import sleep
-
-    Configuration.initialize(False)
-
-    ivs_file = 'tests/files/wep-crackable.ivs'
-    print(f'Running aircrack on {ivs_file} ...')
-
-    aircrack = Aircrack(ivs_file)
-    while aircrack.is_running():
-        sleep(1)
-
-    assert aircrack.is_cracked(), f'Aircrack should have cracked {ivs_file}'
-    print('aircrack process completed.')
-
-    (hexkey, asciikey) = aircrack.get_key_hex_ascii()
-    print(f'aircrack found HEX key: ({hexkey}) and ASCII key: ({asciikey})')
-    assert hexkey == '75:6E:63:6C:65', 'hexkey was "%s", expected "75:6E:63:6C:65"' % hexkey
-    assert asciikey == 'uncle', 'asciikey was "%s", expected "uncle"' % asciikey
-
-    Configuration.exit_gracefully(0)

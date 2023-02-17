@@ -8,14 +8,12 @@ import sys
 
 
 class Arguments(object):
-    """ Holds arguments used by the Wifite """
+    """ Holds arguments used by the WP2C """
 
     def __init__(self, configuration):
-        # Hack: Check for -v before parsing args;
-        # so we know which commands to display.
         self.verbose = '-v' in sys.argv or '-hv' in sys.argv or '-vh' in sys.argv
-        self.config = configuration
-        self.args = self.get_arguments()
+        self.config = configuration # class 'config.Configuration
+        self.args = self.get_arguments() #Collect arguments pass to WP2C in script.
 
     def _verbose(self, msg):
         return Color.s(msg) if self.verbose else argparse.SUPPRESS
@@ -25,7 +23,7 @@ class Arguments(object):
 
         parser = argparse.ArgumentParser(usage=argparse.SUPPRESS,
                                          formatter_class=lambda prog:
-                                         argparse.HelpFormatter(prog, max_help_position=80, width=130)) #Help message
+                                         argparse.HelpFormatter(prog, max_help_position=80, width=130)) #Help message setting
 
         self._add_global_args(parser.add_argument_group(Color.s('{C}SETTINGS{W}'))) #Display and pass the arguments values
         self._add_wpa_args(parser.add_argument_group(Color.s('{C}WPA{W}')))
@@ -191,7 +189,12 @@ class Arguments(object):
                           action='store_true',
                           dest='daemon',
                           help=Color.s('Puts device back in managed mode after quitting (default: {G}off{W})'))
-
+        
+        glob.add_argument('-B',
+                          action='store_true',
+                          dest='display_banner', #will be used at config.parse_settings_args()
+                          help=Color.s('Display WP2C banner (default: {G}off{W})'))
+                          # The banner wil be displayed when the 'display_banner' boolean is true in wp2c.entry_point()
     def _add_wpa_args(self, wpa):
         wpa.add_argument('--wpa',
                          action='store_true',
@@ -240,14 +243,6 @@ class Arguments(object):
                                             % self.config.wpa_attack_timeout))
         wpa.add_argument('-wpat', help=argparse.SUPPRESS, action='store', dest='wpa_attack_timeout', type=int)
 
-        # TODO: Uncomment the --strip option once it works
-        '''
-        wpa.add_argument('--strip',
-            action='store_true',
-            dest='wpa_strip_handshake',
-            default=False,
-            help=Color.s('Strip unnecessary packets from handshake capture using tshark'))
-        '''
         wpa.add_argument('-strip', help=argparse.SUPPRESS, action='store_true', dest='wpa_strip_handshake')
 
     @staticmethod
@@ -282,12 +277,3 @@ class Arguments(object):
                               dest='crack_handshake',
                               help=Color.s('Show commands to crack a captured handshake'))
 
-
-if __name__ == '__main__':
-    from .config import Configuration
-
-    Configuration.initialize(False)
-    a = Arguments(Configuration)
-    args = a.args
-    for (key, value) in sorted(args.__dict__.items()):
-        Color.pl('{C}%s: {G}%s{W}' % (key.ljust(21), value))

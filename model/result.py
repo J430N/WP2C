@@ -136,13 +136,3 @@ class CrackResult(object):
         result.readable_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(result.date))
         result.loc = json['loc']
         return result
-
-
-if __name__ == '__main__':
-    # Deserialize WPA object
-    Color.pl('\nCracked WPA:')
-    json = loads(
-        '{"bssid": "AA:BB:CC:DD:EE:FF", "channel": "1", ""essid": "Test Router", "key": "Key", "date": 1433402428, '
-        '"handshake_file": "hs/capfile.cap", "type": "WPA"}')
-    obj = CrackResult.load(json)
-    obj.dump()

@@ -43,14 +43,3 @@ class CrackResultWPA(CrackResult):
             'key': self.key,
             'handshake_file': self.handshake_file
         }
-
-
-if __name__ == '__main__':
-    w = CrackResultWPA('AA:BB:CC:DD:EE:FF', 'Test Router', 'hs/capfile.cap', 'abcd1234')
-    w.dump()
-
-    w = CrackResultWPA('AA:BB:CC:DD:EE:FF', 'Test Router', 'hs/capfile.cap', 'Key')
-    print('\n')
-    w.dump()
-    w.save()
-    print((w.__dict__['bssid']))

@@ -12,7 +12,7 @@ class AttackAll(object):
     @classmethod
     def attack_multiple(cls, targets):
         """
-        Attacks all given `targets` (list[wifite.model.target]) until user interruption.
+        Attacks all given `targets` (list[WP2C.model.target]) until user interruption.
         Returns: Number of targets that were attacked (int)
         """
 
@@ -40,7 +40,7 @@ class AttackAll(object):
     @classmethod
     def attack_single(cls, target, targets_remaining):
         """
-        Attacks a single `target` (wifite.model.target).
+        Attacks a single `target` (WP2C.model.target).
         Returns: True if attacks should continue, False otherwise.
         """
         global attack

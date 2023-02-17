@@ -2,12 +2,7 @@
 # -*- coding: utf-8 -*-
 
 # Files named __init__.py are used to mark directories on disk as Python package directories. If remove the __init__.py file, Python will no longer look for submodules inside that directory, so attempts to import the module will fail.
-#  __main__.py run file directly from command line
-# try:
-#     from .config import Configuration
-# except (ValueError, ImportError) as e:
-#     raise Exception(
-#         "You may need to run WP2C from the root directory (which includes README.md)", e) from e
+#  if __name__ == '__main__' allows file to run directly from command line
 
 from util.color import Color
 from config import Configuration
@@ -94,9 +89,11 @@ def entry_point():
     except Exception as e:
         Color.pexception(e)
         Color.pl('\n{!} {R}Exiting{W}\n')
-
     except KeyboardInterrupt:
         Color.pl('\n{!} {O}Interrupted, Shutting down...{W}')
+    #Testing    
+    if Configuration.display_banner:
+        banner.print_banner()
 
 
 if __name__ == '__main__': #It Allows You to Execute Code When the File Runs as a Script, but Not When It’s Imported as a Module

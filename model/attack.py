@@ -19,7 +19,7 @@ class Attack(object):
     def wait_for_target(self, airodump):
         """Waits for target to appear in airodump."""
         start_time = time.time()
-        targets = airodump.get_targets(apply_filter=False)
+        targets = airodump.get_targets() # Removed apply_filter=False
         while len(targets) == 0:
             # Wait for target to appear in airodump.
             if int(time.time() - start_time) > Attack.target_wait:
