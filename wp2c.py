@@ -94,6 +94,7 @@ def entry_point():
     #Testing    
     if Configuration.display_banner:
         banner.print_banner()
+    Configuration.exit_gracefully(0)
 
 
 if __name__ == '__main__': #It Allows You to Execute Code When the File Runs as a Script, but Not When It’s Imported as a Module

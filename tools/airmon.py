@@ -56,14 +56,6 @@ class Airmon(Dependency):
     dependency_url = 'https://www.aircrack-ng.org/install.html'
     chipset_table = 'https://wikidevi.com/wiki/Wireless_adapters/Chipset_table'
     base_interface = None
-    killed_network_manager = False
-    use_ipiw = False
-
-    # Drivers that need to be manually put into monitor mode
-    BAD_DRIVERS = ['rtl8821au']
-    # see if_arp.h
-    ARPHRD_ETHER = 1  # managed
-    ARPHRD_IEEE80211_RADIOTAP = 803  # monitor
 
     def __init__(self):
         self.interfaces = None
@@ -126,31 +118,16 @@ class Airmon(Dependency):
         Iw.mode(interface, 'monitor')
         Ip.up(interface)
 
-        # /sys/class/net/wlan0/type
-        iface_type_path = os.path.join('/sys/class/net', interface, 'type')
-        if os.path.exists(iface_type_path):
-            with open(iface_type_path, 'r') as f:
-                if int(f.read()) == Airmon.ARPHRD_IEEE80211_RADIOTAP:
-                    return interface
-
         return interface
 
     @staticmethod
     def stop_bad_driver(interface):
         """
         Manually put interface into managed mode (no airmon-ng or vif).
-        Fix for bad drivers like the rtl8812AU.
         """
         Ip.down(interface)
         Iw.mode(interface, 'managed')
         Ip.up(interface)
-
-        # /sys/class/net/wlan0/type
-        iface_type_path = os.path.join('/sys/class/net', interface, 'type')
-        if os.path.exists(iface_type_path):
-            with open(iface_type_path, 'r') as f:
-                if int(f.read()) == Airmon.ARPHRD_ETHER:
-                    return interface
 
         return interface
 
@@ -181,14 +158,6 @@ class Airmon(Dependency):
         # Try to enable using ip/iw first (for better compatibility)
         Color.p('{+} Enabling {G}monitor mode{W} on {C}%s{W}... ' % iface_name)
         enabled_interface = Airmon.start_bad_driver(iface_name)
-
-        # if it fails, try to use Airmon-ng
-        if enabled_interface is None:
-            airmon_output = Process(['airmon-ng', 'start', iface_name]).stdout()
-            enabled_interface = Airmon._parse_airmon_start(airmon_output)
-        else:
-            # If not, just set for us know how it went in monitor mode
-            cls.use_ipiw = True
 
         # if that also fails, just give up
         if enabled_interface is None:
@@ -228,13 +197,8 @@ class Airmon(Dependency):
     @classmethod
     def stop(cls, interface):
         Color.p('{!}{W} Disabling {O}monitor{W} mode on {R}%s{W}...\n' % interface)
-
-        if cls.use_ipiw:
-            enabled_interface = disabled_interface = Airmon.stop_bad_driver(interface)
-        else:
-            airmon_output = Process(['airmon-ng', 'stop', interface]).stdout()
-            (disabled_interface, enabled_interface) = Airmon._parse_airmon_stop(airmon_output)
-
+        enabled_interface = disabled_interface = Airmon.stop_bad_driver(interface)
+        
         if disabled_interface:
             Color.pl('{+}{W} Disabled monitor mode on {G}%s{W}' % disabled_interface)
         else:
@@ -342,32 +306,12 @@ class Airmon(Dependency):
         if not pid_pnames:
             return
 
-        if not Configuration.kill_conflicting_processes:
-            # Don't kill processes, warn user
-            names_and_pids = ', '.join([
-                '{R}%s{O} (PID {R}%s{O})' % (pname, pid)
-                for pid, pname in pid_pnames
-            ])
-            Color.pl('{!} {O}Conflicting processes: %s' % names_and_pids)
-            Color.pl('{!} {O}If you have problems: {R}kill -9 PID{O} or re-run WP2C with {R}--kill{O}{W}')
-            return
-
         Color.pl('{!} {O}Killing {R}%d {O}conflicting processes' % len(pid_pnames))
         for pid, pname in pid_pnames:
             if pname == 'NetworkManager' and Process.exists('systemctl'):
                 Color.pl('{!} {O}stopping NetworkManager ({R}systemctl stop NetworkManager{O})')
                 # Can't just pkill NetworkManager; it's a service
                 Process(['systemctl', 'stop', 'NetworkManager']).wait()
-                Airmon.killed_network_manager = True
-            elif pname == 'network-manager' and Process.exists('service'):
-                Color.pl('{!} {O}stopping network-manager ({R}service network-manager stop{O})')
-                # Can't just pkill network manager; it's a service
-                Process(['service', 'network-manager', 'stop']).wait()
-                Airmon.killed_network_manager = True
-            elif pname == 'avahi-daemon' and Process.exists('service'):
-                Color.pl('{!} {O}stopping avahi-daemon ({R}service avahi-daemon stop{O})')
-                # Can't just pkill avahi-daemon; it's a service
-                Process(['service', 'avahi-daemon', 'stop']).wait()
             else:
                 Color.pl('{!} {R}Terminating {O}conflicting process {R}%s{O} (PID {R}%s{O})' % (pname, pid))
                 try:
@@ -385,20 +329,6 @@ class Airmon(Dependency):
     def start_network_manager():
         Color.p('{!} {O}start {R}NetworkManager{O}...')
 
-        if Process.exists('service'):
-            cmd = 'service networkmanager start'
-            proc = Process(cmd)
-            (out, err) = proc.get_output()
-            if proc.poll() != 0:
-                Color.pl(' {R}Error executing {O}%s{W}' % cmd)
-                if out is not None and out.strip() != '':
-                    Color.pl('{!} {O}STDOUT> %s{W}' % out)
-                if err is not None and err.strip() != '':
-                    Color.pl('{!} {O}STDERR> %s{W}' % err)
-            else:
-                Color.pl(' {G}Done{W} ({C}%s{W})' % cmd)
-                return
-
         if Process.exists('systemctl'):
             cmd = 'systemctl start NetworkManager'
             proc = Process(cmd)
@@ -413,4 +343,4 @@ class Airmon(Dependency):
                 Color.pl(' {G}done{W} ({C}%s{W})' % cmd)
                 return
         else:
-            Color.pl(' {R}Cannot start NetworkManager: {O}systemctl{R} or {O}service{R} not found{W}')
+            Color.pl(' {R}Cannot start NetworkManager: {O}systemctl{R} not found{W}')

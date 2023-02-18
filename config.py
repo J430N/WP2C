@@ -22,8 +22,6 @@ class Configuration(object):
     cracked_file = None
     crack_handshake = None
     daemon = None
-    # dont_use_pmkid = None
-    # encryption_filter = None
     existing_commands = None
     five_ghz = None
     ignore_cracked = None
@@ -32,14 +30,12 @@ class Configuration(object):
     infinite_mode = None
     inf_wait_time = None
     interface = None
-    kill_conflicting_processes = None
     display_banner = None # Test!!!!!!!!!
     manufacturers = None
     min_power = None
     no_deauth = None
     no_nullpin = None
     num_deauths = None
-    # pmkid_timeout = None
     print_stack_traces = None
     random_mac = None
     require_fakeauth = None
@@ -47,7 +43,6 @@ class Configuration(object):
     show_bssids = None
     show_cracked = None
     show_manufacturers = None
-    # skip_crack = None
     target_bssid = None
     target_channel = None
     target_essid = None
@@ -56,11 +51,10 @@ class Configuration(object):
     wordlist = None
     wpa_attack_timeout = None
     wpa_deauth_timeout = None
-    wpa_filter = None
     wpa_handshake_dir = None
     wpa_strip_handshake = None
 
-    @classmethod #[USED]
+    @classmethod
     def initialize(cls, load_interface=True):
         """
             Sets up default initial configuration values.
@@ -74,8 +68,6 @@ class Configuration(object):
 
         cls.verbose = 0  # Verbosity of output. Higher number means more debug info about running processes.
         cls.print_stack_traces = True
-
-        cls.kill_conflicting_processes = False
         
         cls.display_banner = False #Test!!!!!!!!!!!!!!
         
@@ -85,7 +77,6 @@ class Configuration(object):
         cls.interface = None
         cls.min_power = 0  # Minimum power for an access point to be considered a target. Default is 0
         cls.attack_max = 0
-        # cls.skip_crack = False
         cls.target_channel = None  # User-defined channel to scan
         cls.target_essid = None  # User-defined AP name
         cls.target_bssid = None  # User-defined AP BSSID
@@ -102,12 +93,8 @@ class Configuration(object):
         cls.random_mac = False  # Should generate a random Mac address at startup.
         cls.no_deauth = False  # Deauth hidden networks & WPA handshake targets
         cls.num_deauths = 1  # Number of deauth packets to send to each target.
-        cls.daemon = False  # Don't put back interface back in managed mode
-
-        # cls.encryption_filter = ['WEP', 'WPA', 'WPS']
 
         # WPA variables
-        cls.wpa_filter = False  # Only attack WPA networks
         cls.wpa_deauth_timeout = 15  # Wait time between deauths
         cls.wpa_attack_timeout = 300  # Wait time before failing
         cls.wpa_handshake_dir = 'hs'  # Dir to store handshakes
@@ -115,7 +102,7 @@ class Configuration(object):
         cls.ignore_old_handshakes = False  # Always fetch a new handshake
 
         # Default dictionary for cracking
-        cls.cracked_file = 'cracked.json'
+        cls.cracked_file = 'cracked.txt'
         cls.wordlist = None
         wordlists = [
             './wordlist-probable.txt',  # Local file (ran from cloned repo)
@@ -163,7 +150,7 @@ class Configuration(object):
         if load_interface:
             cls.get_monitor_mode_interface()
 
-    @classmethod #[USED]
+    @classmethod
     def get_monitor_mode_interface(cls):
         if cls.interface is None:
             # Interface wasn't defined, select it!
@@ -179,8 +166,6 @@ class Configuration(object):
 
         args = Arguments(cls).args
         cls.parse_settings_args(args)
-        cls.parse_wpa_args(args)
-        # cls.parse_encryption()
 
 
         # Commands
@@ -247,10 +232,6 @@ class Configuration(object):
             cls.no_deauth = True
             Color.pl('{+} {C}option:{W} will {R}not{W} {O}deauth{W} clients during scans or captures')
 
-        if args.daemon is True:
-            cls.daemon = True
-            Color.pl('{+} {C}option:{W} will put interface back to managed mode')
-
         if args.num_deauths and args.num_deauths > 0:
             cls.num_deauths = args.num_deauths
             Color.pl(f'{{+}} {{C}}option:{{W}} send {{G}}{cls.num_deauths:d}{{W}} deauth packets when deauthing')
@@ -258,10 +239,6 @@ class Configuration(object):
         if args.min_power and args.min_power > 0:
             cls.min_power = args.min_power
             Color.pl(f'{{+}} {{C}}option:{{W}} Minimum power {{G}}{cls.min_power:d}{{W}} for target to be shown')
-
-        # if args.skip_crack:
-        #     cls.skip_crack = True
-        #     Color.pl('{+} {C}option:{W} Skip cracking captured handshakes/pmkid {G}enabled{W}')
 
         if args.attack_max and args.attack_max > 0:
             cls.attack_max = args.attack_max
@@ -297,69 +274,10 @@ class Configuration(object):
         if args.verbose:
             cls.verbose = args.verbose
             Color.pl('{+} {C}option:{W} verbosity level {G}%d{W}' % args.verbose)
-
-        if args.kill_conflicting_processes:
-            cls.kill_conflicting_processes = True
-            Color.pl('{+} {C}option:{W} kill conflicting processes {G}enabled{W}')
             
         if args.display_banner:
             cls.display_banner = True
             Color.pl('{+} {C}option:{W} Display WP2C banner {G}enabled{W}')    
-
-    @classmethod
-    def parse_wpa_args(cls, args):
-        """Parses WPA-specific arguments"""
-        if args.wpa_filter:
-            cls.wpa_filter = args.wpa_filter
-
-        if args.wordlist:
-            if not os.path.exists(args.wordlist):
-                cls.wordlist = None
-                Color.pl('{+} {C}option:{O} wordlist {R}%s{O} was not found, WP2C will NOT attempt to crack '
-                         'handshakes' % args.wordlist)
-            elif os.path.isfile(args.wordlist):
-                cls.wordlist = args.wordlist
-                Color.pl('{+} {C}option:{W} using wordlist {G}%s{W} for cracking' % args.wordlist)
-            elif os.path.isdir(args.wordlist):
-                cls.wordlist = None
-                Color.pl('{+} {C}option:{O} wordlist {R}%s{O} is a directory, not a file. WP2C will NOT attempt to '
-                         'crack handshakes' % args.wordlist)
-
-        if args.wpa_deauth_timeout:
-            cls.wpa_deauth_timeout = args.wpa_deauth_timeout
-            Color.pl('{+} {C}option:{W} will deauth WPA clients every {G}%d seconds{W}' % args.wpa_deauth_timeout)
-
-        if args.wpa_attack_timeout:
-            cls.wpa_attack_timeout = args.wpa_attack_timeout
-            Color.pl(
-                '{+} {C}option:{W} will stop WPA handshake capture after {G}%d seconds{W}' % args.wpa_attack_timeout)
-
-        if args.ignore_old_handshakes:
-            cls.ignore_old_handshakes = True
-            Color.pl('{+} {C}option:{W} will {O}ignore{W} existing handshakes (force capture)')
-
-        if args.wpa_handshake_dir:
-            cls.wpa_handshake_dir = args.wpa_handshake_dir
-            Color.pl('{+} {C}option:{W} will store handshakes to {G}%s{W}' % args.wpa_handshake_dir)
-
-        if args.wpa_strip_handshake:
-            cls.wpa_strip_handshake = True
-            Color.pl('{+} {C}option:{W} will {G}strip{W} non-handshake packets')
-
-    # @classmethod
-    # def parse_encryption(cls):
-    #     """Adjusts encryption filter (WEP and/or WPA and/or WPS)"""
-    #     cls.encryption_filter = []
-    #     if cls.wpa_filter:
-    #         cls.encryption_filter.append('WPA')
-
-    #     if len(cls.encryption_filter) == 3:
-    #         Color.pl('{+} {C}option:{W} targeting {G}all encrypted networks{W}')
-    #     elif not cls.encryption_filter:
-    #         # Default to scan all types
-    #         cls.encryption_filter = ['WEP', 'WPA', 'WPS']
-    #     else:
-    #         Color.pl('{+} {C}option:{W} targeting {G}%s-encrypted{W} networks' % '/'.join(cls.encryption_filter))
 
     @classmethod
     def temp(cls, subfile=''):
@@ -387,32 +305,20 @@ class Configuration(object):
                 os.remove(cls.temp_dir + f)
             os.rmdir(cls.temp_dir)
 
-    @classmethod #[USED]
+    @classmethod
     def exit_gracefully(cls, code=0):
         """ Deletes temp and exist with the given code """
         cls.delete_temp()
         Macchanger.reset_if_changed()
         from tools.airmon import Airmon
         if cls.interface is not None and Airmon.base_interface is not None:
-            if not cls.daemon:
-                Color.pl('{!} {O}Note:{W} Leaving interface in {G}Monitor Mode{W}!')
-                if Airmon.use_ipiw:
-                    Color.pl('{!} To disable {G}Monitor Mode{W} when finished: ')
-                    Color.pl('{+}   {C}ip link set %s down{W}' % cls.interface)
-                    Color.pl('{+}   {C}iw %s set type managed{W}' % cls.interface)
-                    Color.pl('{+}   {C}ip link set %s up{W}\n' % cls.interface)
-                else:
-                    Color.pl('{!} To disable Monitor Mode when finished: {C}airmon-ng stop %s{W}\n' % cls.interface)
-            else:
-                # Stop monitor mode
-                Airmon.stop(cls.interface)
-                # Bring original interface back up
-                Airmon.put_interface_up(Airmon.base_interface)
-
-        if Airmon.killed_network_manager:
-            Color.pl('{!} You can restart NetworkManager when finished ({C}service NetworkManager start{W})')
-            Airmon.start_network_manager() #Commented out before, test can work or not
-
+            # Stop monitor mode
+            Airmon.stop(cls.interface)
+            # Bring original interface back up
+            Airmon.put_interface_up(Airmon.base_interface)
+        
+        Airmon.start_network_manager() 
+            
         exit(code)
 
     @classmethod

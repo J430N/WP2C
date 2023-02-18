@@ -96,11 +96,6 @@ class Arguments(object):
         glob.add_argument('--pillage', help=argparse.SUPPRESS, action='store',
                           dest='scan_time', nargs='?', const=10, type=int)
 
-        glob.add_argument('--kill',
-                          action='store_true',
-                          dest='kill_conflicting_processes',
-                          help=Color.s('Kill processes that conflict with Airmon/Airodump (default: {G}off{W})'))
-
         glob.add_argument('-pow',
                           '--power',
                           action='store',
@@ -108,11 +103,6 @@ class Arguments(object):
                           metavar='[min_power]',
                           type=int,
                           help=Color.s('Attacks any targets with at least {C}min_power{W} signal strength'))
-
-        glob.add_argument('--skip-crack',
-                          action='store_true',
-                          dest='skip_crack',
-                          help=Color.s('Skip cracking captured handshakes/pmkid (default: {G}off{W})'))
 
         glob.add_argument('-first',
                           '--first',
@@ -184,11 +174,6 @@ class Arguments(object):
                           default=None,
                           help=self._verbose(
                               'Number of deauth packets to send (default: {G}%d{W})' % self.config.num_deauths))
-
-        glob.add_argument('--daemon',
-                          action='store_true',
-                          dest='daemon',
-                          help=Color.s('Puts device back in managed mode after quitting (default: {G}off{W})'))
         
         glob.add_argument('-B',
                           action='store_true',

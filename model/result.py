@@ -132,7 +132,5 @@ class CrackResult(object):
                                     json['handshake_file'],
                                     json['key'])
         result.date = json['date']
-        result.channel = json['channel']
         result.readable_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(result.date))
-        result.loc = json['loc']
         return result
