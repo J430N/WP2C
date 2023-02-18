@@ -224,19 +224,9 @@ class Scanner(object):
         if len(self.targets) == 0:
             if self.err_msg is not None:
                 Color.pl(self.err_msg)
-
-            # TODO Print a more-helpful reason for failure.
-            # 1. Link to wireless drivers wiki,
-            # 2. How to check if your device supports monitor mode,
-            # 3. Provide airodump-ng command being executed.
             raise Exception('No targets found.'
                             + ' You may need to wait longer,'
                             + ' or you may have issues with your wifi card')
-
-        # Return all targets if user specified a wait time ('pillage').
-        # A scan time is always set if run in infinite mode
-        if Configuration.scan_time > 0:
-            return self.targets
 
         # Ask user for targets.
         self.print_targets()
@@ -263,12 +253,10 @@ class Scanner(object):
                 (lower, upper) = [int(x) - 1 for x in choice.split('-')]
                 for i in range(lower, min(len(self.targets), upper + 1)):
                     chosen_targets.append(self.targets[i])
-            elif choice.isdigit():
-                choice = int(choice)
-                if choice > len(self.targets):
-                    Color.pl('    {!} {O}Invalid target index (%d)... ignoring' % choice)
-                    continue
-
-                chosen_targets.append(self.targets[choice - 1])
-
+            elif choice.isdigit() and int(choice) < len(self.targets):
+                chosen_targets.append(self.targets[int(choice) - 1])
+            else:
+                Color.pl('    {!} {O}Invalid target index (%s)... ignoring' % choice)
+                continue
+            
         return chosen_targets

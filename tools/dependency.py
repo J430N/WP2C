@@ -28,7 +28,7 @@ class Dependency(object):
         from tools.iw import Iw
         from tools.tshark import Tshark
         from tools.macchanger import Macchanger
-        from tools.hashcat import Hashcat, HcxPcapngTool
+        from tools.hashcat import Hashcat
 
         apps = [
             # Aircrack
@@ -37,7 +37,7 @@ class Dependency(object):
             Iw, Ip,
             Tshark,
             # Hashcat
-            Hashcat, HcxPcapngTool,
+            Hashcat,
             # Misc
             Macchanger
         ]
