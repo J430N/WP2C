@@ -138,7 +138,7 @@ class Airodump(Dependency):
             if fil.startswith('replay_') and fil.endswith('.cap') or fil.endswith('.xor'):
                 os.remove(os.path.join(temp_dir, fil))
 
-    def get_targets(self, old_targets=None, target_archives=None): # Removed apply_filter=True, 
+    def get_targets(self, old_targets=None, target_archives=None):
         """ Parses airodump's CSV file, returns list of Targets """
 
         if old_targets is None:

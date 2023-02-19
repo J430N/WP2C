@@ -160,7 +160,7 @@ class Target(object):
         if bssid_multicast.match(self.bssid):
             raise Exception('Ignoring target with Multicast BSSID (%s)' % self.bssid)
 
-    def to_str(self, show_bssid=False, show_manufacturer=False):
+    def to_str(self):
         # sourcery no-metrics
         """
             *Colored* string representation of this Target.
@@ -173,7 +173,7 @@ class Target(object):
         if len(essid) > max_essid_len:
             essid = essid[:max_essid_len - 3] + '...'
         else:
-            essid = essid.rjust(max_essid_len)
+            essid = essid.ljust(max_essid_len)
 
         if self.essid_known:
             # Known ESSID
@@ -182,32 +182,26 @@ class Target(object):
             # Unknown ESSID
             essid = Color.s('{O}%s' % essid)
 
-        # if self.power < self.max_power:
-        #     var = self.max_power
-
         # Add a '*' if we decloaked the ESSID
         decloaked_char = '*' if self.decloaked else ' '
         essid += Color.s('{P}%s' % decloaked_char)
 
-        bssid = Color.s('{O}%s  ' % self.bssid) if show_bssid else ''
-        if show_manufacturer:
-            oui = ''.join(self.bssid.split(':')[:3])
-            self.manufacturer = Configuration.manufacturers.get(oui, "")
+        bssid = Color.s('{O}%s  ' % self.bssid)
+        oui = ''.join(self.bssid.split(':')[:3])
+        self.manufacturer = Configuration.manufacturers.get(oui, "")
 
-            max_oui_len = 27
-            manufacturer = Color.s('{W}%s  ' % self.manufacturer)
-            # Trim manufacturer name if needed
-            if len(manufacturer) > max_oui_len:
-                manufacturer = manufacturer[:max_oui_len - 3] + '...'
-            else:
-                manufacturer = manufacturer.rjust(max_oui_len)
+        max_oui_len = 27
+        manufacturer = Color.s('{W}%s  ' % self.manufacturer)
+        # Trim manufacturer name if needed
+        if len(manufacturer) > max_oui_len:
+            manufacturer = manufacturer[:max_oui_len - 3] + '...'
         else:
-            manufacturer = ''
+            manufacturer = manufacturer.ljust(max_oui_len)
 
         channel_color = '{C}' if int(self.channel) > 14 else '{G}'
-        channel = Color.s(f'{channel_color}{str(self.channel).rjust(3)}')
+        channel = Color.s(f'{channel_color}{str(self.channel).ljust(3)}')
 
-        encryption = self.encryption.rjust(3)
+        encryption = self.encryption.ljust(3)
         if 'WEP' in encryption:
             encryption = Color.s('{G}%s' % encryption)
         elif 'WPA' in encryption:
@@ -218,7 +212,7 @@ class Target(object):
             else:
                 encryption = Color.s('{O}%s  ' % encryption)
 
-        power = f'{str(self.power).rjust(3)}db'
+        power = f'{str(self.power).ljust(3)}db'
         if self.power > 50:
             color = 'G'
         elif self.power > 35:
@@ -240,9 +234,9 @@ class Target(object):
 
         clients = '       '
         if len(self.clients) > 0:
-            clients = Color.s('{G}  ' + str(len(self.clients)))
+            clients = Color.s('{G}' +str(len(self.clients)))
 
-        result = f'{essid}  {bssid}{manufacturer}{channel}  {encryption}  {power}  {wps}  {clients}'
+        result = f'{essid}  {bssid}  {manufacturer}  {channel}  {encryption}  {power}  {clients}' #{wps} removed 
 
         result += Color.s('{W}')
         return result

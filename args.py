@@ -40,115 +40,105 @@ class Arguments(object):
                           help=Color.s(
                               'Shows more options ({C}-h -v{W}). Prints commands and outputs. Increase verbosity by increasing numbers of v e.g. {C}-vv{W} (default: {G}quiet{W})'))
 
-        # glob.add_argument('-i',
-        #                   action='store',
-        #                   dest='interface',
-        #                   metavar='[interface]',
-        #                   type=str,
-        #                   help=Color.s('Wireless interface to use, e.g. {C}wlan0mon{W} (default: {G}ask{W})'))
+        glob.add_argument('-i',
+                          action='store',
+                          dest='interface',
+                          metavar='[interface]',
+                          type=str,
+                          help=Color.s('Wireless interface to use, e.g. {C}wlan0mon{W} (default: {G}ask{W})'))
 
-        # glob.add_argument('-inf',
-        #                   '--infinite',
-        #                   action='store_true',
-        #                   dest='infinite_mode',
-        #                   help=Color.s(
-        #                       'Enable infinite attack mode. Modify scanning time with {C}-p{W} (default: {G}off{W})'))
-
-        # glob.add_argument('-mac',
-        #                   '--random-mac',
-        #                   action='store_true',
-        #                   dest='random_mac',
-        #                   help=Color.s('Randomize wireless card MAC address (default: {G}off{W})'))
-
-        # glob.add_argument('-p',
-        #                   action='store',
-        #                   dest='scan_time',
-        #                   nargs='?',
-        #                   const=10,
-        #                   metavar='scan_time',
-        #                   type=int,
-        #                   help=Color.s('{G}Pillage{W}: Attack all targets after {C}scan_time{W} (seconds)'))
-        # glob.add_argument('--pillage', help=argparse.SUPPRESS, action='store',
-        #                   dest='scan_time', nargs='?', const=10, type=int)
-
-        # glob.add_argument('-pow',
-        #                   '--power',
-        #                   action='store',
-        #                   dest='min_power',
-        #                   metavar='[min_power]',
-        #                   type=int,
-        #                   help=Color.s('Attacks any targets with at least {C}min_power{W} signal strength'))
-
-        # glob.add_argument('-first',
-        #                   '--first',
-        #                   action='store',
-        #                   dest='attack_max',
-        #                   metavar='[attack_max]',
-        #                   type=int,
-        #                   help=Color.s('Attacks the first {C}attack_max{W} targets'))
-
-        # glob.add_argument('-b',
-        #                   action='store',
-        #                   dest='target_bssid',
-        #                   metavar='[bssid]',
-        #                   type=str,
-        #                   help=self._verbose('BSSID (e.g. {GR}AA:BB:CC:DD:EE:FF{W}) of access point to attack'))
-        # glob.add_argument('--bssid', help=argparse.SUPPRESS, action='store', dest='target_bssid', type=str)
-
-        # glob.add_argument('-e',
-        #                   action='store',
-        #                   dest='target_essid',
-        #                   metavar='[essid]',
-        #                   type=str,
-        #                   help=self._verbose('ESSID (e.g. {GR}NETGEAR07{W}) of access point to attack'))
-        # glob.add_argument('--essid', help=argparse.SUPPRESS, action='store', dest='target_essid', type=str)
-
-        # glob.add_argument('-E',
-        #                   action='append',
-        #                   dest='ignore_essids',
-        #                   metavar='[text]',
-        #                   type=str,
-        #                   default=None,
-        #                   help=self._verbose(
-        #                       'Hides targets with ESSIDs that match the given text. Can be used more than once.'))
-        # glob.add_argument('--ignore-essid', help=argparse.SUPPRESS, action='append', dest='ignore_essids', type=str)
-
-        # glob.add_argument('-ic',
-        #                   '--ignore-cracked',
-        #                   action='store_true',
-        #                   dest='ignore_cracked',
-        #                   help=Color.s('Hides previously-cracked targets. (default: {G}off{W})'))
-
-        # glob.add_argument('--clients-only',
-        #                   action='store_true',
-        #                   dest='clients_only',
-        #                   help=Color.s('Only show targets that have associated clients (default: {G}off{W})'))
-
-        glob.add_argument('--showb', #display byy default
+        glob.add_argument('-inf',
+                          '--infinite',
                           action='store_true',
-                          dest='show_bssids',
-                          help=self._verbose('Show BSSIDs of targets while scanning'))
+                          dest='infinite_mode',
+                          help=Color.s(
+                              'Enable infinite attack mode. Modify scanning time with {C}-p{W} (default: {G}off{W})'))
 
-        glob.add_argument('--showm', #display byy default
+        glob.add_argument('-mac',
+                          '--random-mac',
                           action='store_true',
-                          dest='show_manufacturers',
-                          help=self._verbose('Show manufacturers of targets while scanning'))
+                          dest='random_mac',
+                          help=Color.s('Randomize wireless card MAC address (default: {G}off{W})'))
 
-        # glob.add_argument('--nodeauths',
-        #                   action='store_true',
-        #                   dest='no_deauth',
-        #                   help=Color.s('Passive mode: Never deauthenticates clients (default: {G}deauth targets{W})'))
-        # glob.add_argument('--no-deauths', action='store_true', dest='no_deauth', help=argparse.SUPPRESS)
-        # glob.add_argument('-nd', action='store_true', dest='no_deauth', help=argparse.SUPPRESS)
+        glob.add_argument('-p',
+                          action='store',
+                          dest='scan_time',
+                          nargs='?',
+                          const=10,
+                          metavar='scan_time',
+                          type=int,
+                          help=Color.s('{G}Pillage{W}: Attack all targets after {C}scan_time{W} (seconds)'))
+        glob.add_argument('--pillage', help=argparse.SUPPRESS, action='store',
+                          dest='scan_time', nargs='?', const=10, type=int)
 
-        # glob.add_argument('--num-deauths',
-        #                   action='store',
-        #                   type=int,
-        #                   dest='num_deauths',
-        #                   metavar='[num]',
-        #                   default=None,
-        #                   help=self._verbose(
-        #                       'Number of deauth packets to send (default: {G}%d{W})' % self.config.num_deauths))
+        glob.add_argument('-pow',
+                          '--power',
+                          action='store',
+                          dest='min_power',
+                          metavar='[min_power]',
+                          type=int,
+                          help=Color.s('Attacks any targets with at least {C}min_power{W} signal strength'))
+
+        glob.add_argument('-first',
+                          '--first',
+                          action='store',
+                          dest='attack_max',
+                          metavar='[attack_max]',
+                          type=int,
+                          help=Color.s('Attacks the first {C}attack_max{W} targets'))
+
+        glob.add_argument('-b',
+                          action='store',
+                          dest='target_bssid',
+                          metavar='[bssid]',
+                          type=str,
+                          help=self._verbose('BSSID (e.g. {GR}AA:BB:CC:DD:EE:FF{W}) of access point to attack'))
+        glob.add_argument('--bssid', help=argparse.SUPPRESS, action='store', dest='target_bssid', type=str)
+
+        glob.add_argument('-e',
+                          action='store',
+                          dest='target_essid',
+                          metavar='[essid]',
+                          type=str,
+                          help=self._verbose('ESSID (e.g. {GR}NETGEAR07{W}) of access point to attack'))
+        glob.add_argument('--essid', help=argparse.SUPPRESS, action='store', dest='target_essid', type=str)
+
+        glob.add_argument('-E',
+                          action='append',
+                          dest='ignore_essids',
+                          metavar='[text]',
+                          type=str,
+                          default=None,
+                          help=self._verbose(
+                              'Hides targets with ESSIDs that match the given text. Can be used more than once.'))
+        glob.add_argument('--ignore-essid', help=argparse.SUPPRESS, action='append', dest='ignore_essids', type=str)
+
+        glob.add_argument('-ic',
+                          '--ignore-cracked',
+                          action='store_true',
+                          dest='ignore_cracked',
+                          help=Color.s('Hides previously-cracked targets. (default: {G}off{W})'))
+
+        glob.add_argument('--clients-only',
+                          action='store_true',
+                          dest='clients_only',
+                          help=Color.s('Only show targets that have associated clients (default: {G}off{W})'))
+
+        glob.add_argument('--nodeauths',
+                          action='store_true',
+                          dest='no_deauth',
+                          help=Color.s('Passive mode: Never deauthenticates clients (default: {G}deauth targets{W})'))
+        glob.add_argument('--no-deauths', action='store_true', dest='no_deauth', help=argparse.SUPPRESS)
+        glob.add_argument('-nd', action='store_true', dest='no_deauth', help=argparse.SUPPRESS)
+
+        glob.add_argument('--num-deauths',
+                          action='store',
+                          type=int,
+                          dest='num_deauths',
+                          metavar='[num]',
+                          default=None,
+                          help=self._verbose(
+                              'Number of deauth packets to send (default: {G}%d{W})' % self.config.num_deauths))
         
         glob.add_argument('-B',
                           action='store_true',

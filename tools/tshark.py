@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from .dependency import Dependency
-from model.target import WPSState
 from util.process import Process
 import re
 

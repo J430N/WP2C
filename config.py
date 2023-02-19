@@ -38,9 +38,7 @@ class Configuration(object):
     random_mac = None
     require_fakeauth = None
     scan_time = None
-    show_bssids = None
     show_cracked = None
-    show_manufacturers = None
     target_bssid = None
     target_essid = None
     temp_dir = None  # Temporary directory
@@ -80,8 +78,6 @@ class Configuration(object):
         cls.clients_only = False  # Only show targets that have associated clients
         cls.infinite_mode = False  # Attack targets continuously
         cls.inf_wait_time = 60
-        cls.show_bssids = False  # Show BSSIDs in targets list
-        cls.show_manufacturers = False  # Show manufacturers in targets list
         cls.random_mac = False  # Should generate a random Mac address at startup.
         cls.no_deauth = False  # Deauth hidden networks & WPA handshake targets
         cls.num_deauths = 1  # Number of deauth packets to send to each target.
@@ -191,14 +187,6 @@ class Configuration(object):
                 Color.p(f'; {{O}}pillage time not selected{{W}}, using default {{G}}{cls.inf_wait_time:d}{{W}}s')
                 args.scan_time = cls.inf_wait_time
             Color.pl('')
-
-        if args.show_bssids:
-            cls.show_bssids = True
-            Color.pl('{+} {C}option:{W} showing {G}bssids{W} of targets during scan')
-
-        if args.show_manufacturers is True:
-            cls.show_manufacturers = True
-            Color.pl('{+} {C}option:{W} showing {G}manufacturers{W} of targets during scan')
 
         if args.no_deauth:
             cls.no_deauth = True

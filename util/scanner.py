@@ -116,19 +116,17 @@ class Scanner(object):
         if bssid is None and essid is None:
             return False  # No specific target from user.
 
-        for target in self.targets:
-            # if Configuration.wps_only and target.wps not in [WPSState.UNLOCKED, WPSState.LOCKED]:
-            #    continue
-            if bssid and target.bssid and bssid.lower() == target.bssid.lower():
-                self.target = target
-                break
-            if essid and target.essid and essid == target.essid:
-                self.target = target
-                break
+        # for target in self.targets:
+        #     if bssid and target.bssid and bssid.lower() == target.bssid.lower():
+        #         self.target = target
+        #         break
+        #     if essid and target.essid and essid == target.essid:
+        #         self.target = target
+        #         break
 
-        if self.target:
-            Color.pl('\n{+} {C}found target{G} %s {W}({G}%s{W})' % (self.target.bssid, self.target.essid))
-            return True
+        # if self.target:
+        #     Color.pl('\n{+} {C}found target{G} %s {W}({G}%s{W})' % (self.target.bssid, self.target.essid))
+        #     return True
 
         return False
 
@@ -167,35 +165,23 @@ class Scanner(object):
 
         # First row: columns
         Color.p('   NUM')
-        Color.p('                      ESSID')
-        if Configuration.show_bssids:
-            Color.p('              BSSID')
-
-        if Configuration.show_manufacturers:
-            Color.p('           MANUFACTURER')
-
-        Color.pl('   CH  ENCR    PWR    WPS  CLIENT')
+        Color.p('  ESSID (Wi-Fi name)')
+        Color.p('         BSSID (MAC address)')
+        Color.p('  MANUFACTURER')
+        Color.pl('             CH   ENCRYP PWR    CLIENT')
 
         # Second row: separator
         Color.p('   ---')
         Color.p('  -------------------------')
-        if Configuration.show_bssids:
-            Color.p('  -----------------')
-
-        if Configuration.show_manufacturers:
-            Color.p('  ---------------------')
-
-        Color.pl('  ---  -----   ----   ---  ------{W}')
+        Color.p('  -------------------')
+        Color.p('  -----------------------')
+        Color.pl('  ---  ------ -----  ------{W}')
 
         # Remaining rows: targets
-        for idx, target in enumerate(self.targets, start=1):
+        for idx, target in enumerate(self.targets, start=1): #Adjust here
             Color.clear_entire_line()
-            Color.p('   {G}%s  ' % str(idx).rjust(3))
-            Color.pl(target.to_str(
-                Configuration.show_bssids,
-                Configuration.show_manufacturers
-            )
-            )
+            Color.p('   {G}%s  ' % str(idx).ljust(3)) #numuber to left only (need all to left)
+            Color.pl(target.to_str())
 
     @staticmethod
     def get_terminal_height():
