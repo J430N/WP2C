@@ -183,7 +183,7 @@ class Handshake(object):
     @staticmethod
     def check():
         """ Analyzes .cap file(s) for handshake """
-        from ..config import Configuration
+        from config import Configuration
         if Configuration.check_handshake == '<all>':
             Color.pl('{+} checking all handshakes in {G}"./hs"{W} directory\n')
             try:

@@ -15,7 +15,6 @@ class Configuration(object):
     verbose = 0
     version = '2.6.8'
 
-    all_bands = None
     attack_max = None
     check_handshake = None
     clients_only = None
@@ -23,7 +22,6 @@ class Configuration(object):
     crack_handshake = None
     daemon = None
     existing_commands = None
-    five_ghz = None
     ignore_cracked = None
     ignore_essids = None
     ignore_old_handshakes = None
@@ -44,10 +42,8 @@ class Configuration(object):
     show_cracked = None
     show_manufacturers = None
     target_bssid = None
-    target_channel = None
     target_essid = None
     temp_dir = None  # Temporary directory
-    two_ghz = None
     wordlist = None
     wpa_attack_timeout = None
     wpa_deauth_timeout = None
@@ -77,15 +73,11 @@ class Configuration(object):
         cls.interface = None
         cls.min_power = 0  # Minimum power for an access point to be considered a target. Default is 0
         cls.attack_max = 0
-        cls.target_channel = None  # User-defined channel to scan
         cls.target_essid = None  # User-defined AP name
         cls.target_bssid = None  # User-defined AP BSSID
         cls.ignore_essids = None  # ESSIDs to ignore
         cls.ignore_cracked = False  # Ignore previously-cracked BSSIDs
         cls.clients_only = False  # Only show targets that have associated clients
-        cls.all_bands = False  # Scan for both 2Ghz and 5Ghz channels
-        cls.two_ghz = False  # Scan 2.4Ghz channels
-        cls.five_ghz = False  # Scan 5Ghz channels
         cls.infinite_mode = False  # Attack targets continuously
         cls.inf_wait_time = 60
         cls.show_bssids = False  # Show BSSIDs in targets list
@@ -184,14 +176,6 @@ class Configuration(object):
             cls.random_mac = True
             Color.pl('{+} {C}option:{W} using {G}random mac address{W} when scanning & attacking')
 
-        if args.channel:
-            chn_arg_re = re.compile("^\d+((,\d+)|(-\d+,\d+))*(-\d+)?$")
-            if not chn_arg_re.match(args.channel):
-                raise ValueError("Invalid channel! The format must be 1,3-6,9")
-
-            cls.target_channel = args.channel
-            Color.pl('{+} {C}option:{W} scanning for targets on channel {G}%s{W}' % args.channel)
-
         if args.interface:
             cls.interface = args.interface
             Color.pl('{+} {C}option:{W} using wireless interface {G}%s{W}' % args.interface)
@@ -199,18 +183,6 @@ class Configuration(object):
         if args.target_bssid:
             cls.target_bssid = args.target_bssid
             Color.pl('{+} {C}option:{W} targeting BSSID {G}%s{W}' % args.target_bssid)
-
-        if args.all_bands:
-            cls.all_bands = True
-            Color.pl('{+} {C}option:{W} including both {G}2.4Ghz and 5Ghz networks{W} in scans')
-
-        if args.two_ghz:
-            cls.two_ghz = True
-            Color.pl('{+} {C}option:{W} including {G}2.4Ghz networks{W} in scans')
-
-        if args.five_ghz:
-            cls.five_ghz = True
-            Color.pl('{+} {C}option:{W} including {G}5Ghz networks{W} in scans')
 
         if args.infinite_mode:
             cls.infinite_mode = True

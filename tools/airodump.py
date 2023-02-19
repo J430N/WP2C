@@ -31,12 +31,7 @@ class Airodump(Dependency):
         self.interface = interface
         self.targets = []
 
-        if channel is None:
-            channel = Configuration.target_channel
         self.channel = channel
-        self.all_bands = Configuration.all_bands
-        self.two_ghz = Configuration.two_ghz
-        self.five_ghz = Configuration.five_ghz
 
         self.encryption = encryption
         self.wps = wps
@@ -69,16 +64,11 @@ class Airodump(Dependency):
             self.interface,
             '-a',  # Only show associated clients
             '-w', self.csv_file_prefix,  # Output file prefix
-            '--write-interval', '1'  # Write every second
+            '--write-interval', '1',  # Write every second
+            '--band', 'abg' # 2.4Ghz and 5Ghz bands
         ]
         if self.channel:
             command.extend(['-c', str(self.channel)])
-        elif self.all_bands:
-            command.extend(['--band', 'abg'])
-        elif self.two_ghz:
-            command.extend(['--band', 'bg'])
-        elif self.five_ghz:
-            command.extend(['--band', 'a'])
 
         if self.encryption:
             command.extend(['--enc', self.encryption])
@@ -186,19 +176,6 @@ class Airodump(Dependency):
             if just_found and new_target.bssid in target_archives:
                 target_archives[new_target.bssid].transfer_info(new_target)
 
-        # # Check targets for WPS
-        # if not self.skip_wps:
-        #     capfile = f'{csv_filename[:-3]}cap'
-        #     try:
-        #         Tshark.check_for_wps_and_update_targets(capfile, new_targets)
-        #     except ValueError:
-        #         # No tshark, or it failed. Fall-back to wash
-        #         Wash.check_for_wps_and_update_targets(capfile, new_targets)
-
-        # if apply_filter:
-        #     # Filter targets based on encryption, WPS capability & power
-        #     new_targets = Airodump.filter_targets(new_targets, skip_wps=self.skip_wps)
-
         # Sort by power
         new_targets.sort(key=lambda x: x.power, reverse=True)
 
@@ -272,49 +249,6 @@ class Airodump(Dependency):
                         continue
 
         return targets
-
-    # @staticmethod
-    # def filter_targets(targets, skip_wps=False):
-    #     """ Filters targets based on Configuration """
-    #     result = []
-    #     # Filter based on Encryption
-    #     for target in targets:
-    #         # Filter targets if --power
-    #         # TODO Filter a target based on the current power - not on the max power
-    #         # as soon as losing targets in a single scan does not cause excessive output
-    #         if Configuration.min_power > 0 and target.max_power < Configuration.min_power:
-    #             continue
-
-    #         if Configuration.clients_only and len(target.clients) == 0:
-    #             continue
-    #         if 'WEP' in Configuration.encryption_filter and 'WEP' in target.encryption:
-    #             result.append(target)
-    #         if 'WPA' in Configuration.encryption_filter and 'WPA' in target.encryption:
-    #             result.append(target)
-    #         elif 'WPS' in Configuration.encryption_filter and target.wps in [WPSState.UNLOCKED, WPSState.LOCKED]:
-    #             result.append(target)
-    #         elif skip_wps:
-    #             result.append(target)
-
-        # Filter based on BSSID/ESSID
-        bssid = Configuration.target_bssid
-        essid = Configuration.target_essid
-        i = 0
-        while i < len(result):
-            if result[i].essid is not None and\
-                    Configuration.ignore_essids is not None and\
-                    result[i].essid in Configuration.ignore_essids:
-                result.pop(i)
-            elif Configuration.ignore_cracked and \
-                    result[i].bssid in Configuration.ignore_cracked:
-                result.pop(i)
-            elif bssid and result[i].bssid.lower() != bssid.lower():
-                result.pop(i)
-            elif essid and result[i].essid and result[i].essid != essid:
-                result.pop(i)
-            else:
-                i += 1
-        return result
 
     def deauth_hidden_targets(self):
         """
