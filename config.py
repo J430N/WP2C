@@ -15,32 +15,20 @@ class Configuration(object):
     verbose = 0
     version = '2.6.8'
 
-    attack_max = None
     check_handshake = None
-    clients_only = None
     cracked_file = None
     crack_handshake = None
     daemon = None
     existing_commands = None
-    ignore_cracked = None
-    ignore_essids = None
     ignore_old_handshakes = None
-    infinite_mode = None
-    inf_wait_time = None
     interface = None
     display_banner = None # Test!!!!!!!!!
     manufacturers = None
-    min_power = None
-    no_deauth = None
     no_nullpin = None
     num_deauths = None
     print_stack_traces = None
-    random_mac = None
     require_fakeauth = None
-    scan_time = None
     show_cracked = None
-    target_bssid = None
-    target_essid = None
     temp_dir = None  # Temporary directory
     wordlist = None
     wpa_attack_timeout = None
@@ -62,28 +50,13 @@ class Configuration(object):
 
         cls.verbose = 0  # Verbosity of output. Higher number means more debug info about running processes.
         cls.print_stack_traces = True
-        
         cls.display_banner = False #Test!!!!!!!!!!!!!!
-        
-        cls.scan_time = 0  # Time to wait before attacking all targets
-
         cls.tx_power = 0  # Wifi transmit power (0 is default)
         cls.interface = None
-        cls.min_power = 0  # Minimum power for an access point to be considered a target. Default is 0
-        cls.attack_max = 0
-        cls.target_essid = None  # User-defined AP name
-        cls.target_bssid = None  # User-defined AP BSSID
-        cls.ignore_essids = None  # ESSIDs to ignore
-        cls.ignore_cracked = False  # Ignore previously-cracked BSSIDs
-        cls.clients_only = False  # Only show targets that have associated clients
-        cls.infinite_mode = False  # Attack targets continuously
-        cls.inf_wait_time = 60
-        cls.random_mac = False  # Should generate a random Mac address at startup.
-        cls.no_deauth = False  # Deauth hidden networks & WPA handshake targets
         cls.num_deauths = 1  # Number of deauth packets to send to each target.
 
         # WPA variables
-        cls.wpa_deauth_timeout = 15  # Wait time between deauths
+        cls.wpa_deauth_timeout = 5  # Wait time between deauths
         cls.wpa_attack_timeout = 300  # Wait time before failing
         cls.wpa_handshake_dir = 'hs'  # Dir to store handshakes
         cls.wpa_strip_handshake = False  # Strip non-handshake packets
@@ -94,12 +67,12 @@ class Configuration(object):
         cls.wordlist = None
         wordlists = [
             './wordlist-probable.txt',  # Local file (ran from cloned repo)
-            # '/usr/share/dict/wordlist-probable.txt',  # setup.py with prefix=/usr
-            # '/usr/local/share/dict/wordlist-probable.txt',  # setup.py with prefix=/usr/local
-            # # Other passwords found on Kali
-            # '/usr/share/wfuzz/wordlist/fuzzdb/wordlists-user-passwd/passwds/phpbb.txt',
-            # '/usr/share/fuzzdb/wordlists-user-passwd/passwds/phpbb.txt',
-            # '/usr/share/wordlists/fern-wifi/common.txt'
+            '/usr/share/dict/wordlist-probable.txt',  # setup.py with prefix=/usr
+            '/usr/local/share/dict/wordlist-probable.txt',  # setup.py with prefix=/usr/local
+            # Other passwords found on Kali
+            '/usr/share/wfuzz/wordlist/fuzzdb/wordlists-user-passwd/passwds/phpbb.txt',
+            '/usr/share/fuzzdb/wordlists-user-passwd/passwds/phpbb.txt',
+            '/usr/share/wordlists/fern-wifi/common.txt'
         ]
         
         for wlist in wordlists:
@@ -144,8 +117,8 @@ class Configuration(object):
             # Interface wasn't defined, select it!
             from tools.airmon import Airmon
             cls.interface = Airmon.ask()
-            if cls.random_mac:
-                Macchanger.random()
+            # if cls.random_mac:
+            #     Macchanger.random()
 
     @classmethod
     def load_from_arguments(cls):
@@ -167,69 +140,6 @@ class Configuration(object):
     @classmethod
     def parse_settings_args(cls, args):
         """Parses basic settings/configurations from arguments."""
-        
-        if args.random_mac:
-            cls.random_mac = True
-            Color.pl('{+} {C}option:{W} using {G}random mac address{W} when scanning & attacking')
-
-        if args.interface:
-            cls.interface = args.interface
-            Color.pl('{+} {C}option:{W} using wireless interface {G}%s{W}' % args.interface)
-
-        if args.target_bssid:
-            cls.target_bssid = args.target_bssid
-            Color.pl('{+} {C}option:{W} targeting BSSID {G}%s{W}' % args.target_bssid)
-
-        if args.infinite_mode:
-            cls.infinite_mode = True
-            Color.p('{+} {C}option:{W} ({G}infinite{W}) attack all neighbors forever')
-            if not args.scan_time:
-                Color.p(f'; {{O}}pillage time not selected{{W}}, using default {{G}}{cls.inf_wait_time:d}{{W}}s')
-                args.scan_time = cls.inf_wait_time
-            Color.pl('')
-
-        if args.no_deauth:
-            cls.no_deauth = True
-            Color.pl('{+} {C}option:{W} will {R}not{W} {O}deauth{W} clients during scans or captures')
-
-        if args.num_deauths and args.num_deauths > 0:
-            cls.num_deauths = args.num_deauths
-            Color.pl(f'{{+}} {{C}}option:{{W}} send {{G}}{cls.num_deauths:d}{{W}} deauth packets when deauthing')
-
-        if args.min_power and args.min_power > 0:
-            cls.min_power = args.min_power
-            Color.pl(f'{{+}} {{C}}option:{{W}} Minimum power {{G}}{cls.min_power:d}{{W}} for target to be shown')
-
-        if args.attack_max and args.attack_max > 0:
-            cls.attack_max = args.attack_max
-            Color.pl(f'{{+}} {{C}}option:{{W}} Attack first {{G}}{cls.attack_max:d}{{W}} targets from list')
-
-        if args.target_essid:
-            cls.target_essid = args.target_essid
-            Color.pl('{+} {C}option:{W} targeting ESSID {G}%s{W}' % args.target_essid)
-
-        if args.ignore_essids is not None:
-            cls.ignore_essids = args.ignore_essids
-            Color.pl('{+} {C}option: {O}ignoring ESSID(s): {R}%s{W}' %
-                     ', '.join(args.ignore_essids))
-
-        if args.ignore_cracked:
-            from .model.result import CrackResult
-            if cracked_targets := CrackResult.load_all():
-                cls.ignore_cracked = [item['bssid'] for item in cracked_targets]
-                Color.pl('{+} {C}option: {O}ignoring {R}%s{O} previously-cracked targets' % len(cls.ignore_cracked))
-
-            else:
-                Color.pl('{!} {R}Previously-cracked access points not found in %s' % cls.cracked_file)
-                cls.ignore_cracked = False
-        if args.clients_only:
-            cls.clients_only = True
-            Color.pl('{+} {C}option:{W} {O}ignoring targets that do not have associated clients')
-
-        if args.scan_time:
-            cls.scan_time = args.scan_time
-            Color.pl(
-                f'{{+}} {{C}}option:{{W}} ({{G}}pillage{{W}}) attack all targets after {{G}}{args.scan_time:d}{{W}}s')
 
         if args.verbose:
             cls.verbose = args.verbose

@@ -65,20 +65,11 @@ class WP2C(object):
 
         # Scan
         s = Scanner()
-        do_continue = s.find_targets()
+        s.find_targets()
         targets = s.select_targets()
 
-        if Configuration.infinite_mode:
-            while do_continue:
-                AttackAll.attack_multiple(targets)
-                do_continue = s.update_targets()
-                if not do_continue:
-                    break
-                targets = s.select_targets()
-            attacked_targets = s.get_num_attacked()
-        else:
-            # Attack
-            attacked_targets = AttackAll.attack_multiple(targets)
+        # Attack
+        attacked_targets = AttackAll.attack_multiple(targets)
 
         Color.pl('{+} Finished attacking {C}%d{W} target(s), exiting' % attacked_targets)
 

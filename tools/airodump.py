@@ -257,9 +257,6 @@ class Airodump(Dependency):
         """
         self.decloaking = False
 
-        if Configuration.no_deauth:
-            return  # Do not deauth if requested
-
         if self.channel is None:
             return  # Do not deauth if channel is not fixed.
 

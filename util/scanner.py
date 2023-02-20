@@ -18,7 +18,6 @@ class Scanner(object):
         self.previous_target_count = 0
         self.target_archives = {}
         self.targets = []
-        self.target = None  # Target specified by user (based on ESSID/BSSID)
         self.err_msg = None
 
     def find_targets(self):
@@ -27,8 +26,6 @@ class Scanner(object):
         Loops until scan is interrupted via user or config.
         Sets this object `targets` attribute (list[Target]) on interruption
         """
-
-        max_scan_time = Configuration.scan_time
 
         # Loads airodump with interface/channel/etc from Configuration
         try:
@@ -42,9 +39,6 @@ class Scanner(object):
 
                     self.targets = airodump.get_targets(old_targets=self.targets,
                                                         target_archives=self.target_archives)
-
-                    if self.found_target():
-                        return True  # We found the target we want
 
                     if airodump.pid.poll() is not None:
                         return True  # Airodump process died
@@ -64,26 +58,9 @@ class Scanner(object):
                     Color.clear_entire_line()
                     Color.p(outline)
 
-                    if max_scan_time > 0 and time() > scan_start_time + max_scan_time:
-                        return True
-
                     sleep(1)
 
         except KeyboardInterrupt:
-            if not Configuration.infinite_mode:
-                return True
-
-            options = '({G}s{W}{D}, {W}{R}e{W})'
-            prompt = '{+} Do you want to {G}start attacking{W} or {R}exit{W}%s?' % options
-
-            self.print_targets()
-            Color.clear_entire_line()
-            Color.p(prompt)
-            answer = input().lower()
-
-            if answer.startswith('e'):
-                return False
-
             return True
 
     def update_targets(self):
@@ -92,8 +69,6 @@ class Scanner(object):
         Returns: True if user wants to stop attack, False otherwise
         """
         self.previous_target_count = 0
-        # for target in self.targets:
-        # self.target_archives[target.bssid] = ArchivedTarget(target)
 
         self.targets = []
         return self.find_targets()
@@ -103,32 +78,6 @@ class Scanner(object):
         Returns: number of attacked targets by this scanner
         """
         return sum(bool(target.attacked) for target in list(self.target_archives.values()))
-
-    def found_target(self):
-        """
-        Detect if we found a target specified by the user (optional).
-        Sets this object's `target` attribute if found.
-        Returns: True if target was specified and found, False otherwise.
-        """
-        bssid = Configuration.target_bssid
-        essid = Configuration.target_essid
-
-        if bssid is None and essid is None:
-            return False  # No specific target from user.
-
-        # for target in self.targets:
-        #     if bssid and target.bssid and bssid.lower() == target.bssid.lower():
-        #         self.target = target
-        #         break
-        #     if essid and target.essid and essid == target.essid:
-        #         self.target = target
-        #         break
-
-        # if self.target:
-        #     Color.pl('\n{+} {C}found target{G} %s {W}({G}%s{W})' % (self.target.bssid, self.target.essid))
-        #     return True
-
-        return False
 
     @staticmethod
     def clr_scr():
@@ -202,10 +151,6 @@ class Scanner(object):
         If the user used pillage or infinite attack mode retuns all the targets
         Otherwise, prompts user to select targets and returns the selection.
         """
-
-        if self.target:
-            # When user specifies a specific target
-            return [self.target]
 
         if len(self.targets) == 0:
             if self.err_msg is not None:

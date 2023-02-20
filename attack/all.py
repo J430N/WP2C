@@ -18,17 +18,17 @@ class AttackAll(object):
         attacked_targets = 0
         targets_remaining = len(targets)
         for index, target in enumerate(targets, start=1):
-            if Configuration.attack_max != 0 and index > Configuration.attack_max:
-                print(("Attacked %d targets, stopping because of the --first flag" % Configuration.attack_max))
-                break
-            attacked_targets += 1
-            targets_remaining -= 1
+            # if Configuration.attack_max != 0 and index > Configuration.attack_max:
+            #     print(("Attacked %d targets, stopping because of the --first flag" % Configuration.attack_max))
+            #     break
+            # attacked_targets += 1
+            # targets_remaining -= 1
 
-            bssid = target.bssid
-            essid = target.essid if target.essid_known else '{O}ESSID unknown{W}'
+            # bssid = target.bssid
+            # essid = target.essid if target.essid_known else '{O}ESSID unknown{W}'
 
-            Color.pl('\n{+} ({G}%d{W}/{G}%d{W})'
-                     % (index, len(targets)) + ' Starting attacks against {C}%s{W} ({C}%s{W})' % (bssid, essid))
+            # Color.pl('\n{+} ({G}%d{W}/{G}%d{W})'
+            #          % (index, len(targets)) + ' Starting attacks against {C}%s{W} ({C}%s{W})' % (bssid, essid))
 
             should_continue = cls.attack_single(target, targets_remaining)
             if not should_continue:
@@ -103,29 +103,17 @@ class AttackAll(object):
         Color.pl('{+} %s' % prompt)
 
         prompt = '{+} Do you want to'
-        options = '('
 
         if attacks_remaining > 0:
-            prompt += ' {G}continue{W} attacking,'
-            options += '{G}c{W}{D}, {W}'
+            prompt += ' {G}continue (c){W} attacking? Ans: '
 
         if targets_remaining > 0:
-            prompt += ' {O}skip{W} to the next target,'
-            options += '{O}s{W}{D}, {W}'
-
-        if Configuration.infinite_mode:
-            options += '{R}r{W})'
-            prompt += ' or {R}return{W} to scanning %s? {C}' % options
-        else:
-            options += '{R}e{W})'
-            prompt += ' or {R}exit{W} %s? {C}' % options
+            prompt += ' {O}skip (s){W} to the next target? Ans: '
 
         Color.p(prompt)
         answer = input().lower()
 
         if answer.startswith('s'):
             return None  # Skip
-        elif answer.startswith('e') or answer.startswith('r'):
-            return False  # Exit/Return
         else:
             return True  # Continue

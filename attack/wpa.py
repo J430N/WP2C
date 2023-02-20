@@ -225,8 +225,6 @@ class AttackWPA(Attack):
             Args:
                 target - The Target to deauth, including clients.
         """
-        if Configuration.no_deauth:
-            return
 
         for client in [None] + self.clients:
             target_name = '*broadcast*' if client is None else client

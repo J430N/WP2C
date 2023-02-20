@@ -40,97 +40,6 @@ class Arguments(object):
                           help=Color.s(
                               'Shows more options ({C}-h -v{W}). Prints commands and outputs. Increase verbosity by increasing numbers of v e.g. {C}-vv{W} (default: {G}quiet{W})'))
 
-        glob.add_argument('-i',
-                          action='store',
-                          dest='interface',
-                          metavar='[interface]',
-                          type=str,
-                          help=Color.s('Wireless interface to use, e.g. {C}wlan0mon{W} (default: {G}ask{W})'))
-
-        glob.add_argument('-inf',
-                          '--infinite',
-                          action='store_true',
-                          dest='infinite_mode',
-                          help=Color.s(
-                              'Enable infinite attack mode. Modify scanning time with {C}-p{W} (default: {G}off{W})'))
-
-        glob.add_argument('-mac',
-                          '--random-mac',
-                          action='store_true',
-                          dest='random_mac',
-                          help=Color.s('Randomize wireless card MAC address (default: {G}off{W})'))
-
-        glob.add_argument('-p',
-                          action='store',
-                          dest='scan_time',
-                          nargs='?',
-                          const=10,
-                          metavar='scan_time',
-                          type=int,
-                          help=Color.s('{G}Pillage{W}: Attack all targets after {C}scan_time{W} (seconds)'))
-        glob.add_argument('--pillage', help=argparse.SUPPRESS, action='store',
-                          dest='scan_time', nargs='?', const=10, type=int)
-
-        glob.add_argument('-pow',
-                          '--power',
-                          action='store',
-                          dest='min_power',
-                          metavar='[min_power]',
-                          type=int,
-                          help=Color.s('Attacks any targets with at least {C}min_power{W} signal strength'))
-
-        glob.add_argument('-first',
-                          '--first',
-                          action='store',
-                          dest='attack_max',
-                          metavar='[attack_max]',
-                          type=int,
-                          help=Color.s('Attacks the first {C}attack_max{W} targets'))
-
-        glob.add_argument('-b',
-                          action='store',
-                          dest='target_bssid',
-                          metavar='[bssid]',
-                          type=str,
-                          help=self._verbose('BSSID (e.g. {GR}AA:BB:CC:DD:EE:FF{W}) of access point to attack'))
-        glob.add_argument('--bssid', help=argparse.SUPPRESS, action='store', dest='target_bssid', type=str)
-
-        glob.add_argument('-e',
-                          action='store',
-                          dest='target_essid',
-                          metavar='[essid]',
-                          type=str,
-                          help=self._verbose('ESSID (e.g. {GR}NETGEAR07{W}) of access point to attack'))
-        glob.add_argument('--essid', help=argparse.SUPPRESS, action='store', dest='target_essid', type=str)
-
-        glob.add_argument('-E',
-                          action='append',
-                          dest='ignore_essids',
-                          metavar='[text]',
-                          type=str,
-                          default=None,
-                          help=self._verbose(
-                              'Hides targets with ESSIDs that match the given text. Can be used more than once.'))
-        glob.add_argument('--ignore-essid', help=argparse.SUPPRESS, action='append', dest='ignore_essids', type=str)
-
-        glob.add_argument('-ic',
-                          '--ignore-cracked',
-                          action='store_true',
-                          dest='ignore_cracked',
-                          help=Color.s('Hides previously-cracked targets. (default: {G}off{W})'))
-
-        glob.add_argument('--clients-only',
-                          action='store_true',
-                          dest='clients_only',
-                          help=Color.s('Only show targets that have associated clients (default: {G}off{W})'))
-
-        glob.add_argument('--nodeauths',
-                          action='store_true',
-                          dest='no_deauth',
-                          help=Color.s('Passive mode: Never deauthenticates clients (default: {G}deauth targets{W})'))
-        glob.add_argument('--no-deauths', action='store_true', dest='no_deauth', help=argparse.SUPPRESS)
-        glob.add_argument('-nd', action='store_true', dest='no_deauth', help=argparse.SUPPRESS)
-
         glob.add_argument('--num-deauths',
                           action='store',
                           type=int,
@@ -147,21 +56,6 @@ class Arguments(object):
                           # The banner wil be displayed when the 'display_banner' boolean is true in wp2c.entry_point()
                           
     def _add_wpa_args(self, wpa):
-        # wpa.add_argument('--wpa',
-        #                  action='store_true',
-        #                  dest='wpa_filter',
-        #                  help=Color.s('Show only {C}WPA-encrypted networks{W} (includes {C}WPS{W})'))
-        # wpa.add_argument('-wpa', help=argparse.SUPPRESS, action='store_true', dest='wpa_filter')
-
-        # wpa.add_argument('--hs-dir',
-        #                  action='store',
-        #                  dest='wpa_handshake_dir',
-        #                  metavar='[dir]',
-        #                  type=str,
-        #                  help=self._verbose(
-        #                      'Directory to store handshake files (default: {G}%s{W})' % self.config.wpa_handshake_dir))
-        # wpa.add_argument('-hs-dir', help=argparse.SUPPRESS, action='store', dest='wpa_handshake_dir', type=str)
-
         wpa.add_argument('--new-hs',
                          action='store_true',
                          dest='ignore_old_handshakes',
@@ -175,26 +69,6 @@ class Arguments(object):
                          type=str,
                          help=Color.s(
                              'File containing passwords for cracking (default: {G}%s{W})') % self.config.wordlist)
-
-        # wpa.add_argument('--wpadt',
-        #                  action='store',
-        #                  dest='wpa_deauth_timeout',
-        #                  metavar='[seconds]',
-        #                  type=int,
-        #                  help=self._verbose('Time to wait between sending Deauths (default: {G}%d sec{W})'
-        #                                     % self.config.wpa_deauth_timeout))
-        # wpa.add_argument('-wpadt', help=argparse.SUPPRESS, action='store', dest='wpa_deauth_timeout', type=int)
-
-        # wpa.add_argument('--wpat',
-        #                  action='store',
-        #                  dest='wpa_attack_timeout',
-        #                  metavar='[seconds]',
-        #                  type=int,
-        #                  help=self._verbose('Time to wait before failing WPA attack (default: {G}%d sec{W})'
-        #                                     % self.config.wpa_attack_timeout))
-        # wpa.add_argument('-wpat', help=argparse.SUPPRESS, action='store', dest='wpa_attack_timeout', type=int)
-
-        # wpa.add_argument('-strip', help=argparse.SUPPRESS, action='store_true', dest='wpa_strip_handshake')
 
     @staticmethod
     def _add_command_args(commands):
@@ -223,7 +97,7 @@ class Arguments(object):
                               const='<all>',
                               dest='check_handshake')
 
-        commands.add_argument('--crack',
+        commands.add_argument('--crack', # Check does it works?
                               action='store_true',
                               dest='crack_handshake',
                               help=Color.s('Show commands to crack a captured handshake'))
