@@ -5,7 +5,6 @@ import os
 import re
 
 from util.color import Color
-from tools.macchanger import Macchanger
 
 
 class Configuration(object):
@@ -117,8 +116,6 @@ class Configuration(object):
             # Interface wasn't defined, select it!
             from tools.airmon import Airmon
             cls.interface = Airmon.ask()
-            # if cls.random_mac:
-            #     Macchanger.random()
 
     @classmethod
     def load_from_arguments(cls):
@@ -179,7 +176,6 @@ class Configuration(object):
     def exit_gracefully(cls, code=0):
         """ Deletes temp and exist with the given code """
         cls.delete_temp()
-        Macchanger.reset_if_changed()
         from tools.airmon import Airmon
         if cls.interface is not None and Airmon.base_interface is not None:
             # Stop monitor mode

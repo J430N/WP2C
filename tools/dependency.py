@@ -8,7 +8,6 @@ class Dependency(object):
     dependency_url = None
     required_attr_names = ['dependency_name', 'dependency_url', 'dependency_required']
 
-    # https://stackoverflow.com/a/49024227
     def __init_subclass__(cls):
         for attr_name in cls.required_attr_names:
             if attr_name not in cls.__dict__:
@@ -27,7 +26,6 @@ class Dependency(object):
         from tools.ip import Ip
         from tools.iw import Iw
         from tools.tshark import Tshark
-        from tools.macchanger import Macchanger
         from tools.hashcat import Hashcat
 
         apps = [
@@ -38,8 +36,6 @@ class Dependency(object):
             Tshark,
             # Hashcat
             Hashcat,
-            # Misc
-            Macchanger
         ]
 
         missing_required = any(app.fails_dependency_check() for app in apps)
