@@ -205,7 +205,7 @@ class AttackWPA(Attack):
         else:
             essid_safe = 'UnknownEssid'
         bssid_safe = handshake.bssid.replace(':', '-')
-        date = time.strftime('%Y-%m-%dT%H-%M-%S')
+        date = time.strftime('%Y-%m-%dT%H-%M-%S') # Convert date and time duration from 1970-01-02 07:30:00 until the file created into seconds
         cap_filename = f'handshake_{essid_safe}_{bssid_safe}_{date}.cap'
         cap_filename = os.path.join(Configuration.wpa_handshake_dir, cap_filename)
 

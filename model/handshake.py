@@ -128,9 +128,6 @@ class Handshake(object):
         if Tshark.exists():
             Handshake.print_pairs(self.tshark_handshakes(), 'tshark')
 
-        if Process.exists('cowpatty'):
-            Handshake.print_pairs(self.cowpatty_handshakes(), 'cowpatty')
-
         Handshake.print_pairs(self.aircrack_handshakes(), 'aircrack')
 
     def strip(self, outfile=None):
@@ -200,6 +197,6 @@ class Handshake(object):
             if not os.path.exists(capfile):
                 Color.pl('{!} {O}.cap file {C}%s{O} not found{W}' % capfile)
                 return
-            hs = Handshake(capfile, bssid=Configuration.target_bssid, essid=Configuration.target_essid)
+            hs = Handshake(capfile)
             hs.analyze()
             Color.pl('')

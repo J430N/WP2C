@@ -132,5 +132,5 @@ class CrackResult(object):
                                     json['handshake_file'],
                                     json['key'])
         result.date = json['date']
-        result.readable_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(result.date))
+        result.readable_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(result.date)) # Convert seconds from 1970-01-02 07:30:00 until the file created back to readable date and time
         return result
