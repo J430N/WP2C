@@ -7,10 +7,6 @@ from config import Configuration
 import re
 
 
-class WPSState:
-    NONE, UNLOCKED, LOCKED, UNKNOWN = list(range(4))
-
-
 class ArchivedTarget(object):
     """
         Holds information between scans from a previously found target
@@ -76,7 +72,6 @@ class Target(object):
                     14 Key            ()
         """
         self.manufacturer = None
-        self.wps = WPSState.NONE
         self.bssid = fields[0].strip()
         self.channel = fields[3].strip()
         self.encryption = fields[5].strip()
@@ -86,10 +81,6 @@ class Target(object):
         # In this case (len = 0), defaults to WPA (which is the most common)
         if 'WPA' in self.encryption or len(self.encryption) == 0:
             self.encryption = 'WPA'
-        elif 'WEP' in self.encryption:
-            self.encryption = 'WEP'
-        elif 'WPS' in self.encryption:
-            self.encryption = 'WPS'
 
         if len(self.encryption) > 4:
             self.encryption = self.encryption[:4].strip()
@@ -112,8 +103,6 @@ class Target(object):
             self.essid = None  # '(%s)' % self.bssid
             self.essid_known = False
 
-        # self.wps = WPSState.UNKNOWN
-
         # Will be set to true once this target will be attacked
         # Needed to count targets in infinite attack mode
         self.attacked = False
@@ -132,7 +121,7 @@ class Target(object):
         """
             Helper function to transfer relevant fields into another Target or ArchivedTarget
         """
-        other.wps = self.wps
+        
         other.attacked = self.attacked
 
         # If both targets know the essid, keep decloacked value
@@ -202,9 +191,7 @@ class Target(object):
         channel = Color.s(f'{channel_color}{str(self.channel).ljust(3)}')
 
         encryption = self.encryption.ljust(3)
-        if 'WEP' in encryption:
-            encryption = Color.s('{G}%s' % encryption)
-        elif 'WPA' in encryption:
+        if 'WPA' in encryption:
             if 'PSK' in self.authentication:
                 encryption = Color.s('{O}%s-P' % encryption)
             elif 'MGT' in self.authentication:
@@ -221,22 +208,11 @@ class Target(object):
             color = 'R'
         power = Color.s('{%s}%s' % (color, power))
 
-        if self.wps == WPSState.UNLOCKED:
-            wps = Color.s('{G} yes')
-        elif self.wps == WPSState.NONE:
-            wps = Color.s('{O}  no')
-        elif self.wps == WPSState.LOCKED:
-            wps = Color.s('{R}lock')
-        elif self.wps == WPSState.UNKNOWN:
-            wps = Color.s('{O} n/a')
-        else:
-            wps = ' ERR'
-
         clients = '       '
         if len(self.clients) > 0:
             clients = Color.s('{G}' +str(len(self.clients)))
 
-        result = f'{essid}  {bssid}  {manufacturer}  {channel}  {encryption}  {power}  {clients}' #{wps} removed 
+        result = f'{essid}  {bssid}  {manufacturer}  {channel}  {encryption}  {power}  {clients}'
 
         result += Color.s('{W}')
         return result

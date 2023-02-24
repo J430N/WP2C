@@ -73,7 +73,6 @@ class AttackWPA(Attack):
         # First, start Airodump process
         with Airodump(channel=self.target.channel,
                       target_bssid=self.target.bssid,
-                      skip_wps=True,
                       output_file_prefix='wpa') as airodump:
 
             Color.clear_entire_line()

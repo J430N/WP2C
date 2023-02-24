@@ -26,7 +26,6 @@ class Dependency(object):
         from tools.ip import Ip
         from tools.iw import Iw
         from tools.tshark import Tshark
-        from tools.hashcat import Hashcat
 
         apps = [
             # Aircrack
@@ -34,8 +33,6 @@ class Dependency(object):
             # wireless/net tools
             Iw, Ip,
             Tshark,
-            # Hashcat
-            Hashcat,
         ]
 
         missing_required = any(app.fails_dependency_check() for app in apps)

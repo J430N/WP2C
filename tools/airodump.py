@@ -4,7 +4,7 @@
 from .dependency import Dependency
 from util.process import Process
 from config import Configuration
-from model.target import Target, WPSState
+from model.target import Target
 from model.client import Client
 
 import os
@@ -18,9 +18,9 @@ class Airodump(Dependency):
     dependency_url = 'https://www.aircrack-ng.org/install.html'
 
     def __init__(self, interface=None, channel=None, encryption=None,
-                 wps=WPSState.UNKNOWN, target_bssid=None,
+                  target_bssid=None,
                  output_file_prefix='airodump',
-                 ivs_only=False, skip_wps=False, delete_existing_files=True):
+                 ivs_only=False, delete_existing_files=True):
         """Sets up airodump arguments, doesn't start process yet."""
         Configuration.initialize()
 
@@ -34,12 +34,10 @@ class Airodump(Dependency):
         self.channel = channel
 
         self.encryption = encryption
-        self.wps = wps
 
         self.target_bssid = target_bssid
         self.output_file_prefix = output_file_prefix
         self.ivs_only = ivs_only
-        self.skip_wps = skip_wps
 
         # For tracking decloaked APs (previously were hidden)
         self.decloaking = False
@@ -72,8 +70,7 @@ class Airodump(Dependency):
 
         if self.encryption:
             command.extend(['--enc', self.encryption])
-        if self.wps:
-            command.extend(['--wps'])
+
         if self.target_bssid:
             command.extend(['--bssid', self.target_bssid])
 

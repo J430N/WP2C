@@ -14,67 +14,6 @@ class Aircrack(Dependency):
     dependency_name = 'aircrack-ng'
     dependency_url = 'https://www.aircrack-ng.org/install.html'
 
-    def __init__(self, ivs_file=None):
-
-        self.cracked_file = os.path.abspath(os.path.join(Configuration.temp(), 'wepkey.txt'))
-
-        # Delete previous cracked files
-        if os.path.exists(self.cracked_file):
-            os.remove(self.cracked_file)
-
-        command = [
-            'aircrack-ng',
-            '-a', '1',
-            '-l', self.cracked_file,
-        ]
-        if type(ivs_file) is str:
-            ivs_file = [ivs_file]
-
-        command.extend(ivs_file)
-
-        self.pid = Process(command, devnull=True)
-
-    def is_running(self):
-        return self.pid.poll() is None
-
-    def is_cracked(self):
-        return os.path.exists(self.cracked_file)
-
-    def stop(self):
-        """ Stops aircrack process """
-        if self.pid.poll() is None:
-            self.pid.interrupt()
-
-    def get_key_hex_ascii(self):
-        if not self.is_cracked():
-            raise Exception('Cracked file not found')
-
-        with open(self.cracked_file, 'r') as fid:
-            hex_raw = fid.read()
-
-        return self._hex_and_ascii_key(hex_raw)
-
-    @staticmethod
-    def _hex_and_ascii_key(hex_raw):
-        hex_chars = []
-        ascii_key = ''
-        for index in range(0, len(hex_raw), 2):
-            byt = hex_raw[index:index + 2]
-            hex_chars.append(byt)
-            byt_int = int(byt, 16)
-            if byt_int < 32 or byt_int > 127 or ascii_key is None:
-                ascii_key = None  # Not printable
-            else:
-                ascii_key += chr(byt_int)
-
-        hex_key = ':'.join(hex_chars)
-
-        return hex_key, ascii_key
-
-    def __del__(self):
-        if os.path.exists(self.cracked_file):
-            os.remove(self.cracked_file)
-
     @staticmethod
     def crack_handshake(handshake, show_command=False):
         from util.color import Color

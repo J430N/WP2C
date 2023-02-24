@@ -26,7 +26,6 @@ class Configuration(object):
     no_nullpin = None
     num_deauths = None
     print_stack_traces = None
-    require_fakeauth = None
     show_cracked = None
     temp_dir = None  # Temporary directory
     wordlist = None
