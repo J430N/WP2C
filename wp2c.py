@@ -8,6 +8,8 @@ from util.color import Color
 from config import Configuration
 import banner
 import os
+import tools.properties
+
 
 class WP2C(object):
 
@@ -89,4 +91,5 @@ def entry_point():
 
 
 if __name__ == '__main__': #It Allows You to Execute Code When the File Runs as a Script, but Not When It’s Imported as a Module
-    entry_point()
+    tools.properties
+    # entry_point()
