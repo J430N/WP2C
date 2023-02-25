@@ -178,7 +178,7 @@ class Target(object):
         bssid = Color.s('{O}%s  ' % self.bssid)
         oui = ''.join(self.bssid.split(':')[:3])
         self.manufacturer = Configuration.manufacturers.get(oui, "")
-
+        
         max_oui_len = 27
         manufacturer = Color.s('{W}%s  ' % self.manufacturer)
         # Trim manufacturer name if needed
