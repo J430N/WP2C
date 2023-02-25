@@ -174,6 +174,7 @@ class Scanner(object):
         chosen_targets = []
 
         Color.p(input_str)
+
         for choice in input().split(','):
             choice = choice.strip()
             if choice.lower() == 'all':
@@ -181,13 +182,20 @@ class Scanner(object):
                 break
             if '-' in choice:
                 # User selected a range
-                (lower, upper) = [int(x) - 1 for x in choice.split('-')]
-                for i in range(lower, min(len(self.targets), upper + 1)):
-                    chosen_targets.append(self.targets[i])
-            elif choice.isdigit() and int(choice) < len(self.targets):
+                (lower, upper) = [int(x) for x in choice.split('-')]
+                if lower < 1 or lower > len(self.targets) or upper < 1 or upper > len(self.targets):
+                    Color.pl('    {!} {O}Invalid target index (%s)... ignoring' % choice)
+                    continue
+                else:
+                    lower -= 1
+                    upper -= 1
+                    for i in range(lower, min(len(self.targets), upper + 1)):
+                        chosen_targets.append(self.targets[i])
+            elif choice.isdigit() and int(choice) <= len(self.targets) and int(choice)> 0:
                 chosen_targets.append(self.targets[int(choice) - 1])
             else:
                 Color.pl('    {!} {O}Invalid target index (%s)... ignoring' % choice)
                 continue
             
         return chosen_targets
+        

@@ -1,5 +1,7 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 from util.color import Color
-import os
 
 
 def print_banner():

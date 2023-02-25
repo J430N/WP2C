@@ -6,14 +6,13 @@ import re
 
 from util.color import Color
 
-
 class Configuration(object):
     """ Stores configuration variables and functions for WP2C. """
 
     initialized = False  # Flag indicating config has been initialized
     verbose = 0
     version = '2.6.8'
-
+    
     check_handshake = None
     cracked_file = None
     crack_handshake = None
@@ -21,7 +20,7 @@ class Configuration(object):
     existing_commands = None
     ignore_old_handshakes = None
     interface = None
-    display_banner = None # Test!!!!!!!!!
+    wifi_properties = None
     manufacturers = None
     no_nullpin = None
     num_deauths = None
@@ -48,7 +47,7 @@ class Configuration(object):
 
         cls.verbose = 0  # Verbosity of output. Higher number means more debug info about running processes.
         cls.print_stack_traces = True
-        cls.display_banner = False #Test!!!!!!!!!!!!!!
+        cls.wifi_properties = False
         cls.tx_power = 0  # Wifi transmit power (0 is default)
         cls.interface = None
         cls.num_deauths = 1  # Number of deauth packets to send to each target.
@@ -129,9 +128,11 @@ class Configuration(object):
         if args.cracked:
             cls.show_cracked = True
         if args.check_handshake:
-            cls.check_handshake = args.check_handshake
+            cls.check_handshake = True
         if args.crack_handshake:
             cls.crack_handshake = True
+        if args.wifi_properties:
+            cls.wifi_properties = True
 
     @classmethod
     def parse_settings_args(cls, args):
@@ -141,10 +142,6 @@ class Configuration(object):
             cls.verbose = args.verbose
             Color.pl('{+} {C}option:{W} verbosity level {G}%d{W}' % args.verbose)
             
-        if args.display_banner:
-            cls.display_banner = True
-            Color.pl('{+} {C}option:{W} Display WP2C banner {G}enabled{W}')    
-
     @classmethod
     def temp(cls, subfile=''):
         """ Creates and/or returns the temporary directory """
@@ -182,7 +179,9 @@ class Configuration(object):
             # Bring original interface back up
             Airmon.put_interface_up(Airmon.base_interface)
         
-        Airmon.start_network_manager() 
+        if Airmon.kill_network_monitor:
+            # Kill processes that may interfere with WP2C's operation
+            Airmon.start_network_manager() 
             
         exit(code)
 

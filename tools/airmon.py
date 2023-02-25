@@ -55,6 +55,7 @@ class Airmon(Dependency):
     dependency_url = 'https://www.aircrack-ng.org/install.html'
     chipset_table = 'https://wikidevi.com/wiki/Wireless_adapters/Chipset_table'
     base_interface = None
+    kill_network_monitor = None
 
     def __init__(self):
         self.interfaces = None
@@ -241,6 +242,8 @@ class Airmon(Dependency):
         Puts selected device into Monitor Mode.
         """
         Airmon.terminate_conflicting_processes()
+        
+        Airmon.kill_network_monitor = True
 
         Color.p('\n{+} Looking for {C}wireless interfaces{W}...')
         monitor_interfaces = Iw.get_interfaces(mode='monitor')

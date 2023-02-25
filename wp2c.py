@@ -8,7 +8,6 @@ from util.color import Color
 from config import Configuration
 import banner
 import os
-import tools.properties
 
 
 class WP2C(object):
@@ -39,7 +38,8 @@ class WP2C(object):
         from model.result import CrackResult
         from model.handshake import Handshake
         from util.crack import CrackHelper
-
+        from tools.properties import Properties
+        
         if Configuration.show_cracked:  # Print previously-cracked access points
             CrackResult.display()
 
@@ -49,6 +49,9 @@ class WP2C(object):
 
         elif Configuration.crack_handshake:  # Show commands to crack a captured handshake
             CrackHelper.run()
+        
+        elif Configuration.wifi_properties:  # Show commands to crack a captured handshake
+            Properties.run()  
 
         else:
             Configuration.get_monitor_mode_interface()  # WPA attack start here!
@@ -84,12 +87,8 @@ def entry_point():
         Color.pl('\n{!} {R}Exiting{W}\n')
     except KeyboardInterrupt:
         Color.pl('\n{!} {O}Interrupted, Shutting down...{W}')
-    #Testing    
-    if Configuration.display_banner:
-        banner.print_banner()
     Configuration.exit_gracefully(0)
 
 
 if __name__ == '__main__': #It Allows You to Execute Code When the File Runs as a Script, but Not When It’s Imported as a Module
-    tools.properties
-    # entry_point()
+    entry_point()

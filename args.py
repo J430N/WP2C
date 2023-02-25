@@ -40,7 +40,7 @@ class Arguments(object):
                           help=Color.s(
                               'Shows more options ({C}-h -v{W}). Prints commands and outputs. Increase verbosity by increasing numbers of v e.g. {C}-vv{W} (default: {G}quiet{W})'))
 
-        glob.add_argument('--num-deauths',
+        glob.add_argument('--num-deauths', #Check
                           action='store',
                           type=int,
                           dest='num_deauths',
@@ -49,10 +49,10 @@ class Arguments(object):
                           help=self._verbose(
                               'Number of deauth packets to send (default: {G}%d{W})' % self.config.num_deauths))
         
-        glob.add_argument('-B',
-                          action='store_true',
-                          dest='display_banner', #will be used at config.parse_settings_args()
-                          help=Color.s('Display WP2C banner (default: {G}off{W})'))
+        glob.add_argument('--prop',
+                          action = 'store_true',
+                          dest='wifi_properties', #will be used at config.parse_settings_args()
+                          help=Color.s('Shows current Wi-Fi properties'))
                           # The banner wil be displayed when the 'display_banner' boolean is true in wp2c.entry_point()
                           
     def _add_wpa_args(self, wpa):
@@ -97,7 +97,7 @@ class Arguments(object):
                               const='<all>',
                               dest='check_handshake')
 
-        commands.add_argument('--crack', # Check does it works?
+        commands.add_argument('--crack',
                               action='store_true',
                               dest='crack_handshake',
                               help=Color.s('Show commands to crack a captured handshake'))
