@@ -247,7 +247,7 @@ class Airmon():
             interface = monitor_interfaces[0]
             Color.clear_entire_line()
             Color.pl('{+} Using {G}%s{W} already in monitor mode' % interface)
-            Airmon.base_interface = None
+            Airmon.base_interface = interface
             return interface
 
         Color.clear_entire_line()
@@ -320,11 +320,11 @@ class Airmon():
     def put_interface_up(interface):
         Color.p('{!}{W} Putting interface {R}%s{W} {G}up{W}...\n' % interface)
         Ip.up(interface)
-        Color.pl('{+}{W} Done !')
+        Color.pl('{+} {G}%s{W} interface is upped' % interface)
 
     @staticmethod
     def start_network_manager():
-        Color.p('{!} {O}start {R}NetworkManager{O}...')
+        Color.pl('{!} {O}Starting {R}NetworkManager{O}...')
 
         if Process.exists('systemctl'):
             cmd = 'systemctl start NetworkManager'
@@ -337,7 +337,7 @@ class Airmon():
                 if err is not None and err.strip() != '':
                     Color.pl('{!} {O}STDERR> %s{W}' % err)
             else:
-                Color.pl(' {G}done{W} ({C}%s{W})' % cmd)
+                Color.pl('{+} {W}Started NetworkManager{W} ({C}%s{W})' % cmd)
                 return
         else:
-            Color.pl(' {R}Cannot start NetworkManager: {O}systemctl{R} not found{W}')
+            Color.pl('{!} {R}Cannot start NetworkManager: {O}systemctl{R} not found{W}')
