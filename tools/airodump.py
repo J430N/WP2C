@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .dependency import Dependency
 from util.process import Process
 from config import Configuration
 from model.target import Target
@@ -11,11 +10,7 @@ import os
 import time
 
 
-class Airodump(Dependency):
-    """ Wrapper around airodump-ng program """
-    dependency_required = True
-    dependency_name = 'airodump-ng'
-    dependency_url = 'https://www.aircrack-ng.org/install.html'
+class Airodump():
 
     def __init__(self, interface=None, channel=None, encryption=None,
                   target_bssid=None,

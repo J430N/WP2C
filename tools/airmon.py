@@ -5,7 +5,6 @@ import os
 import re
 import signal
 
-from .dependency import Dependency
 from .ip import Ip
 from .iw import Iw
 from util.color import Color
@@ -48,11 +47,7 @@ class AirmonIface(object):
         return s
 
 
-class Airmon(Dependency):
-    """ Wrapper around the 'airmon-ng' program """
-    dependency_required = True
-    dependency_name = 'airmon-ng'
-    dependency_url = 'https://www.aircrack-ng.org/install.html'
+class Airmon():
     chipset_table = 'https://wikidevi.com/wiki/Wireless_adapters/Chipset_table'
     base_interface = None
     kill_network_monitor = None

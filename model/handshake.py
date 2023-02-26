@@ -81,27 +81,6 @@ class Handshake(object):
         tshark_bssids = Tshark.bssids_with_handshakes(self.capfile, bssid=self.bssid)
         return [(bssid, None) for bssid in tshark_bssids]
 
-    def cowpatty_handshakes(self):
-        """Returns list[tuple] of BSSID & ESSID pairs (BSSIDs are always `None`)."""
-        if not Process.exists('cowpatty'):
-            return []
-
-        # Needs to check if cowpatty is updated and have the -2 parameter
-        cowpattycheck = Process('cowpatty', devnull=False)
-
-        command = [
-            'cowpatty',
-            '-2' if 'frames 1 and 2 or 2 and 3 for key attack' in cowpattycheck.stdout() else '',
-            '-r',   self.capfile,
-            '-c'    # Check for handshake
-        ]
-
-        proc = Process(command, devnull=False)
-        result = next(([(None, self.essid)] for line in proc.stdout().split('\n') if 'Collected all necessary data to '
-                                                                                     'mount crack against WPA' in
-                       line), [])
-
-        return result
 
     def aircrack_handshakes(self):
         """Returns tuple (BSSID,None) if aircrack thinks self.capfile contains a handshake / can be cracked"""
@@ -124,9 +103,6 @@ class Handshake(object):
     def analyze(self):
         """Prints analysis of handshake capfile"""
         self.divine_bssid_and_essid()
-
-        if Tshark.exists():
-            Handshake.print_pairs(self.tshark_handshakes(), 'tshark')
 
         Handshake.print_pairs(self.aircrack_handshakes(), 'aircrack')
 

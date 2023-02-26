@@ -39,21 +39,16 @@ class Arguments(object):
                           dest='verbose',
                           help=Color.s(
                               'Shows more options ({C}-h -v{W}). Prints commands and outputs. Increase verbosity by increasing numbers of v e.g. {C}-vv{W} (default: {G}quiet{W})'))
-
-        glob.add_argument('--num-deauths', #Check
-                          action='store',
-                          type=int,
-                          dest='num_deauths',
-                          metavar='[num]',
-                          default=None,
-                          help=self._verbose(
-                              'Number of deauth packets to send (default: {G}%d{W})' % self.config.num_deauths))
         
         glob.add_argument('--prop',
                           action = 'store_true',
-                          dest='wifi_properties', #will be used at config.parse_settings_args()
+                          dest='wifi_properties',
                           help=Color.s('Shows current Wi-Fi properties'))
-                          # The banner wil be displayed when the 'display_banner' boolean is true in wp2c.entry_point()
+        
+        glob.add_argument('--speed',
+                          action = 'store_true',
+                          dest='speed',
+                          help=Color.s('Test current Wi-Fi upload and download speed'))
                           
     def _add_wpa_args(self, wpa):
         wpa.add_argument('--new-hs',
@@ -77,11 +72,6 @@ class Arguments(object):
                               dest='cracked',
                               help=Color.s('Print previously-cracked access points'))
 
-        commands.add_argument('-cracked',
-                              help=argparse.SUPPRESS,
-                              action='store_true',
-                              dest='cracked')
-
         commands.add_argument('--check',
                               action='store',
                               metavar='file',
@@ -89,13 +79,6 @@ class Arguments(object):
                               const='<all>',
                               dest='check_handshake',
                               help=Color.s('Check a {C}.cap file{W} (or all {C}hs/*.cap{W} files) for WPA handshakes'))
-
-        commands.add_argument('-check',
-                              help=argparse.SUPPRESS,
-                              action='store',
-                              nargs='?',
-                              const='<all>',
-                              dest='check_handshake')
 
         commands.add_argument('--crack',
                               action='store_true',

@@ -1,17 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .dependency import Dependency
 from config import Configuration
 from util.process import Process
 import time
 from threading import Thread
 
 
-class Aireplay(Thread, Dependency):
-    dependency_required = True
-    dependency_name = 'aireplay-ng'
-    dependency_url = 'https://www.aircrack-ng.org/install.html'
+class Aireplay(Thread):
 
     @staticmethod
     def deauth(target_bssid, essid=None, client_mac=None, num_deauths=None, timeout=2):

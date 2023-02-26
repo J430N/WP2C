@@ -27,31 +27,31 @@ class WP2C(object):
             Color.pl('{!} {R}Error: {O}WP2C{R} require {O}root {R}permissions to run{W}')
             Color.pl('{!} {R}Recommendation: Re-run the WP2C with {O}sudo{W}')
             Configuration.exit_gracefully(0)
-
-        from tools.dependency import Dependency
-        Dependency.run_dependency_check()
         
     def start(self):
         """
-        Starts target-scan + attack loop, or launches utilities depending on user input. (!!!!!!!Edit 3 of these functions)
+        Performs different actions depending on user input.
         """
         from model.result import CrackResult
         from model.handshake import Handshake
         from util.crack import CrackHelper
         from tools.properties import Properties
+        from tools.speed import Speed
         
         if Configuration.show_cracked:  # Print previously-cracked access points
             CrackResult.display()
 
-        # Check a .cap file (or all hs/*.cap files) for WPA handshakes
-        elif Configuration.check_handshake:
+        elif Configuration.check_handshake: # Check a .cap file (or all hs/*.cap files) for WPA handshakes
             Handshake.check()
 
         elif Configuration.crack_handshake:  # Show commands to crack a captured handshake
             CrackHelper.run()
         
-        elif Configuration.wifi_properties:  # Show commands to crack a captured handshake
+        elif Configuration.wifi_properties:  # Show wifi properties
             Properties.run()  
+        
+        elif Configuration.speed: # Test internet speed
+            Speed.run()
 
         else:
             Configuration.get_monitor_mode_interface()  # WPA attack start here!

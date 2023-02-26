@@ -21,9 +21,9 @@ class Configuration(object):
     ignore_old_handshakes = None
     interface = None
     wifi_properties = None
+    speed = None
     manufacturers = None
     no_nullpin = None
-    num_deauths = None
     print_stack_traces = None
     show_cracked = None
     temp_dir = None  # Temporary directory
@@ -46,11 +46,10 @@ class Configuration(object):
         cls.initialized = True
 
         cls.verbose = 0  # Verbosity of output. Higher number means more debug info about running processes.
-        cls.print_stack_traces = True
-        cls.wifi_properties = False
+        cls.print_stack_traces = True # Print stack traces when exceptions occur
         cls.tx_power = 0  # Wifi transmit power (0 is default)
-        cls.interface = None
-        cls.num_deauths = 1  # Number of deauth packets to send to each target.
+        cls.interface = None # Wireless interface to use
+        cls.num_deauths = 3  # Number of deauth packets to send to each target.
 
         # WPA variables
         cls.wpa_deauth_timeout = 5  # Wait time between deauths
@@ -98,6 +97,8 @@ class Configuration(object):
         cls.show_cracked = False
         cls.check_handshake = None
         cls.crack_handshake = False
+        cls.wifi_properties = False
+        cls.speed = False
 
         # A list to cache all checked commands (e.g. `which hashcat` will execute only once)
         cls.existing_commands = {}
@@ -133,6 +134,8 @@ class Configuration(object):
             cls.crack_handshake = True
         if args.wifi_properties:
             cls.wifi_properties = True
+        if args.speed:
+            cls.speed = True
 
     @classmethod
     def parse_settings_args(cls, args):

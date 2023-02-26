@@ -16,14 +16,14 @@ class Properties:
         
         Configuration.initialize(False)
         
-        if not cls.get_network_info() is False:
-            Color.pl('\n{O}---------- Network Information ----------')
+        if not cls.get_network_info() is False and len(Properties.dict_list) > 0:
+            Color.pl('\n{W} ------------------{G} Wi-Fi Properties {W}------------------')
             for dict in Properties.dict_list:
                 for key, value in dict.items():
-                    Color.p('{P}%s: ' % str(key).ljust(17))
-                    Color.pl('{W}%s' % str(value).ljust(42))
+                    Color.p('{+} {W}%s: ' % str(key).ljust(19))
+                    Color.pl('{C}%s' % str(value).ljust(42))
         else:
-            Color.pl('{!} {R}Error: {O}WP2C{R} could not find any network interfaces{W}')
+            Color.pl('{!} {R}Error: {O}WP2C{R} could not find any wireless interfaces{W}')
 
                     
     @classmethod
@@ -36,9 +36,9 @@ class Properties:
         else:
             # First row: columns
             Color.p('   NUM')
-            Color.pl('  Network Interface')
+            Color.pl('  Wireless Interface')
             Color.p('   ---')
-            Color.pl('  -----------------')
+            Color.pl('  ------------------')
             
             # Remaining rows: interfaces
             for idx, interface in enumerate(interfaces, start=1): #Adjust here
@@ -75,51 +75,56 @@ class Properties:
                 else:
                     Color.pl('    {!} {O}Invalid target index (%s)... ignoring' % choice)
                     continue
-                
+            
             # Get WiFi properties from chosen interfaces        
             for interface in chosen_interfaces:
                 interface = interface.strip()
-                
-                dict = {} # Create a dict for each interface
-                dict['Network Interface'] = interface        
+  
+                dict = {} # Create a dict for each wireless interface
+                dict['Wireless Interface'] = interface        
 
-                # Get WiFi properties using iwconfig
-                output = subprocess.check_output(['iwconfig', interface])
-                lines = output.decode().split('\n')
-
-                for line in lines:
-                    if 'ESSID' in line:
-                        ssid = line.split('ESSID:')[1].split('"')[1]
-                        dict['SSID'] = ssid
-                        
-                    if '802.11' in line:
-                        protocol = line.split()[2]
-                        dict['Protocol'] = protocol
-                        
-                    if 'Frequency' in line:
-                        frequency = line.split('Frequency:')[1].split()[0]
-                        dict['Frequency'] = frequency + ' Ghz'
-                        
-                    if ('Frequendcy' in dict or 'Link Quality' in line or line == lines[-1]):
-                        dict.update(cls.get_network_info_cont(ssid))
+                try:
+                    # Get WiFi properties using iwconfig
+                    output = subprocess.check_output(['iwconfig', interface])
+                    lines = output.decode().split('\n')  
                     
-                    if 'Access Point' in line:
-                        mac = line.split('Access Point:')[1].strip()
-                        dict['MAC Address'] = mac
+                    for line in lines:                       
+                        if 'ESSID' in line:
+                            ssid = line.split('ESSID:')[1].split('"')[1]
+                            dict['SSID'] = ssid
+                            
+                        if '802.11' in line:
+                            protocol = line.split()[2]
+                            dict['Protocol'] = protocol
+                            
+                        if 'Frequency' in line:
+                            frequency = line.split('Frequency:')[1].split()[0]
+                            dict['Frequency'] = frequency + ' Ghz'
+                            
+                        if ('Frequendcy' in dict or 'Link Quality' in line or line == lines[-1]):
+                            dict.update(cls.get_network_info_cont(ssid))
                         
-                        oui = ''.join(mac.split(':')[:3]) # Use oui in MAC address to find manufacturer                       
-                        manufacturer = Configuration.manufacturers.get(oui, "")
-                        dict['Manufacturer'] = manufacturer 
-                        
-                    if 'Link Quality' in line:
-                        quality = line.split('Link Quality=')[1].split()[0]
-                        dict['Link Quality'] = quality
-                        
-                    if 'Signal level' in line:
-                        signal_level = line.split('Signal level=')[1].split()[0]
-                        dict['Signal Level'] = signal_level
-                        
-                Properties.dict_list.append(dict) # Add dict to list     
+                        if 'Access Point' in line:
+                            mac = line.split('Access Point:')[1].strip()
+                            dict['MAC Address'] = mac
+                            
+                            oui = ''.join(mac.split(':')[:3]) # Use oui in MAC address to find manufacturer                       
+                            manufacturer = Configuration.manufacturers.get(oui, "")
+                            dict['Manufacturer'] = manufacturer 
+                            
+                        if 'Link Quality' in line:
+                            quality = line.split('Link Quality=')[1].split()[0]
+                            dict['Link Quality'] = quality
+                            
+                        if 'Signal level' in line:
+                            signal_level = line.split('Signal level=')[1].split()[0]
+                            dict['Signal Level'] = signal_level
+                            
+                    Properties.dict_list.append(dict) # Add dict to list
+                except:
+                    Color.pl('{!} {R}Error: Unable to obtain Wi-Fi properties from {O}%s{R} wireless interface{W}' %interface)
+                    continue
+            
 
     @classmethod
     def get_network_info_cont(cls, ssid):  
@@ -175,9 +180,3 @@ class Properties:
                 dict_cont['IPv6 DNS[2]'] = ipv6_dns_2
             
         return dict_cont
-
-# Connect to Wifi after cracked
-# wifi connect (B)SSID [password password] [wep-key-type {key | phrase}] [ifname ifname]
-#        [bssid BSSID] [name name] [private {yes | no}] [hidden {yes | no}]
-
-#Connect this to a arguments in args.py

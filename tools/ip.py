@@ -3,13 +3,9 @@
 
 import re
 
-from .dependency import Dependency
 
+class Ip():
 
-class Ip(Dependency):
-    dependency_required = True
-    dependency_name = 'ip'
-    dependency_url = 'apt install iproute2'
 
     @classmethod
     def up(cls, interface):

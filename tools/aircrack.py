@@ -4,15 +4,11 @@
 import os
 import re
 
-from tools.dependency import Dependency
 from config import Configuration
 from util.process import Process
 
 
-class Aircrack(Dependency):
-    dependency_required = True
-    dependency_name = 'aircrack-ng'
-    dependency_url = 'https://www.aircrack-ng.org/install.html'
+class Aircrack():
 
     @staticmethod
     def crack_handshake(handshake, show_command=False):

@@ -1,13 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .dependency import Dependency
-
-
-class Iw(Dependency):
-    dependency_required = True
-    dependency_name = 'iw'
-    dependency_url = 'apt install iw'
+class Iw():
 
     @classmethod
     def mode(cls, iface, mode_name):

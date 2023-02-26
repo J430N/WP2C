@@ -1,16 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .dependency import Dependency
 from util.process import Process
 import re
 
 
-class Tshark(Dependency):
-    """ Wrapper for Tshark program. """
-    dependency_required = False
-    dependency_name = 'tshark'
-    dependency_url = 'apt install wireshark'
+class Tshark():
 
     def __init__(self):
         pass
@@ -77,8 +72,6 @@ class Tshark(Dependency):
 
     @staticmethod
     def bssids_with_handshakes(capfile, bssid=None):
-        if not Tshark.exists():
-            return []
 
         # Returns list of BSSIDs for which we have valid handshakes in the capfile.
         command = [
@@ -105,8 +98,6 @@ class Tshark(Dependency):
     def bssid_essid_pairs(capfile, bssid):
         # Finds all BSSIDs (with corresponding ESSIDs) from cap file.
         # Returns list of tuples(BSSID, ESSID)
-        if not Tshark.exists():
-            return []
 
         ssid_pairs = set()
 
