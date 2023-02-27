@@ -1,33 +1,96 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import subprocess
 from .iw import Iw
 from util.color import Color
 from config import Configuration
+import subprocess
+import ipaddress
+import socket
+import re
 
 
 class Properties:
     """Get properties of WiFi networks."""
+    Configuration.initialize(False)
+ 
     dict_list = []
+    ipv4_add_1 = None
+    ipv4_add_2 = None
     
     @classmethod
     def run(cls):
-        
-        Configuration.initialize(False)
-        
-        if not cls.get_network_info() is False and len(Properties.dict_list) > 0:
+
+        if not Properties.get_network_info() is False and len(Properties.dict_list) > 0:
             Color.pl('\n{W} ------------------{G} Wi-Fi Properties {W}------------------')
-            for dict in Properties.dict_list:
+            for dict in cls.dict_list:
                 for key, value in dict.items():
                     Color.p('{+} {W}%s: ' % str(key).ljust(19))
-                    Color.pl('{C}%s' % str(value).ljust(42))
+                    Color.pl('{C}%s' % str(value))
+
+                # print out the infomations of the founded devices and the summary
+                Color.pl('\n{W} ------------------{G} Devices Connected to %s {W}------------------' % Properties.dict_list[0]['SSID'])
+                if Properties.ipv4_add_1 is not None:
+                    attribute = ['Name', 'MAC Address', 'Manufacturer']
+                    count = 0                    
+                    for element in Properties.discovery(Properties.ipv4_add_1):
+                        if Properties.valid_ip(element): # Check if the element is a IP address or not
+                            Color.p('{+} IP Address         : ')
+                            Color.pl('{C}%s' % element)
+                            count = 1
+                            continue
+                        elif count == 1:
+                            Color.p('{+} %s               : ' % attribute[0])
+                            Color.pl('{C}%s' % element)
+                            count += 1
+                            continue
+                        elif count == 2:
+                            Color.p('{+} %s        : ' % attribute[1])
+                            Color.pl('{C}%s' % element)
+                            count += 1
+                            continue
+                        elif count == 3:
+                            Color.p('{+} %s       : ' % attribute[2])
+                            Color.pl('{C}%s' % element + '\n')
+                            continue
+                        
+                    Color.p('\n{+} Summary            : ')
+                    Color.pl('{C}Found {O}%d{C} devices on the {W}' % Properties.host + Properties.network_ip + '{C} network{W}')
+                
+                if Properties.ipv4_add_2 is not None:
+                    attribute = ['Name', 'MAC Address', 'Manufacturer']
+                    count = 0                    
+                    for element in Properties.discovery(Properties.ipv4_add_2):
+                        if Properties.valid_ip(element): # Check if the element is a IP address or not
+                            Color.p('{+} IP Address         : ')
+                            Color.pl('{C}%s' % element)
+                            count = 1
+                            continue
+                        elif count == 1:
+                            Color.p('{+} %s               : ' % attribute[0])
+                            Color.pl('{C}%s' % element)
+                            count += 1
+                            continue
+                        elif count == 2:
+                            Color.p('{+} %s        : ' % attribute[1])
+                            Color.pl('{C}%s' % element)
+                            count += 1
+                            continue
+                        elif count == 3:
+                            Color.p('{+} %s       : ' % attribute[2])
+                            Color.pl('{C}%s' % element + '\n')
+                            continue
+                        
+                    Color.p('\n{+} Summary            : ')
+                    Color.pl('{C}Found {O}%d{C} devices on the {W}' % Properties.host + Properties.network_ip + '{C} network{W}')
+                
+                    
         else:
             Color.pl('{!} {R}Error: {O}WP2C{R} could not find any wireless interfaces{W}')
 
                     
-    @classmethod
-    def get_network_info(cls):
+    @staticmethod
+    def get_network_info():
         
         interfaces = Iw.get_interfaces()
         
@@ -102,7 +165,7 @@ class Properties:
                             dict['Frequency'] = frequency + ' Ghz'
                             
                         if ('Frequendcy' in dict or 'Link Quality' in line or line == lines[-1]):
-                            dict.update(cls.get_network_info_cont(ssid))
+                            dict.update(Properties.get_network_info_cont(ssid))
                         
                         if 'Access Point' in line:
                             mac = line.split('Access Point:')[1].strip()
@@ -121,13 +184,14 @@ class Properties:
                             dict['Signal Level'] = signal_level
                             
                     Properties.dict_list.append(dict) # Add dict to list
+                    
                 except:
                     Color.pl('{!} {R}Error: Unable to obtain Wi-Fi properties from {O}%s{R} wireless interface{W}' %interface)
                     continue
             
 
-    @classmethod
-    def get_network_info_cont(cls, ssid):  
+    @staticmethod
+    def get_network_info_cont(ssid):  
         dict_cont = {}
             
         # Get WiFi properties using nmcli
@@ -140,13 +204,13 @@ class Properties:
                 dict_cont['Security Type'] = security
                 
             if 'IP4.ADDRESS[1]' in line:
-                ipv4_add_1 = line.split(':')[1].strip()
-                dict_cont['IPv4 Address[1]'] = ipv4_add_1
+                Properties.ipv4_add_1 = line.split(':')[1].strip()
+                dict_cont['IPv4 Address[1]'] = Properties.ipv4_add_1
                 
             if 'IP4.ADDRESS[2]' in line:
-                ipv4_add_2 = line.split(':')[1].strip()
-                dict_cont['IPv4 Address[2]'] = ipv4_add_2
-                
+                Properties.ipv4_add_2 = line.split(':')[1].strip()
+                dict_cont['IPv4 Address[2]'] = Properties.ipv4_add_2
+
             if 'IP4.DNS[1]' in line:
                 ipv4_dns_1 = line.split(':')[1].strip()
                 dict_cont['IPv4 DNS[1]'] = ipv4_dns_1
@@ -178,5 +242,44 @@ class Properties:
             if 'IP6.DNS[2]' in line:
                 ipv6_dns_2 = line.split()[1]
                 dict_cont['IPv6 DNS[2]'] = ipv6_dns_2
-            
+                
         return dict_cont
+    
+    @staticmethod
+    def discovery(ip_addr):
+        Properties.host = 0
+        network = ipaddress.IPv4Network(ip_addr, strict=False)
+
+        # run the nmap -sn command to discover devices on the network
+        Properties.network_ip = (f"{network.network_address}/{network.prefixlen}")       
+        cmd = ['sudo', 'nmap', '-sn', Properties.network_ip]
+        output = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        # parse the output to extract the list of devices
+        devices = []
+        for line in output.stdout.decode().splitlines():
+            
+            if 'Nmap scan report for' in line:
+                info = line.split()
+                ip = info[-1].strip('(').strip(')')
+                name = info[-2] if len(info) > 5 else 'None'
+                devices.append(ip)
+                devices.append(name)
+                Properties.host += 1
+                
+            elif 'MAC Address:' in line:
+                info = line.split()
+                mac = info[2]
+                manufacturer = (''.join(info[3:len(info)])).strip('(').strip(')')
+                devices.append(mac)
+                devices.append(manufacturer)
+                
+        return devices
+
+    @staticmethod
+    def valid_ip(address): # Check if IP address is valid
+        try: 
+            socket.inet_aton(address)
+            return True
+        except:
+            return False
