@@ -37,6 +37,10 @@ class WP2C(object):
         from util.crack import CrackHelper
         from tools.properties import Properties
         from tools.speed import Speed
+        from tools.password import Password
+        # from tools.generate import Generate
+        # from util.report import Report
+        
         
         if Configuration.show_cracked:  # Print previously-cracked access points
             CrackResult.display()
@@ -47,12 +51,21 @@ class WP2C(object):
         elif Configuration.crack_handshake:  # Show commands to crack a captured handshake
             CrackHelper.run()
         
-        elif Configuration.wifi_properties:  # Show wifi properties
+        elif Configuration.properties:  # Show wifi properties
             Properties.run()  
         
         elif Configuration.speed: # Test internet speed
             Speed.run()
 
+        elif Configuration.password: # Test password strength
+            Password.run()
+        
+        # elif Configuration.generate: # Geneerate new password
+        #     generate.run()
+            
+        # elif Configuration.report: # Generate report
+        #     report.run()
+        
         else:
             Configuration.get_monitor_mode_interface()  # WPA attack start here!
             self.scan_and_attack()

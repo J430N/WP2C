@@ -40,18 +40,33 @@ class Arguments(object):
                           help=Color.s(
                               'Shows more options ({C}-h -v{W}). Prints commands and outputs. Increase verbosity by increasing numbers of v e.g. {C}-vv{W} (default: {G}quiet{W})'))
         
-        glob.add_argument('--prop',
+        glob.add_argument('--properties',
                           action = 'store_true',
-                          dest='wifi_properties',
+                          dest='properties',
                           help=Color.s('Shows current Wi-Fi properties'))
         
         glob.add_argument('--speed',
                           action = 'store_true',
                           dest='speed',
                           help=Color.s('Test current Wi-Fi upload and download speed'))
-                          
+        
+        glob.add_argument('--password',
+                          action = 'store_true',
+                          dest='password',
+                          help=Color.s('Test current Wi-Fi upload and download speed'))
+        
+        glob.add_argument('--generate',
+                          action = 'store_true',
+                          dest='generate',
+                          help=Color.s('Test current Wi-Fi upload and download speed'))   
+        
+        glob.add_argument('--report',
+                          action = 'store_true',
+                          dest='report',
+                          help=Color.s('Test current Wi-Fi upload and download speed'))
+                         
     def _add_wpa_args(self, wpa):
-        wpa.add_argument('--new-hs',
+        wpa.add_argument('--new',
                          action='store_true',
                          dest='ignore_old_handshakes',
                          help=Color.s('Captures new handshakes, ignores existing handshakes in {C}%s{W} '
@@ -67,7 +82,7 @@ class Arguments(object):
 
     @staticmethod
     def _add_command_args(commands):
-        commands.add_argument('--cracked',
+        commands.add_argument('--history',
                               action='store_true',
                               dest='cracked',
                               help=Color.s('Print previously-cracked access points'))

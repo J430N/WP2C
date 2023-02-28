@@ -1,4 +1,7 @@
-import tools.check as check
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+import tools.password as password
 import random
 import string
 
@@ -134,7 +137,7 @@ def main():
         print(f"Option {i+1}: {password}")
 
         # Check the password strength
-        check.passwd_gen_chk(password)
+        password.passwd_gen_chk(password)
 
     # Prompt the user to choose a password
     while True:
@@ -149,4 +152,4 @@ def main():
 
     # Print the chosen password
     print(f"You have chosen the following password: {passwords[choice-1]}")
-    check.passwd_gen_chk(passwords[choice - 1])
+    password.passwd_gen_chk(passwords[choice - 1])

@@ -7,7 +7,6 @@ from config import Configuration
 import subprocess
 import ipaddress
 import socket
-import re
 
 
 class Properties:
@@ -28,11 +27,13 @@ class Properties:
                     Color.p('{+} {W}%s: ' % str(key).ljust(19))
                     Color.pl('{C}%s' % str(value))
 
-                # print out the infomations of the founded devices and the summary
-                Color.pl('\n{W} ------------------{G} Devices Connected to %s {W}------------------' % Properties.dict_list[0]['SSID'])
+                # print out the infomations of the founded devices and the summary               
                 if Properties.ipv4_add_1 is not None:
+                    Color.pl('\n{+} {W}Discovering devices on the {C}%s {W}network...' % Properties.dict_list[0]['SSID'])                
+                    Color.pl('\n{W} ------------------{G} Devices Connected to %s {W}------------------' % Properties.dict_list[0]['SSID'])
                     attribute = ['Name', 'MAC Address', 'Manufacturer']
-                    count = 0                    
+                    count = 0
+                        
                     for element in Properties.discovery(Properties.ipv4_add_1):
                         if Properties.valid_ip(element): # Check if the element is a IP address or not
                             Color.p('{+} IP Address         : ')
@@ -55,11 +56,12 @@ class Properties:
                             continue
                         
                     Color.p('\n{+} Summary            : ')
-                    Color.pl('{C}Found {O}%d{C} devices on the {W}' % Properties.host + Properties.network_ip + '{C} network{W}')
+                    Color.pl('{C}Found {O}%d{C} devices on the {O}' % Properties.host + Properties.network_ip + '{C} network{W}')
                 
                 if Properties.ipv4_add_2 is not None:
                     attribute = ['Name', 'MAC Address', 'Manufacturer']
-                    count = 0                    
+                    count = 0
+                        
                     for element in Properties.discovery(Properties.ipv4_add_2):
                         if Properties.valid_ip(element): # Check if the element is a IP address or not
                             Color.p('{+} IP Address         : ')
@@ -249,9 +251,9 @@ class Properties:
     def discovery(ip_addr):
         Properties.host = 0
         network = ipaddress.IPv4Network(ip_addr, strict=False)
-
+        
         # run the nmap -sn command to discover devices on the network
-        Properties.network_ip = (f"{network.network_address}/{network.prefixlen}")       
+        Properties.network_ip = (f"{network.network_address}/{network.prefixlen}") 
         cmd = ['sudo', 'nmap', '-sn', Properties.network_ip]
         output = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 

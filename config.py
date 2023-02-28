@@ -20,8 +20,11 @@ class Configuration(object):
     existing_commands = None
     ignore_old_handshakes = None
     interface = None
-    wifi_properties = None
+    properties = None
     speed = None
+    password = None
+    generate  = None
+    report = None
     manufacturers = None
     no_nullpin = None
     print_stack_traces = None
@@ -97,8 +100,11 @@ class Configuration(object):
         cls.show_cracked = False
         cls.check_handshake = None
         cls.crack_handshake = False
-        cls.wifi_properties = False
+        cls.properties = False
         cls.speed = False
+        cls.password = False
+        cls.generate = False
+        cls.report = False
 
         # A list to cache all checked commands (e.g. `which hashcat` will execute only once)
         cls.existing_commands = {}
@@ -132,10 +138,16 @@ class Configuration(object):
             cls.check_handshake = True
         if args.crack_handshake:
             cls.crack_handshake = True
-        if args.wifi_properties:
-            cls.wifi_properties = True
+        if args.properties:
+            cls.properties = True
         if args.speed:
             cls.speed = True
+        if args.password:
+            cls.password = True
+        if args.generate:
+            cls.generate = True
+        if args.report:
+            cls.report = True
 
     @classmethod
     def parse_settings_args(cls, args):
