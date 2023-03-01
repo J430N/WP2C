@@ -74,6 +74,7 @@ class Process(object):
         if type(command) is str:
             # Commands have to be a list
             command = command.split(' ')
+            print(command)
 
         self.command = command
 

@@ -22,17 +22,6 @@ class CrackHelper:
     def run(cls):
         Configuration.initialize(False)
 
-        # Get wordlist
-        if not Configuration.wordlist:
-            Color.p('\n{+} Enter wordlist file to use for cracking: {G}')
-            Configuration.wordlist = input()
-            Color.p('{W}')
-
-            if not os.path.exists(Configuration.wordlist):
-                Color.pl('{!} {R}Wordlist {O}%s{R} not found. Exiting.' % Configuration.wordlist)
-                return
-            Color.pl('')
-
         # Get handshakes
         handshakes = cls.get_handshakes()
         if len(handshakes) == 0:
@@ -196,8 +185,8 @@ class CrackHelper:
     def crack_4way(cls, hs, tool):
 
         handshake = Handshake(hs['filename'],
-                              bssid=hs['bssid'],
-                              essid=hs['essid'])
+                            bssid=hs['bssid'],
+                            essid=hs['essid'])
         try:
             handshake.divine_bssid_and_essid()
         except ValueError as e:
@@ -205,7 +194,8 @@ class CrackHelper:
             return None
 
         if tool == 'aircrack':
-            key = Aircrack.crack_handshake(handshake, show_command=True)
+            for wordlist in Configuration.wordlists:
+                key = Aircrack.crack_handshake(wordlist, handshake, show_command=True)
 
         if key is not None:
             return CrackResultWPA(hs['bssid'], hs['essid'], hs['filename'], key)

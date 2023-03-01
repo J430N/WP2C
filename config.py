@@ -63,21 +63,17 @@ class Configuration(object):
 
         # Default dictionary for cracking
         cls.cracked_file = 'cracked.json'
-        cls.wordlist = None
-        wordlists = [
-            './wordlist-probable.txt',  # Local file (ran from cloned repo)
-            '/usr/share/dict/wordlist-probable.txt',  # setup.py with prefix=/usr
-            '/usr/local/share/dict/wordlist-probable.txt',  # setup.py with prefix=/usr/local
-            # Other passwords found on Kali
-            '/usr/share/wfuzz/wordlist/fuzzdb/wordlists-user-passwd/passwds/phpbb.txt',
-            '/usr/share/fuzzdb/wordlists-user-passwd/passwds/phpbb.txt',
-            '/usr/share/wordlists/fern-wifi/common.txt'
+
+        # Add your own wordlists here
+        cls.wordlists = [
+            './wordlist/small-dict.txt',
+             './wordlist/probable.txt' 
         ]
         
-        for wlist in wordlists:
-            if os.path.exists(wlist):
-                cls.wordlist = wlist
-                break
+        # for wlist in wordlists:
+        #     if os.path.exists(wlist):
+        #         cls.wordlist = wlist
+        #         break
 
         if os.path.isfile('/usr/share/ieee-data/oui.txt'):
             manufacturers = '/usr/share/ieee-data/oui.txt'

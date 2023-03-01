@@ -11,7 +11,7 @@ from util.process import Process
 class Aircrack():
 
     @staticmethod
-    def crack_handshake(handshake, show_command=False):
+    def crack_handshake(wordlist, handshake, show_command=False):
         from util.color import Color
         from util.timer import Timer
         '''Tries to crack a handshake. Returns WPA key if found, otherwise None.'''
@@ -20,7 +20,7 @@ class Aircrack():
         command = [
             'aircrack-ng',
             '-a', '2',
-            '-w', Configuration.wordlist,
+            '-w', wordlist,
             '--bssid', handshake.bssid,
             '-l', key_file,
             handshake.capfile
