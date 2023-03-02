@@ -26,7 +26,7 @@ class WP2C(object):
         if os.getuid() != 0:
             Color.pl('{!} {R}Error: {O}WP2C{R} require {O}root {R}permissions to run{W}')
             Color.pl('{!} {R}Recommendation: Re-run the WP2C with {O}sudo{W}')
-            Configuration.exit_gracefully(0)
+            Configuration.exit_gracefully()
         
     def start(self):
         """
@@ -38,7 +38,6 @@ class WP2C(object):
         from tools.properties import Properties
         from tools.speed import Speed
         from tools.password import Password
-        import tkp.play
         # from tools.generate import Generate
         # from util.report import Report
         
@@ -59,7 +58,7 @@ class WP2C(object):
             Speed.run()
 
         elif Configuration.password: # Test password strength
-            tkp.play.run()
+            Password.run()
         
         # elif Configuration.generate: # Geneerate new password
         #     generate.run()
@@ -101,7 +100,7 @@ def entry_point():
         Color.pl('\n{!} {R}Exiting{W}\n')
     except KeyboardInterrupt:
         Color.pl('\n{!} {O}Interrupted, Shutting down...{W}')
-    Configuration.exit_gracefully(0)
+    Configuration.exit_gracefully()
 
 
 if __name__ == '__main__': #It Allows You to Execute Code When the File Runs as a Script, but Not When It’s Imported as a Module

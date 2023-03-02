@@ -7,6 +7,7 @@ import signal
 
 from .ip import Ip
 from .iw import Iw
+from config import Configuration
 from util.color import Color
 from util.process import Process
 
@@ -258,8 +259,8 @@ class Airmon():
             # No interfaces found
             Color.pl('\n{!} {O}airmon-ng did not find {R}any{O} wireless interfaces')
             Color.pl('{!} {O}Make sure your wireless device is connected')
-            Color.pl('{!} {O}See {C}https://www.aircrack-ng.org/doku.php?id=airmon-ng{O} for more info{W}')
-            raise Exception('airmon-ng did not find any wireless interfaces')
+            Color.pl('{!} {O}See {C}https://www.aircrack-ng.org/doku.php?id=airmon-ng{O} for more info{W}\n')
+            Configuration.exit_gracefully()
 
         Color.clear_entire_line()
         a.print_menu()

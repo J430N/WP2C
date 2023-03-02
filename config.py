@@ -66,6 +66,7 @@ class Configuration(object):
 
         # Add your own wordlists here
         cls.wordlists = [
+            # './wordlist/pass.txt',
             './wordlist/small-dict.txt',
              './wordlist/probable.txt' 
         ]
@@ -180,7 +181,7 @@ class Configuration(object):
             os.rmdir(cls.temp_dir)
 
     @classmethod
-    def exit_gracefully(cls, code=0):
+    def exit_gracefully(cls):
         """ Deletes temp and exist with the given code """
         cls.delete_temp()
         from tools.airmon import Airmon
@@ -194,7 +195,7 @@ class Configuration(object):
             # Kill processes that may interfere with WP2C's operation
             Airmon.start_network_manager() 
             
-        exit(code)
+        exit()
 
     @classmethod
     def dump(cls):

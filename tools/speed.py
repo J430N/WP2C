@@ -7,11 +7,11 @@ import subprocess
     
 try:
     import speedtest
-except ImportError:
+except ModuleNotFoundError:
     Color.pl('{!} {R}speedtest-cli{O} module not found. Installing it now...{W}\n')
     subprocess.run(['pip', 'install', 'speedtest-cli'])
     Color.pl('\n{!} {O}Rerun the {R}WP2C.py {O}with {R}--speed {O} argument again after the {R}speedtest-cli {O}module installation is complete.{W}')
-    Configuration.exit_gracefully(0)
+    Configuration.exit_gracefully()
 
 class Speed():
 

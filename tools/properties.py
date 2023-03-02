@@ -85,7 +85,7 @@ class Properties:
                         
                     Color.p('\n{+} Summary            : ')
                     Color.pl('{C}Found {O}%d{C} devices on the {W}' % Properties.host + Properties.network_ip + '{C} network{W}')
-                
+            Color.pl('{W}------------------ {G}Thank You {W}------------------')    
                     
         else:
             Color.pl('{!} {R}Error: {O}WP2C{R} could not find any wireless interfaces{W}')
