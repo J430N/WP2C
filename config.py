@@ -66,15 +66,12 @@ class Configuration(object):
 
         # Add your own wordlists here
         cls.wordlists = [
-            # './wordlist/pass.txt',
             './wordlist/small-dict.txt',
-             './wordlist/probable.txt' 
+            './wordlist/probable.txt' 
         ]
         
-        # for wlist in wordlists:
-        #     if os.path.exists(wlist):
-        #         cls.wordlist = wlist
-        #         break
+        # Default wordlist for generating passphrases
+        cls.passphrases = './wordlist/scrabble.txt'
 
         if os.path.isfile('/usr/share/ieee-data/oui.txt'):
             manufacturers = '/usr/share/ieee-data/oui.txt'

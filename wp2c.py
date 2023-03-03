@@ -38,7 +38,7 @@ class WP2C(object):
         from tools.properties import Properties
         from tools.speed import Speed
         from tools.password import Password
-        # from tools.generate import Generate
+        from tools.generate import Generate
         # from util.report import Report
         
         
@@ -60,8 +60,8 @@ class WP2C(object):
         elif Configuration.password: # Test password strength
             Password.run()
         
-        # elif Configuration.generate: # Geneerate new password
-        #     generate.run()
+        elif Configuration.generate: # Geneerate new password
+            Generate.run()
             
         # elif Configuration.report: # Generate report
         #     report.run()

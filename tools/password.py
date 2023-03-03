@@ -1,13 +1,13 @@
 import os
 import subprocess
+import requests
+import hashlib
 from getpass import getpass
 from config import Configuration
 from util.color import Color
 
 try:
     from zxcvbn import zxcvbn
-    import requests
-    import hashlib
 except ModuleNotFoundError:
     Color.pl('{!} {R}zxcvbn{O} module not found. Installing it now...{W}\n')
     subprocess.run(['pip', 'install', 'zxcvbn'])
@@ -42,17 +42,19 @@ SCORE_TO_WORD = {
 class Password:
     
     def run():
-        Color.pl('\n{W} ------------------{G} Password Strength Checker {W}------------------\n')
+        Color.pl('\n{W}-------------------------------{G} Password Strength Checker {W}-------------------------------\n')
         Color.p('{?} Do you want to {G}hide {W}your password while typing? ({G}y{W}/{R}n{W}):{C} ')
         ans = input()
         if ans == 'y' or ans == 'Y':
-            Color.p(('{+} {W}Enter your password(s) to be checked: '))
+            Color.p(('{+} {W}Enter your password to be checked: '))
             passwd = getpass()
+            Color.p('\n')
         elif ans == 'n' or ans == 'N':
-            Color.p(('{+} {W}Enter your password(s) to be checked:{C} '))
+            Color.p(('{+} {W}Enter your password to be checked:{C} '))
             passwd = input()
+            Color.p('\n')
         else:
-            Color.pl('{!} {R}Invalid option. Try again.{W}')
+            Color.pl('{!} {R}Error: {O}Invalid option. Try again.{W}')
             Password.run()
 
         Password.check_password(passwd, ans) # zxcvbn
@@ -61,17 +63,17 @@ class Password:
         if count:
             if ans == 'y' or ans == 'Y':
                 masked_password = '*' * (len(passwd)-1) + passwd[-1:]
-                Color.pl(f'\n{{!}} {{R}}{masked_password} {{O}}was found to be leaked {{R}}{count} {{O}}times.  It is time to change it!')
+                Color.pl(f'\n{{!}} {{R}}{masked_password} {{O}}was found to be leaked {{R}}{count} {{O}}times.  It is time to change it!{{W}}\n')
             else:
-                Color.pl(f'\n{{!}} {{R}}{passwd} {{O}}was found to be leaked {{R}}{count} {{O}}times.  It is time to change it!')
+                Color.pl(f'\n{{!}} {{R}}{passwd} {{O}}was found to be leaked {{R}}{count} {{O}}times.  It is time to change it!{{W}}\n')
         else:
             if ans == 'y' or ans == 'Y':
                 masked_password = '*' * (len(passwd)-1) + passwd[-1:]
-                Color.pl(f'\n{{+}} {{R}}{masked_password} {{O}}was not found to be leaked. Carry on!')
+                Color.pl(f'\n{{+}} {{R}}{masked_password} {{O}}was not found to be leaked. Carry on!{{W}}\n')
             else:
-                Color.pl(f'\n{{+}} {{R}}{passwd} {{O}}was not found to be leaked. Carry on!')
-            
-        Color.pl('{W}------------------ {G}Thank You {W}------------------')
+                Color.pl(f'\n{{+}} {{R}}{passwd} {{O}}was not found to be leaked. Carry on!{{W}}\n')
+        Color.pl('{W}--------------------------------------- {G}Thank You {W}---------------------------------------')
+        Configuration.exit_gracefully()
         
     
     @staticmethod    
@@ -89,7 +91,7 @@ class Password:
         add_frequency_lists(dict_wordlists)
 
         # Gets the password results with zxcvbn and displays the score
-        Color.pl('\n{+} {G}Result of the password strength check: {W}')
+        Color.pl('{+} {G}Result of the password strength check: {W}')
         if not passwd:
             raise SystemExit('ValueError: The password is empty.')
         result = zxcvbn(passwd)
@@ -215,7 +217,7 @@ class Password:
         res = requests.get('https://api.pwnedpasswords.com/range/'+hash_char)
         if res.status_code != 200:
             raise RuntimeError(
-                f'error fetching: {res.status_code}, check the API and try again')
+                f'error fetching: {res.status_code}, check the API and try again.')
         return res
 
     @staticmethod

@@ -42,10 +42,11 @@ class Speed():
         ping_result = ("%.2f" % test.results.ping)
 
         # Color.pl the results
-        Color.pl('\n {W}---------- {G}Speedtest Results {W}----------')
+        Color.pl('\n{W}----------------------------------- {G}Speedtest Results {W}-----------------------------------')
         Color.p('{+} Download speed '.ljust(19))
         Color.pl(':{C} %sMb/s' % '{:.2f}'.format(download_result_in_mb).rjust(1))
         Color.p(f'{{+}} Upload speed '.ljust(19))
         Color.pl(':{C} %sMb/s' % '{:.2f}'.format(upload_result_in_mb).rjust(1))
         Color.p(f'{{+}} Ping '.ljust(19))
         Color.pl(':{C} %sms' % str(ping_result).rjust(1))
+        Color.pl('{W}-------------------------------------- {G}Thank You {W}----------------------------------------') 

@@ -99,7 +99,7 @@ class AttackAll(object):
 
         if targets_remaining > 0:
             options = '({G}s{W}/{R}e{W})'
-            prompt = '{+} Do you want to {G}skip{W} to the next target or {R}exit{W}%s?{C} ' % options
+            prompt = '{+} Do you want to {G}skip(s){W} to the next target or {R}exit(e){W}%s?{C} ' % options
             
         Color.p(prompt)
         answer = input().lower()

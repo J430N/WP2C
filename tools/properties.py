@@ -21,7 +21,7 @@ class Properties:
     def run(cls):
 
         if not Properties.get_network_info() is False and len(Properties.dict_list) > 0:
-            Color.pl('\n{W} ------------------{G} Wi-Fi Properties {W}------------------')
+            Color.pl('\n{W}------------------------------------{G} Wi-Fi Properties {W}-----------------------------------')
             for dict in cls.dict_list:
                 for key, value in dict.items():
                     Color.p('{+} {W}%s: ' % str(key).ljust(19))
@@ -29,8 +29,8 @@ class Properties:
 
                 # print out the infomations of the founded devices and the summary               
                 if Properties.ipv4_add_1 is not None:
-                    Color.pl('\n{+} {W}Discovering devices on the {C}%s {W}network...' % Properties.dict_list[0]['SSID'])                
-                    Color.pl('\n{W} ------------------{G} Devices Connected to %s {W}------------------' % Properties.dict_list[0]['SSID'])
+                    Color.pl('\n{+} {W}Discovering devices on the {C}%s {W}network...' % Properties.dict_list[0]['SSID'])               
+                    Color.pl('\n{+} {W}Devices Connected to {G}%s {W}:' % Properties.dict_list[0]['SSID'])
                     attribute = ['Name', 'MAC Address', 'Manufacturer']
                     count = 0
                         
@@ -85,10 +85,12 @@ class Properties:
                         
                     Color.p('\n{+} Summary            : ')
                     Color.pl('{C}Found {O}%d{C} devices on the {W}' % Properties.host + Properties.network_ip + '{C} network{W}')
-            Color.pl('{W}------------------ {G}Thank You {W}------------------')    
+            Color.pl('{W}--------------------------------------- {G}Thank You {W}---------------------------------------')
+            Configuration.exit_gracefully()
                     
         else:
             Color.pl('{!} {R}Error: {O}WP2C{R} could not find any wireless interfaces{W}')
+            Configuration.exit_gracefully()
 
                     
     @staticmethod
