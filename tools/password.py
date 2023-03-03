@@ -99,7 +99,7 @@ class Password:
 
         # Shows the estimated number of guesses
         Color.p('    {+} Estimated number needed to guess the password : ')
-        Color.pl(round(result['guesses'], 2))
+        Color.pl(round(result['guesses']))
         
         # Shows the estimated time
         Color.pl('    {+} Estimated time needed to guess the password: ')

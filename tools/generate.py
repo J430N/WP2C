@@ -19,22 +19,18 @@ except ModuleNotFoundError:
 
 class Generate():
     
-    @classmethod
-    def run(cls):
-        
-        cls.result = None # To store new generated password for tested
-        
+    def run():      
         # Prompt the user to enter their desired password
         Color.pl('\n{W}----------------------------------{G} Password Generater {W}-----------------------------------\n')
-        Color.p('{?} Do you want to {G}create new password(c) {W}or {G}modify existing password(m) {W}? ({G}c{W}/{R}m{W}):{C} ')
+        Color.p('{?} Do you want to {G}create new password(c) {W}or {R}modify existing password(m) {W}? ({G}c{W}/{R}m{W}):{C} ')
         choosen_ans = input()
         if choosen_ans == 'c' or choosen_ans == 'C': # Create new password
-            Color.p('{?} {W}Do you want to create new password {G}randomly suggested by WP2C(r) {W}or {G}tailor made(t){W}? ({G}r{W}/{R}t{W}):{C} ')
+            Color.p('{?} {W}Do you want to create new password {G}randomly suggested by WP2C(r) {W}or {R}tailor made(t){W}? ({G}r{W}/{R}t{W}):{C} ')
             method_ans = input()
             
             if method_ans == 'r' or method_ans == 'R': # Randomly suggested by WP2C
                 # prompt the user to choose between generating a password or passphrase
-                Color.p('{?} {W}Do you want to generate a {G}password(w) {W}or a {G}passphrase(p){W}? ({G}w{W}/{R}p{W}):{C} ')
+                Color.p('{?} {W}Do you want to generate a {G}password(w) {W}or a {R}passphrase(p){W}? ({G}w{W}/{R}p{W}):{C} ')
                 choice = input()
 
                 ''' Generate a password '''
@@ -94,7 +90,7 @@ class Generate():
                     # generate the password and print it to the console
                     passwd = Generate.random_password(length, num_letters, num_digits, num_symbols)
                     Color.pl('{+} Your new password is:{C} ' + passwd)
-                    cls.result = passwd
+                    Generate.check_strength(passwd)
                     
                     ''' Generate a passphrase'''    
                 elif choice == 'p' or choice == 'P':
@@ -104,7 +100,7 @@ class Generate():
                     # generate the passphrase and print it to the console
                     passphrase = Generate.random_passphrase(num_words)
                     Color.pl('{+} Your new passphrase is:{C} ' + passphrase)
-                    cls.result = passphrase
+                    Generate.check_strength(passphrase)
                     
                 else: # Invalid option
                     Color.pl('{!} {R}Error: {O}Invalid option. Try again.{W}')
@@ -180,19 +176,18 @@ class Generate():
         # Print the chosen password
         Color.pl('\n{W}----------------------------------- {G}Password Choosen {W}------------------------------------')
         Color.pl(f'{{+}} You have chosen the following password: {{G}}{passwds[choice-1]}{{W}}')
-        result = passwds[choice-1]
-        Generate.check_strength(result)
+        Generate.check_strength(passwds[choice-1])
         
     # Check the strength of the password
     @staticmethod
-    def check_strength(result):
-        Password.check_password(result, 'no') # zxcvbn
+    def check_strength(passwd):
+        Password.check_password(passwd, 'no') # zxcvbn
         
-        count = Password.pwned_api_check(result) # pwned
+        count = Password.pwned_api_check(passwd) # pwned
         if count:
-            Color.pl(f'\n{{!}} {{R}}{result} {{O}}was found to be leaked {{R}}{count} {{O}}times.  It is time to change it!{{W}}\n\n')
+            Color.pl(f'\n{{!}} {{R}}{passwd} {{O}}was found to be leaked {{R}}{count} {{O}}times.  It is time to change it!{{W}}\n\n')
         else:
-            Color.pl(f'\n{{+}} {{R}}{result} {{O}}was not found to be leaked. Carry on!{{W}}')
+            Color.pl(f'\n{{+}} {{R}}{passwd} {{O}}was not found to be leaked. Carry on!{{W}}')
     
     @staticmethod    
     def tailor_password(passwd, length):
