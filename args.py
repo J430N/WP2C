@@ -59,11 +59,6 @@ class Arguments(object):
                           action = 'store_true',
                           dest='generate',
                           help=Color.s('Generate new password for you'))   
-        
-        glob.add_argument('--report',
-                          action = 'store_true',
-                          dest='report',
-                          help=Color.s('Generate a report after cracking Wi-Fi'))
                          
     def _add_wpa_args(self, wpa):
         wpa.add_argument('--new',

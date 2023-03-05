@@ -7,6 +7,7 @@ from config import Configuration
 import os
 import time
 from json import loads, dumps
+from util.report import Report
 
 
 class CrackResult(object):
@@ -69,6 +70,7 @@ class CrackResult(object):
             fid.write(dumps(saved_results, indent=2))
         Color.pl('{+} saved crack result to {C}%s{W} ({G}%d total{W})'
                  % (name, len(saved_results)))
+        Report.run(self.essid)
 
     @classmethod
     def display(cls):

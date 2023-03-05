@@ -24,7 +24,6 @@ class Configuration(object):
     speed = None
     password = None
     generate  = None
-    report = None
     manufacturers = None
     no_nullpin = None
     print_stack_traces = None
@@ -98,7 +97,6 @@ class Configuration(object):
         cls.speed = False
         cls.password = False
         cls.generate = False
-        cls.report = False
 
         # A list to cache all checked commands (e.g. `which hashcat` will execute only once)
         cls.existing_commands = {}
@@ -140,8 +138,6 @@ class Configuration(object):
             cls.password = True
         if args.generate:
             cls.generate = True
-        if args.report:
-            cls.report = True
 
     @classmethod
     def parse_settings_args(cls, args):

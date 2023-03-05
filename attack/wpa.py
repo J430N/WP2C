@@ -40,6 +40,7 @@ class AttackWPA(Attack):
         handshake.analyze()
 
         # Check wordlist
+        Color.pl('\n')
         for wordlist in Configuration.wordlists:
             if wordlist is None:
                 Color.pl('{!} {O}Not cracking handshake because wordlist is not set')
@@ -51,7 +52,7 @@ class AttackWPA(Attack):
                 self.success = False
                 return False
 
-            Color.pl('\n{+} {C}Cracking WPA Handshake:{W} Running {C}aircrack-ng{W} with '
+            Color.pl('{+} {C}Cracking WPA Handshake:{W} Running {C}aircrack-ng{W} with '
                     '{C}%s{W} wordlist' % os.path.split(wordlist)[-1])
 
         # Crack it

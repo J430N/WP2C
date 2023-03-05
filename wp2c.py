@@ -14,10 +14,10 @@ class WP2C(object):
 
     def __init__(self):  # Constructors is to initialize(assign values) to the data members of the class when an object of the class is created
                          # self represents the instance of the class. By using the “self”  we can access the attributes and methods of the class in python.
-        """
+        '''
         1. Initializes WP2C.
         2. Checks the WP2C is running under root permissions and ensures dependencies are installed.
-        """
+        '''
 
         banner.print_banner()  # Print WP2C's banner
 
@@ -29,9 +29,9 @@ class WP2C(object):
             Configuration.exit_gracefully()
         
     def start(self):
-        """
+        '''
         Performs different actions depending on user input.
-        """
+        '''
         from model.result import CrackResult
         from model.handshake import Handshake
         from util.crack import CrackHelper
@@ -39,7 +39,7 @@ class WP2C(object):
         from tools.speed import Speed
         from tools.password import Password
         from tools.generate import Generate
-        # from util.report import Report
+        from util.report import Report
         
         
         if Configuration.show_cracked:  # Print previously-cracked access points
@@ -63,22 +63,35 @@ class WP2C(object):
         elif Configuration.generate: # Geneerate new password
             Generate.run()
             
-        # elif Configuration.report: # Generate report
-        #     report.run()
-        
         else:
             Configuration.get_monitor_mode_interface()  # WPA attack start here!
             self.scan_and_attack()
 
     @staticmethod
     def scan_and_attack():
-        """
-        1) Scans for targets, asks user to select targets
-        2) Attacks each target
-        """
+        '''Scans for targets, asks user to select targets.'''
+        import subprocess
         from util.scanner import Scanner
         from attack.all import AttackAll
-
+        
+        # Check dependencies for report
+        try:
+            import reportlab
+        except ModuleNotFoundError:
+            Color.pl('{!} {R}reportlab{O} module not found. Installing it now...{W}\n')
+            subprocess.run(['pip', 'install', 'reportlab'])
+            Color.pl('\n{!} {O}Rerun the {R}WP2C.py {O}again after the {R}reportlab {O}module installation is complete.{W}')
+            Configuration.exit_gracefully()
+        
+        try:
+            import zxcvbn
+        except ModuleNotFoundError:
+            Color.pl('{!} {R}zxcvbn{O} module not found. Installing it now...{W}\n')
+            subprocess.run(['pip', 'install', 'zxcvbn'])
+            Color.pl('\n{!} {O}Rerun the {R}WP2C.py {O}again after the {R}zxcvbn {O}module installation is complete.{W}')
+            Configuration.exit_gracefully()
+    
+        
         Color.pl('')
 
         # Scan
