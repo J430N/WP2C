@@ -39,7 +39,6 @@ class WP2C(object):
         from tools.speed import Speed
         from tools.password import Password
         from tools.generate import Generate
-        from util.report import Report
         
         
         if Configuration.show_cracked:  # Print previously-cracked access points

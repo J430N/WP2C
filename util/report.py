@@ -18,7 +18,7 @@ class Report:
         with open(Configuration.cracked_file, 'r') as f:
             cracked_data_list = json.load(f)
 
-         # Find the latest Wi-Fi network data with the same ESSID
+        # Find the latest Wi-Fi network data with the same ESSID
         latest_cracked_data = None
         for data in reversed(cracked_data_list):
             if data['essid'] == essid:
@@ -32,6 +32,13 @@ class Report:
         wifi_name = latest_cracked_data['essid'].replace('@', '_')
         pdf_filename = 'report/{}_report.pdf'.format(wifi_name)
 
+        # Check if the file already exists, and append (1) to the filename if it does
+        if os.path.isfile(pdf_filename):
+            i = 1
+            while os.path.isfile(pdf_filename[:-4] + f"({i}).pdf"):
+                i += 1
+            pdf_filename = pdf_filename[:-4] + f"({i}).pdf"
+            
         # Create a new PDF file
         c = canvas.Canvas(pdf_filename, pagesize=letter)
         

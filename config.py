@@ -29,7 +29,7 @@ class Configuration(object):
     print_stack_traces = None
     show_cracked = None
     temp_dir = None  # Temporary directory
-    wordlist = None
+    wordlists = []
     wpa_attack_timeout = None
     wpa_deauth_timeout = None
     wpa_handshake_dir = None
@@ -63,11 +63,14 @@ class Configuration(object):
         # Default dictionary for cracking
         cls.cracked_file = 'cracked.json'
 
-        # Add your own wordlists here
-        cls.wordlists = [
-            './wordlist/small-dict.txt',
-            './wordlist/probable.txt' 
-        ]
+        # Loop through all files in the directory
+        for filename in os.listdir('./wordlists/'):
+            # Get the full path of the file
+            file_path = os.path.join('./wordlists/', filename)
+            # Check if the file path is a file (not a directory)
+            if os.path.isfile(file_path):
+                # Append the file path to the list
+                cls.wordlists.append(file_path)
         
         # Default wordlist for generating passphrases
         cls.passphrases = './wordlist/scrabble.txt'
@@ -119,15 +122,16 @@ class Configuration(object):
         """ Sets configuration values based on Argument.args object """
         from args import Arguments
 
-        args = Arguments(cls).args
+        # Get arguments
+        args = Arguments(cls).args 
         cls.parse_settings_args(args)
-
+        cls.parse_wpa_args(args)
 
         # Commands
         if args.cracked:
             cls.show_cracked = True
         if args.check_handshake:
-            cls.check_handshake = True
+            cls.check_handshake = args.check_handshake
         if args.crack_handshake:
             cls.crack_handshake = True
         if args.properties:
@@ -146,7 +150,14 @@ class Configuration(object):
         if args.verbose:
             cls.verbose = args.verbose
             Color.pl('{+} {C}option:{W} verbosity level {G}%d{W}' % args.verbose)
-            
+    
+    @classmethod
+    def parse_wpa_args(cls, args):
+        """Parses WPA-specific arguments"""
+        if args.ignore_old_handshakes:
+            cls.ignore_old_handshakes = True
+            Color.pl('{+} {C}option:{W} will {O}ignore{W} existing handshakes (force capture)')
+
     @classmethod
     def temp(cls, subfile=''):
         """ Creates and/or returns the temporary directory """

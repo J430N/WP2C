@@ -55,8 +55,6 @@ class AttackWPA(Attack):
             Color.pl('{+} {C}Cracking WPA Handshake:{W} Running {C}aircrack-ng{W} with '
                     '{C}%s{W} wordlist' % os.path.split(wordlist)[-1])
 
-        # Crack it
-        for wordlist in Configuration.wordlists:
             key = Aircrack.crack_handshake(wordlist, handshake, show_command=False)
             if key is None:
                 Color.pl('{!} {R}Failed to crack handshake: {O}%s{R} did not contain password{W}' % wordlist.split(os.sep)[-1])
@@ -66,7 +64,12 @@ class AttackWPA(Attack):
                 self.crack_result = CrackResultWPA(handshake.bssid, handshake.essid, handshake.capfile, key)
                 self.crack_result.dump()
                 self.success = True
+                break
         return self.success
+            
+        # # Crack it
+        # for wordlist in Configuration.wordlists:
+            
 
     def capture_handshake(self):
         """Returns captured or stored handshake, otherwise None."""

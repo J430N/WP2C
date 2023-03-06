@@ -67,14 +67,6 @@ class Arguments(object):
                          help=Color.s('Captures new handshakes, ignores existing handshakes in {C}%s{W} '
                                       '(default: {G}off{W})' % self.config.wpa_handshake_dir))
 
-        wpa.add_argument('--dict',
-                         action='store',
-                         dest='wordlist',
-                         metavar='[file]',
-                         type=str,
-                         help=Color.s(
-                             'File containing passwords for cracking (default: {G}%s{W})') % self.config.wordlist)
-
     @staticmethod
     def _add_command_args(commands):
         commands.add_argument('--history',
