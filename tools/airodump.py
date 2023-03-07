@@ -1,13 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import os
+import time
 from util.process import Process
 from config import Configuration
 from model.target import Target
 from model.client import Client
-
-import os
-import time
 
 
 class Airodump():
@@ -163,8 +162,7 @@ class Airodump():
                     just_found = False
                     break
 
-            # If the new_target is not in old_targets, check target_archives
-            # and copy attributes from there
+            # If the new_target is not in old_targets, check target_archives and copy attributes from there
             if just_found and new_target.bssid in target_archives:
                 target_archives[new_target.bssid].transfer_info(new_target)
 

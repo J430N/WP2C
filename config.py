@@ -3,7 +3,6 @@
 
 import os
 import re
-
 from util.color import Color
 
 class Configuration(object):
@@ -64,16 +63,16 @@ class Configuration(object):
         cls.cracked_file = 'cracked.json'
 
         # Loop through all files in the directory
-        for filename in os.listdir('./wordlists/'):
+        for filename in os.listdir('./wordlist/'):
             # Get the full path of the file
-            file_path = os.path.join('./wordlists/', filename)
+            file_path = os.path.join('./wordlist/', filename)
             # Check if the file path is a file (not a directory)
             if os.path.isfile(file_path):
                 # Append the file path to the list
                 cls.wordlists.append(file_path)
         
         # Default wordlist for generating passphrases
-        cls.passphrases = './wordlist/scrabble.txt'
+        cls.passphrases = './wordlist/for_passphases.txt'
 
         if os.path.isfile('/usr/share/ieee-data/oui.txt'):
             manufacturers = '/usr/share/ieee-data/oui.txt'

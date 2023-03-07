@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
+import os
 from util.process import Process
 from util.color import Color
 from tools.tshark import Tshark
-
-import re
-import os
 
 
 class Handshake(object):
@@ -39,8 +38,6 @@ class Handshake(object):
 
         if not self.essid and not self.bssid:
             # We do not know the bssid nor the essid
-            # TODO: Display menu for user to select from list
-            # HACK: Just use the first one we see
             self.bssid = pairs[0][0]
             self.essid = pairs[0][1]
             Color.pl('{!} {O}Warning{W}: {O}Arbitrarily selected ' +
@@ -69,10 +66,6 @@ class Handshake(object):
 
         if len(self.tshark_handshakes()) > 0:
             return True
-
-        # TODO: Can we trust cowpatty & aircrack?
-        # if len(self.cowpatty_handshakes()) > 0: return True
-        # if len(self.aircrack_handshakes()) > 0: return True
 
         return False
 
@@ -107,7 +100,6 @@ class Handshake(object):
         Handshake.print_pairs(self.aircrack_handshakes(), 'aircrack')
 
     def strip(self, outfile=None):
-        # XXX: This method might break aircrack-ng, use at own risk.
         """
             Strips out packets from handshake that aren't necessary to crack.
             Leaves only handshake packets and SSID broadcast (for discovery).

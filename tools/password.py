@@ -30,7 +30,7 @@ CARACTS_SPE = ['&', '~', ''', '#', ''', '{', '(', '[', '-', '|', '`', '_', '^',
                '@', ')', ']', '°', '+', '=', '}', '¨', '£', '$', '¤', '%', 'µ',
                '*', '!', '§', ':', ';', '.', ',', '?']
 
-# Comment on the password score.
+# Convert score from zxcvbn to word.
 SCORE_TO_WORD = {
     0: 'Very weak',
     1: 'Very weak',
@@ -237,7 +237,3 @@ class Password:
         # passes the first five chars in the funct and receives matching responses
         response = Password.request_api_data(first5_chars)
         return Password.password_leak_count(response, rest)
-    
-# Modify the message
-# adjust the results position
-# add ! to the warning and + to the process

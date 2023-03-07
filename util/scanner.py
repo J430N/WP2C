@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*-
 
 from time import sleep, time
-
 from config import Configuration
 from tools.airodump import Airodump
 from util.color import Color

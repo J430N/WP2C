@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-from util.color import Color
-from config import Configuration
-import subprocess
+
 import json
 import time
 import os
-
+from util.color import Color
+from config import Configuration
 from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from zxcvbn import zxcvbn
@@ -85,7 +84,6 @@ class Report:
 
 
         '''Password Vulnerabilities'''
-        
         # Write the Wi-Fi network vulnerabilities section
         c.setFont('Helvetica-Bold', 12)
         c.drawString(50, 540, 'Password Vulnerabilities:')
@@ -112,7 +110,6 @@ class Report:
 
 
         '''Password Exposure'''    
-
         c.setFont('Helvetica-Bold', 12)
         c.drawString(50, 390, 'Password Exposure:')
         c.setFont('Helvetica', 10)
@@ -160,7 +157,6 @@ class Report:
 
 
         '''Comments and Recommendations for Weak Password'''
-        
         # Feedback
         no_feedback = True
         c.setFont('Helvetica-Bold', 12)
@@ -188,7 +184,6 @@ class Report:
         
         
         '''Recommendations to Avoid WPA Vulnerabilities'''
-        
         # Add WPA vulnerabilities recommendations
         c.setFont('Helvetica-Bold', 12)
         c.drawString(50, 750, 'Recommendations to Avoid WPA Vulnerabilities:')

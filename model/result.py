@@ -1,21 +1,17 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-*
 
-from util.color import Color
-from config import Configuration
-
 import os
 import time
+from util.color import Color
+from config import Configuration
 from json import loads, dumps
 from util.report import Report
 
 
 class CrackResult(object):
     """ Abstract class containing results from a crack session """
-
-    # File to save cracks to, in PWD
-    cracked_file = Configuration.cracked_file
-
+    
     def __init__(self):
         self.date = int(time.time())
         self.loc = 'ND'
@@ -42,7 +38,7 @@ class CrackResult(object):
 
     def save(self):
         """ Adds this crack result to the cracked file and saves it. """
-        name = CrackResult.cracked_file
+        name = Configuration.cracked_file
         saved_results = []
         if os.path.exists(name):
             with open(name, 'r') as fid:
@@ -75,7 +71,7 @@ class CrackResult(object):
     @classmethod
     def display(cls):
         """ Show cracked targets from cracked file """
-        name = cls.cracked_file
+        name = Configuration.cracked_file
         if not os.path.exists(name):
             Color.pl('{!} {O}file {C}%s{O} not found{W}' % name)
             return
@@ -114,9 +110,9 @@ class CrackResult(object):
 
     @classmethod
     def load_all(cls):
-        if not os.path.exists(cls.cracked_file):
+        if not os.path.exists(Configuration.cracked_file):
             return []
-        with open(cls.cracked_file, 'r') as json_file:
+        with open(Configuration.cracked_file, 'r') as json_file:
             try:
                 json = loads(json_file.read())
             except ValueError:
@@ -134,5 +130,6 @@ class CrackResult(object):
                                     json['handshake_file'],
                                     json['key'])
         result.date = json['date']
-        result.readable_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(result.date)) # Convert seconds from 1970-01-02 07:30:00 until the file created back to readable date and time
+        # Convert seconds to readable date and time (1970-01-02 07:30:00 - date and time of the file created)
+        result.readable_date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(result.date))
         return result

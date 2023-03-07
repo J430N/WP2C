@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import time
 from config import Configuration
 from util.process import Process
-import time
 from threading import Thread
 
 

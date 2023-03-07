@@ -1,6 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import time
+import os
+import re
 from model.attack import Attack
 from tools.aircrack import Aircrack
 from tools.airodump import Airodump
@@ -10,10 +13,6 @@ from util.color import Color
 from util.timer import Timer
 from model.handshake import Handshake
 from model.wpa_result import CrackResultWPA
-
-import time
-import os
-import re
 from shutil import copy
 
 
@@ -40,7 +39,7 @@ class AttackWPA(Attack):
         handshake.analyze()
 
         # Check wordlist
-        Color.pl('\n')
+        Color.p('\n')
         for wordlist in Configuration.wordlists:
             if wordlist is None:
                 Color.pl('{!} {O}Not cracking handshake because wordlist is not set')
@@ -66,10 +65,6 @@ class AttackWPA(Attack):
                 self.success = True
                 break
         return self.success
-            
-        # # Crack it
-        # for wordlist in Configuration.wordlists:
-            
 
     def capture_handshake(self):
         """Returns captured or stored handshake, otherwise None."""

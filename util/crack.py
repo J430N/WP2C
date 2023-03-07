@@ -3,7 +3,6 @@
 
 import os
 from json import loads
-
 from config import Configuration
 from model.handshake import Handshake
 from model.wpa_result import CrackResultWPA
@@ -196,8 +195,8 @@ class CrackHelper:
         if tool == 'aircrack':
             for wordlist in Configuration.wordlists:
                 key = Aircrack.crack_handshake(wordlist, handshake, show_command=True)
-
-        if key is not None:
-            return CrackResultWPA(hs['bssid'], hs['essid'], hs['filename'], key)
-        else:
+                if key is not None:
+                    return CrackResultWPA(hs['bssid'], hs['essid'], hs['filename'], key)
+                else:
+                    continue
             return None

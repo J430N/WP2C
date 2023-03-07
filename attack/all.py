@@ -1,6 +1,13 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Jason Teo Jie Chen
+# Program Name: wp2c.py
+# Description: 
+# First Written On: 22/2/2023
+# Edited On: 7/3/2023 
+
+
 from attack.wpa import AttackWPA
 from util.color import Color
 
@@ -17,10 +24,7 @@ class AttackAll(object):
         attacked_targets = 0
         targets_remaining = len(targets)
         for index, target in enumerate(targets, start=1):
-            
-            # if Configuration.attack_max != 0 and index > Configuration.attack_max:
-            #     print(("Attacked %d targets, stopping because of the --first flag" % Configuration.attack_max))
-            #     break
+
             attacked_targets += 1
             targets_remaining -= 1
 
@@ -60,7 +64,7 @@ class AttackAll(object):
             target.attacked = True
             attack = attacks.pop(0)
             try:
-                result = attack.run() #Boolean result returned from wpa module
+                result = attack.run() # Boolean result returned from wpa module
                 if result:
                     break  # Attack was successful, stop other attacks.
             except Exception as e:
@@ -74,7 +78,7 @@ class AttackAll(object):
                 else:
                     return False  # Stop all attacks (exit)
 
-        if attack.success: #Boolean result returned from wpa module
+        if attack.success: # Boolean result returned from wpa module
             attack.crack_result.save()
 
         return True  # Keep attacking other targets

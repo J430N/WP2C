@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .iw import Iw
-from util.color import Color
-from config import Configuration
 import subprocess
 import ipaddress
 import socket
+from .iw import Iw
+from util.color import Color
+from config import Configuration
 
 
 class Properties:

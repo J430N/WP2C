@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from util.process import Process
 import re
+from util.process import Process
 
 
 class Tshark():

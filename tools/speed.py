@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import subprocess
 from util.color import Color
 from config import Configuration
-import subprocess
     
 try:
     import speedtest

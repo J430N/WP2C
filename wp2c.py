@@ -1,19 +1,49 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Files named __init__.py are used to mark directories on disk as Python package directories. If remove the __init__.py file, Python will no longer look for submodules inside that directory, so attempts to import the module will fail.
-#  if __name__ == '__main__' allows file to run directly from command line
+# Developer Name: Jason Teo Jie Chen
+# Program Name: wp2c.py
+# Description: This is the main program of WP2C. It is used to run the program from command line.
+# First Written On: 22/2/2023
+# Edited On: 7/3/2023 
 
-from util.color import Color
-from config import Configuration
+
+import subprocess
 import banner
 import os
+from util.color import Color
+from config import Configuration
+from model.result import CrackResult
+from model.handshake import Handshake
+from util.crack import CrackHelper
+from tools.properties import Properties
+from tools.speed import Speed
+from tools.password import Password
+from tools.generate import Generate
+from util.scanner import Scanner
+from attack.all import AttackAll
+
+# Check dependencies for report
+try:
+    import reportlab
+except ModuleNotFoundError:
+    Color.pl('{!} {R}reportlab{O} module not found. Installing it now...{W}\n')
+    subprocess.run(['pip', 'install', 'reportlab'])
+    Color.pl('\n{!} {O}Rerun the {R}WP2C.py {O}again after the {R}reportlab {O}module installation is complete.{W}')
+    Configuration.exit_gracefully()
+
+try:
+    import zxcvbn
+except ModuleNotFoundError:
+    Color.pl('{!} {R}zxcvbn{O} module not found. Installing it now...{W}\n')
+    subprocess.run(['pip', 'install', 'zxcvbn'])
+    Color.pl('\n{!} {O}Rerun the {R}WP2C.py {O}again after the {R}zxcvbn {O}module installation is complete.{W}')
+    Configuration.exit_gracefully()
 
 
 class WP2C(object):
 
-    def __init__(self):  # Constructors is to initialize(assign values) to the data members of the class when an object of the class is created
-                         # self represents the instance of the class. By using the “self”  we can access the attributes and methods of the class in python.
+    def __init__(self):
         '''
         1. Initializes WP2C.
         2. Checks the WP2C is running under root permissions and ensures dependencies are installed.
@@ -32,15 +62,6 @@ class WP2C(object):
         '''
         Performs different actions depending on user input.
         '''
-        from model.result import CrackResult
-        from model.handshake import Handshake
-        from util.crack import CrackHelper
-        from tools.properties import Properties
-        from tools.speed import Speed
-        from tools.password import Password
-        from tools.generate import Generate
-        
-        
         if Configuration.show_cracked:  # Print previously-cracked access points
             CrackResult.display()
 
@@ -69,27 +90,6 @@ class WP2C(object):
     @staticmethod
     def scan_and_attack():
         '''Scans for targets, asks user to select targets.'''
-        import subprocess
-        from util.scanner import Scanner
-        from attack.all import AttackAll
-        
-        # Check dependencies for report
-        try:
-            import reportlab
-        except ModuleNotFoundError:
-            Color.pl('{!} {R}reportlab{O} module not found. Installing it now...{W}\n')
-            subprocess.run(['pip', 'install', 'reportlab'])
-            Color.pl('\n{!} {O}Rerun the {R}WP2C.py {O}again after the {R}reportlab {O}module installation is complete.{W}')
-            Configuration.exit_gracefully()
-        
-        try:
-            import zxcvbn
-        except ModuleNotFoundError:
-            Color.pl('{!} {R}zxcvbn{O} module not found. Installing it now...{W}\n')
-            subprocess.run(['pip', 'install', 'zxcvbn'])
-            Color.pl('\n{!} {O}Rerun the {R}WP2C.py {O}again after the {R}zxcvbn {O}module installation is complete.{W}')
-            Configuration.exit_gracefully()
-    
         
         Color.pl('')
 

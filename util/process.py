@@ -4,9 +4,7 @@
 import time
 import signal
 import os
-
 from subprocess import Popen, PIPE
-
 from util.color import Color
 from config import Configuration
 

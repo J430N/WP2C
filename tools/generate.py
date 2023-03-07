@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from tools.password import Password
-from util.color import Color
-from config import Configuration
 import subprocess
 import random
 import string
+from tools.password import Password
+from util.color import Color
+from config import Configuration
 
 try:
     from zxcvbn import zxcvbn
@@ -22,15 +22,15 @@ class Generate():
     def run():      
         # Prompt the user to enter their desired password
         Color.pl('\n{W}----------------------------------{G} Password Generater {W}-----------------------------------\n')
-        Color.p('{?} Do you want to {G}create new password(c) {W}or {R}modify existing password(m) {W}? ({G}c{W}/{R}m{W}):{C} ')
+        Color.p('{?} Do you want to {G}create new password(c) {W}or {B}modify existing password(m) {W}? ({G}c{W}/{B}m{W}):{C} ')
         choosen_ans = input()
         if choosen_ans == 'c' or choosen_ans == 'C': # Create new password
-            Color.p('{?} {W}Do you want to create new password {G}randomly suggested by WP2C(r) {W}or {R}tailor made(t){W}? ({G}r{W}/{R}t{W}):{C} ')
+            Color.p('{?} {W}Do you want to create new password {G}randomly suggested by WP2C(r) {W}or {B}tailor made(t){W}? ({G}r{W}/{B}t{W}):{C} ')
             method_ans = input()
             
             if method_ans == 'r' or method_ans == 'R': # Randomly suggested by WP2C
                 # prompt the user to choose between generating a password or passphrase
-                Color.p('{?} {W}Do you want to generate a {G}password(w) {W}or a {R}passphrase(p){W}? ({G}w{W}/{R}p{W}):{C} ')
+                Color.p('{?} {W}Do you want to generate a {G}password(w) {W}or a {B}passphrase(p){W}? ({G}w{W}/{B}p{W}):{C} ')
                 choice = input()
 
                 ''' Generate a password '''

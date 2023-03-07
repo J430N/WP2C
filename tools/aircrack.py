@@ -3,7 +3,6 @@
 
 import os
 import re
-
 from config import Configuration
 from util.process import Process
 
@@ -55,7 +54,7 @@ class Aircrack():
             status = '\r{+} {C}Cracking WPA Handshake: %0.2f%%{W}' % percent
             status += ' ETA: {C}%s{W}' % eta_str
             status += ' @ {C}%0.1fkps{W}' % num_kps
-            # status += ' ({C}%d{W}/{C}%d{W} keys)' % (num_tried, num_total)
+            status += ' ({C}%d{W}/{C}%d{W} keys)' % (num_tried, num_total)
             status += ' (current key: {C}%s{W})' % current_key
             Color.clear_entire_line()
             Color.p(status)

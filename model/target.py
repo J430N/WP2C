@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import re
 from util.color import Color
 from config import Configuration
-
-import re
 
 
 class ArchivedTarget(object):

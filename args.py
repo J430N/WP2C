@@ -1,10 +1,9 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from util.color import Color
-
 import argparse
 import sys
+from util.color import Color
 
 
 class Arguments(object):
@@ -12,8 +11,8 @@ class Arguments(object):
 
     def __init__(self, configuration):
         self.verbose = '-v' in sys.argv or '-hv' in sys.argv or '-vh' in sys.argv
-        self.config = configuration # class 'config.Configuration
-        self.args = self.get_arguments() #Collect arguments pass to WP2C in script.
+        self.config = configuration # class 'config.Configuration.
+        self.args = self.get_arguments() # Collect arguments pass to WP2C in script.
 
     def _verbose(self, msg):
         return Color.s(msg) if self.verbose else argparse.SUPPRESS
@@ -23,13 +22,13 @@ class Arguments(object):
 
         parser = argparse.ArgumentParser(usage=argparse.SUPPRESS,
                                          formatter_class=lambda prog:
-                                         argparse.HelpFormatter(prog, max_help_position=80, width=130)) #Help message setting
+                                         argparse.HelpFormatter(prog, max_help_position=80, width=130)) # Help message setting.
 
-        self._add_global_args(parser.add_argument_group(Color.s('{C}SETTINGS{W}'))) #Display and pass the arguments values
+        self._add_global_args(parser.add_argument_group(Color.s('{C}SETTINGS{W}'))) # Display and pass the arguments values.
         self._add_wpa_args(parser.add_argument_group(Color.s('{C}WPA{W}')))
         self._add_command_args(parser.add_argument_group(Color.s('{C}COMMANDS{W}')))
 
-        return parser.parse_args() #Reads the command-line arguments and returns an 'args' object containing the values of the parsed arguments
+        return parser.parse_args() # Reads the command-line arguments and returns an 'args' object containing the values of the parsed arguments.
 
     def _add_global_args(self, glob):
         glob.add_argument('-v',
