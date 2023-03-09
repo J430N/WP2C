@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: scanner.py
+# Description: Scans wifi networks & provides menu for selecting targets
+# First Written On: 18 February 2023
+# Edited On: 9 March 2023 
+
 from time import sleep, time
 from config import Configuration
 from tools.airodump import Airodump

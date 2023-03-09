@@ -1,3 +1,12 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: password.py
+# Description: Test user's password strength
+# First Written On: 3 March 2023
+# Edited On: 9 March 2023
+
 import os
 import subprocess
 import requests

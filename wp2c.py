@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Developer Name: Jason Teo Jie Chen
+# Developer Name: Mr. Jason Teo Jie Chen
 # Program Name: wp2c.py
-# Description: This is the main program of WP2C. It is used to run the program from command line.
-# First Written On: 22/2/2023
-# Edited On: 7/3/2023 
-
+# Description: Main program for WP2C and initializes WP2C
+# First Written On: 22 February 2023
+# Edited On: 6 March 2023 
 
 import subprocess
 import banner

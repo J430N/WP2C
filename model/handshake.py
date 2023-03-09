@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: handshake.py
+# Description: Analyze handshake .cap file
+# First Written On: 18 February 2023
+# Edited On: 9 March 2023 
+
 import re
 import os
 from util.process import Process

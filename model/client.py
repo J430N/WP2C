@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: client.py
+# Description: Holds details for a device connected to an Access Point
+# First Written On: 18 February 2023
+# Edited On: 7 March 2023 
 
 class Client(object):
     """

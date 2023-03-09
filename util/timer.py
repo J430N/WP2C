@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: timer.py
+# Description: Format time
+# First Written On: 18 February 2023
+# Edited On: 18 February 2023 
+
 import time
 
 

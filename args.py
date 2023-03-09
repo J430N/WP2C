@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: args.py
+# Description: Holds arguments used by the WP2C
+# First Written On: 18 February 2023
+# Edited On: 9 March 2023 
+
 import argparse
 import sys
 import banner

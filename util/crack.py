@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: crack.py
+# Description: Manages handshake retrieval, selection, and running the cracking commands when user includes --crack option
+# First Written On: 18 February 2023
+# Edited On: 5 March 2023 
+
 import os
 from json import loads
 from config import Configuration

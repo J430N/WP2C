@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-*
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: result.py
+# Description: Save cracked result to json and pdf files
+# First Written On: 18 February 2023
+# Edited On: 8 March 2023 
+
 import os
 import time
 from util.color import Color

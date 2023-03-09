@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: config.py
+# Description: Stores configuration variables and functions for WP2C.
+# First Written On: 18 February 2023
+# Edited On: 9 March 2023 
+
 import os
 import re
 from util.color import Color

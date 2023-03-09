@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: attack.py
+# Description: Waiting target to appear in airodump
+# First Written On: 18 February 2023
+# Edited On: 7 March 2023 
+
 import time
 from config import Configuration
 
@@ -19,7 +25,7 @@ class Attack(object):
     def wait_for_target(self, airodump):
         """Waits for target to appear in airodump."""
         start_time = time.time()
-        targets = airodump.get_targets() # Removed apply_filter=False
+        targets = airodump.get_targets() 
         while len(targets) == 0:
             # Wait for target to appear in airodump.
             if int(time.time() - start_time) > Attack.target_wait:

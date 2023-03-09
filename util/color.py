@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: color.py
+# Description: Print colored text to the terminal
+# First Written On: 18 February 2023
+# Edited On: 21 February 2023 
+
 import sys
 
 

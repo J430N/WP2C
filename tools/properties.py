@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: properties.py
+# Description: Display basic Wi-Fi properties and devices connected to the network
+# First Written On: 2 March 2023
+# Edited On: 9 March 2023
+
 import subprocess
 import ipaddress
 import socket

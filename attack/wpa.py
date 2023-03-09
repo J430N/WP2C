@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: wpa.py
+# Description: Initiates full WPA handshake capture attack
+# First Written On: 20 February 2023
+# Edited On: 9 March 2023 
+
 import time
 import os
 import re

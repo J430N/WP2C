@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: aircrack.py
+# Description: Crack a captured handshake using aircrack-ng
+# First Written On: 15 February 2023
+# Edited On: 20 February 2023
+
 import os
 import re
 from config import Configuration

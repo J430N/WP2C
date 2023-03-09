@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: target.py
+# Description: Hold information of previous found targets
+# First Written On: 18 February 2023
+# Edited On: 7 March 2023 
+
 import re
 from util.color import Color
 from config import Configuration

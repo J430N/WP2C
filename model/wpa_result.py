@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: wpa_result.py
+# Description: Display cracked result for WPA after attack
+# First Written On: 18 February 2023
+# Edited On: 2 March 2023 
+
 from util.color import Color
 from .result import CrackResult
 

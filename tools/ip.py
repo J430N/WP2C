@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: ip.py
+# Description: Command to put interface up and down
+# First Written On: 15 February 2023
+# Edited On: 20 February 2023
+
 import re
 
 

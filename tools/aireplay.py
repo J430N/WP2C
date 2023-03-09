@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: aireplay.py
+# Description: Deauthenticating target
+# First Written On: 15 February 2023
+# Edited On: 20 February 2023
+
 import time
 from config import Configuration
 from util.process import Process

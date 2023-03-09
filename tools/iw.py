@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: iw.py
+# Description: Command to set interface to managed mode and monitor mode
+# First Written On: 15 February 2023
+# Edited On: 20 February 2023
+
 class Iw():
 
     @classmethod

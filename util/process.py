@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: process.py
+# Description: Send command to terminal and get output
+# First Written On: 18 February 2023
+# Edited On: 18 February 2023 
+
 import time
 import signal
 import os

@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: airodump.py
+# Description: Logging founded Access Point and Client
+# First Written On: 15 February 2023
+# Edited On: 20 February 2023
+
 import os
 import time
 from util.process import Process

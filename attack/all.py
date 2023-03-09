@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# Developer Name: Jason Teo Jie Chen
-# Program Name: wp2c.py
-# Description: 
-# First Written On: 22/2/2023
-# Edited On: 7/3/2023 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: all.py
+# Description: Attack all selected targets
+# First Written On: 20 February 2023
+# Edited On: 7 March 2023 
 
 
 from attack.wpa import AttackWPA

@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: tshark.py
+# Description: Analyse captured packets like Wireshark
+# First Written On: 15 February 2023
+# Edited On: 15 February 2023
+
 import re
 from util.process import Process
 

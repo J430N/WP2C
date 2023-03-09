@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: generate.py
+# Description: Generate password and passphrase based on user requirements
+# First Written On: 1 March 2023
+# Edited On: 9 March 2023
+
 import subprocess
 import random
 import string

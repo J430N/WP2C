@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: airmon.py
+# Description: Change mode of interface, kill conflicting processes and network manager
+# First Written On: 15 February 2023
+# Edited On: 28 February 2023
+
 import os
 import re
 import signal

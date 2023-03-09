@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: report.py
+# Description: Generate a PDF report after cracking a Wi-Fi network
+# First Written On: 18 March 2023
+# Edited On: 9 March 2023 
+
 import json
 import time
 import os

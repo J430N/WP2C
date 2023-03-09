@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: banner.py
+# Description: Holds WP2C banner
+# First Written On: 18 February 2023
+# Edited On: 20 February 2023 
+
 from util.color import Color
 
 

@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Developer Name: Mr. Jason Teo Jie Chen
+# Program Name: speed.py
+# Description: GTest Wi-Fi upload and download speed and ping
+# First Written On: 1 March 2023
+# Edited On: 5 March 2023
+
 import subprocess
 from util.color import Color
 from config import Configuration
