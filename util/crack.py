@@ -87,7 +87,7 @@ class CrackHelper:
             if hs_type == '4-WAY':
                 # Patch for essid with " " (zero) or dot "." in name
                 handshakenew = Handshake(os.path.join(hs_dir, hs_file))
-                handshakenew.divine_bssid_and_essid()
+                handshakenew.divide_bssid_and_essid()
                 essid_discovery = handshakenew.essid
 
                 essid = essid if essid_discovery is None else essid_discovery
@@ -146,18 +146,28 @@ class CrackHelper:
         Color.p('{W}')
 
         selection = []
+        
         for choice in choices.split(','):
             if '-' in choice:
+                if choice.startswith('-'):
+                    Color.pl('    {!} {O}Invalid target index (%s)... ignoring' % choice)
+                    continue
                 first, last = [int(x) for x in choice.split('-')]
-                for index in range(first, last + 1):
-                    selection.append(handshakes[index - 1])
+                if first < 1 or first > len(handshakes) or last < 1 or last > len(handshakes):
+                    Color.pl('    {!} {O}Invalid target index (%s)... ignoring' % choice)
+                    continue
+                else:
+                    for index in range(first, last + 1):
+                        selection.append(handshakes[index - 1])
             elif choice.strip().lower() == 'all':
                 selection = handshakes[:]
                 break
-            elif [c.isdigit() for c in choice]:
-                index = int(choice)
-                selection.append(handshakes[index - 1])
-
+            elif choice.isdigit() and int(choice) <= len(handshakes) and int(choice)> 0:
+                selection.append(handshakes[int(choice) - 1])
+            else:
+                Color.pl('    {!} {O}Invalid target index (%s)... ignoring' % choice)
+                continue
+            
         return selection
 
     @classmethod
@@ -187,7 +197,7 @@ class CrackHelper:
                             bssid=hs['bssid'],
                             essid=hs['essid'])
         try:
-            handshake.divine_bssid_and_essid()
+            handshake.divide_bssid_and_essid()
         except ValueError as e:
             Color.pl('{!} {R}Error: {O}%s{W}' % e)
             return None

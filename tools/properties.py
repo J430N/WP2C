@@ -127,6 +127,9 @@ class Properties:
                     chosen_interfaces = interfaces
                     break
                 if '-' in choice:
+                    if choice.startswith('-'):
+                        Color.pl('    {!} {O}Invalid target index (%s)... ignoring' % choice)
+                        continue
                     # User selected a range
                     (lower, upper) = [int(x) for x in choice.split('-')]
                     if lower < 1 or lower > len(interfaces) or upper < 1 or upper > len(interfaces):

@@ -15,7 +15,7 @@ class Handshake(object):
         self.bssid = bssid
         self.essid = essid
 
-    def divine_bssid_and_essid(self):
+    def divide_bssid_and_essid(self):
         """
             Tries to find BSSID and ESSID from cap file.
             Sets this instances 'bssid' and 'essid' instance fields.
@@ -62,7 +62,7 @@ class Handshake(object):
 
     def has_handshake(self):
         if not self.bssid or not self.essid:
-            self.divine_bssid_and_essid()
+            self.divide_bssid_and_essid()
 
         if len(self.tshark_handshakes()) > 0:
             return True
@@ -95,7 +95,7 @@ class Handshake(object):
 
     def analyze(self):
         """Prints analysis of handshake capfile"""
-        self.divine_bssid_and_essid()
+        self.divide_bssid_and_essid()
 
         Handshake.print_pairs(self.aircrack_handshakes(), 'aircrack')
 
@@ -150,18 +150,18 @@ class Handshake(object):
         """ Analyzes .cap file(s) for handshake """
         from config import Configuration
         if Configuration.check_handshake == '<all>':
-            Color.pl('{+} checking all handshakes in {G}"./hs"{W} directory\n')
+            Color.pl('\n{+} Checking all handshakes in {G}./%s{W} directory\n' % Configuration.wpa_handshake_dir)
             try:
-                capfiles = [os.path.join('hs', x) for x in os.listdir('hs') if x.endswith('.cap')]
+                capfiles = [os.path.join(Configuration.wpa_handshake_dir, x) for x in os.listdir(Configuration.wpa_handshake_dir) if x.endswith('.cap')]
             except OSError:
                 capfiles = []
             if not capfiles:
-                Color.pl('{!} {R}no .cap files found in {O}"./hs"{W}\n')
+                Color.pl('{!} {R}no .cap files found in {O}./%s{W}\n' % Configuration.wpa_handshake_dir)
         else:
             capfiles = [Configuration.check_handshake]
 
         for capfile in capfiles:
-            Color.pl('{+} checking for handshake in .cap file {C}%s{W}' % capfile)
+            Color.pl('{+} Checking for handshake in .cap file {C}%s{W}' % capfile)
             if not os.path.exists(capfile):
                 Color.pl('{!} {O}.cap file {C}%s{O} not found{W}' % capfile)
                 return

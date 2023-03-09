@@ -18,17 +18,17 @@ class Report:
             cracked_data_list = json.load(f)
 
         # Find the latest Wi-Fi network data with the same ESSID
-        latest_cracked_data = None
+        cracked_data = None
         for data in reversed(cracked_data_list):
             if data['essid'] == essid:
-                latest_cracked_data = data
+                cracked_data = data
                 break
 
-        if latest_cracked_data is None:
+        if cracked_data is None:
             raise ValueError("ESSID '{}' not found in cracked data file.".format(essid))
 
         # Set the PDF filename based on the Wi-Fi name
-        wifi_name = latest_cracked_data['essid'].replace('@', '_')
+        wifi_name = cracked_data['essid'].replace('@', '_')
         pdf_filename = 'report/{}_report.pdf'.format(wifi_name)
 
         # Check if the file already exists, and append (1) to the filename if it does
@@ -63,21 +63,29 @@ class Report:
         c.setFont('Helvetica', 10)
 
         # Write the network information
-        c.drawString(50, 700, 'Network Name:')
-        c.drawString(200, 700, latest_cracked_data['essid'])
+        c.drawString(50, 690, 'Network Name:')
+        c.drawString(220, 690, cracked_data['essid'])
 
         c.drawString(50, 670, 'Mac Address:')
-        c.drawString(200, 670, latest_cracked_data['bssid'])
+        c.drawString(220, 670, cracked_data['bssid'])
 
-        c.drawString(50, 640, 'Encryption:')
-        c.drawString(200, 640, latest_cracked_data['type'])
+        c.drawString(50, 650, 'Encryption:')
+        c.drawString(220, 650, cracked_data['type'])
 
-        c.drawString(50, 610, 'Password:')
-        c.drawString(200, 610, latest_cracked_data['key'])
+        c.drawString(50, 630, 'Password:')
+        c.drawString(220, 630, cracked_data['key'])
 
-        c.drawString(50, 580, 'Cracked Date and Time:')
-        date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(latest_cracked_data['date']))
-        c.drawString(200, 580, date)
+        c.drawString(50, 610, 'Handshake Captured Date and Time:')
+        datetime_str = cracked_data['handshake_file'].split("_")[-1].split(".")[0]  # Extract "2023-03-09T13-33-01"
+        time_obj = time.strptime(datetime_str, "%Y-%m-%dT%H-%M-%S")  # Parse string into time object
+        date_str = time.strftime("%Y-%m-%d", time_obj)  # Convert time object to date string
+        time_str = time.strftime("%H:%M:%S", time_obj)  # Convert time object to time string
+
+        c.drawString(220, 610, date_str + ' ' + time_str)
+        
+        c.drawString(50, 590, 'Password Cracked Date and Time:')
+        date = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(cracked_data['date']))
+        c.drawString(220, 590, date)
 
         # Draw a line under the Wi-Fi network information section
         c.line(50, 570, letter[0] - 50, 570)
@@ -98,7 +106,7 @@ class Report:
             4: 'Strong',
         }
         
-        password_strength = zxcvbn(latest_cracked_data['key'])
+        password_strength = zxcvbn(cracked_data['key'])
         c.drawString(50, 520, '{}. Password Strength: {}/4)'.format('1', SCORE_TO_WORD[password_strength['score']] + ' (' + str(password_strength['score'])))
         
         # Shows the estimated number of guesses and estimated time
@@ -144,7 +152,7 @@ class Report:
         for key, values in dict_wordlists.items():
             for value in values:
                 position += 1
-                if latest_cracked_data['key'] in value:
+                if cracked_data['key'] in value:
                     matches.append((value, key, position))
 
         if len(matches) > 0:

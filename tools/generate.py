@@ -95,7 +95,7 @@ class Generate():
                     ''' Generate a passphrase'''    
                 elif choice == 'p' or choice == 'P':
                     # prompt the user for the the number of words to include
-                    Color.p('{+} {W}Enter the number of words in the passphrase:{C} ')
+                    Color.p('{?} {W}Enter the number of words in the passphrase:{C} ')
                     num_words = int(input())
                     # generate the passphrase and print it to the console
                     passphrase = Generate.random_passphrase(num_words)
@@ -107,13 +107,13 @@ class Generate():
                     Generate.run()
                     
             elif method_ans == 't' or method_ans == 'T': # Tailor made
-                Color.p(('{+} {W}Enter your {G}desired word {W}to add in password:{C} '))
+                Color.p(('{?} {W}Enter your {G}desired word {W}to add in password:{C} '))
                 user_passwd = input()
                 
                 # Prompt the user to enter the desired password length
                 while True:
                     try:
-                        Color.p(('{+} {W}Enter the desired password length:{C} '))
+                        Color.p(('{?} {W}Enter the desired password length:{C} '))
                         passwd_length = int(input())
                         if passwd_length < 7 or passwd_length > 20:
                             Color.pl('{!} {R}Error: {O}Please enter a value between 8 to 20.{W}')
@@ -129,7 +129,7 @@ class Generate():
                 Generate.run()
                 
         elif choosen_ans == 'm' or choosen_ans == 'M': # Modify existing password
-            Color.p(('{+} {W}Enter your {G}current password {W}to be modify:{C} '))
+            Color.p(('{?} {W}Enter your {G}current password {W}to be modify:{C} '))
             user_passwd = input()
             passwd_length = len(user_passwd)
             Generate.print_tailor_passwords(user_passwd, passwd_length)
