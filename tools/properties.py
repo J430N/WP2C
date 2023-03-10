@@ -17,7 +17,7 @@ from config import Configuration
 
 class Properties:
     """Get properties of WiFi networks."""
-    Configuration.initialize(False)
+    # Configuration.initialize(False)
  
     dict_list = []
     ipv4_add_1 = None
@@ -95,7 +95,7 @@ class Properties:
             Configuration.exit_gracefully()
                     
         else:
-            Color.pl('{!} {R}Error: {O}WP2C{R} could not find any wireless interfaces{W}')
+            Color.pl('{!} {R}Error: WP2C {O}could not find any wireless interfaces{W}')
             Configuration.exit_gracefully()
 
                     

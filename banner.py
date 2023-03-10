@@ -36,4 +36,4 @@ def print_banner():
   Color.pl(r'{R}                 =@@@@@@@@@@@@@@=                                            {G}Version: {C}1.0{W}''')   
   Color.pl('                                                                            {G} By {C}Jason Teo ')     
   Color.pl('{GR}{D}-----------------------------------------------------------------------------------------{W}')                     
-  Color.pl('{!} {R}Disclaimer: {W}WP2C is developeed for testing and discovering vulnerabilities in \n\t\t wireless networks as well as providing feedbacks to fix them. \n\t\t {R}Do not use it for illegal purposes.{W}')
+  Color.pl('{!} {R}Disclaimer: {W}WP2C is developeed for testing and discovering vulnerabilities in \n\t\t wireless networks as well as providing feedbacks to fix them. \n\t\t {R}Do not use it for illegal purposes.{W}\n')

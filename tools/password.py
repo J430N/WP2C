@@ -51,7 +51,7 @@ SCORE_TO_WORD = {
 class Password:
     
     def run():
-        Color.pl('\n{W}-------------------------------{G} Password Strength Checker {W}-------------------------------\n')
+        Color.pl('{W}-------------------------------{G} Password Strength Checker {W}-------------------------------\n')
         Color.p('{?} Do you want to {G}hide {W}your password while typing? ({G}y{W}/{R}n{W}):{C} ')
         ans = input()
         if ans == 'y' or ans == 'Y':

@@ -69,7 +69,7 @@ class CrackHelper:
             Color.pl('\n{!} {O}directory not found: {R}%s{W}' % hs_dir)
             return []
 
-        Color.pl('\n{+} Listing captured handshakes from {C}%s{W}:\n' % os.path.abspath(hs_dir))
+        Color.pl('{+} Listing captured handshakes from {C}%s{W}:\n' % os.path.abspath(hs_dir))
         for hs_file in os.listdir(hs_dir):
             if hs_file.count('_') != 3:
                 continue

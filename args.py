@@ -9,7 +9,6 @@
 
 import argparse
 import sys
-import banner
 from util.color import Color
 
 
@@ -19,7 +18,7 @@ class Arguments(object):
     def __init__(self, configuration):
 
         self.verbose = '-v' in sys.argv
-        self.config = configuration # class 'config.Configuration.
+        self.config = configuration
         self.args = self.get_arguments() # Collect arguments pass to WP2C in script.
 
     def _verbose(self, msg):

@@ -89,7 +89,7 @@ class CrackResult(object):
             Color.pl('{!} {R}no results found in {O}%s{W}' % name)
             return
 
-        Color.pl('\n{+} Displaying {G}%d{W} cracked target(s) from {C}%s{W}\n' % (
+        Color.pl('{+} Displaying {G}%d{W} cracked target(s) from {C}%s{W}\n' % (
             len(cracked_targets), name))
 
         results = sorted([cls.load(item) for item in cracked_targets], key=lambda x: x.date, reverse=True)

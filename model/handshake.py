@@ -156,7 +156,7 @@ class Handshake(object):
         """ Analyzes .cap file(s) for handshake """
         from config import Configuration
         if Configuration.check_handshake == '<all>':
-            Color.pl('\n{+} Checking all handshakes in {G}./%s{W} directory\n' % Configuration.wpa_handshake_dir)
+            Color.pl('{+} Checking all handshakes in {G}./%s{W} directory\n' % Configuration.wpa_handshake_dir)
             try:
                 capfiles = [os.path.join(Configuration.wpa_handshake_dir, x) for x in os.listdir(Configuration.wpa_handshake_dir) if x.endswith('.cap')]
             except OSError:

@@ -16,8 +16,6 @@ class Configuration(object):
 
     initialized = False  # Flag indicating config has been initialized
     verbose = 0
-    version = '2.6.8'
-    
     check_handshake = None
     cracked_file = None
     crack_handshake = None
@@ -78,7 +76,7 @@ class Configuration(object):
                 cls.wordlists.append(file_path)
             elif os.path.isfile(file_path):
                 # Print an error message if the file is not a txt file
-                Color.pl('{!} {R}Error: %s {O}is not a text file and cannot be used as a wordlist. Ignored!' % filename)
+                Color.pl('{!} {R}Error: %s {O}is not a text file and cannot be used as a wordlist. Ignored!{W}\n' % filename)
 
         # Default wordlist for generating passphrases
         cls.passphrases = './wordlist/for_passphases.txt'

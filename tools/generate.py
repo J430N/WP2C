@@ -27,7 +27,7 @@ class Generate():
     
     def run():      
         # Prompt the user to enter their desired password
-        Color.pl('\n{W}----------------------------------{G} Password Generater {W}-----------------------------------\n')
+        Color.pl('{W}----------------------------------{G} Password Generater {W}-----------------------------------\n')
         Color.p('{?} Do you want to {G}create new password(c) {W}or {B}modify existing password(m) {W}? ({G}c{W}/{B}m{W}):{C} ')
         choosen_ans = input()
         if choosen_ans == 'c' or choosen_ans == 'C': # Create new password
@@ -55,7 +55,7 @@ class Generate():
                             num_letters = int(input())
                             if num_letters <= remain:
                                 break
-                            Color.pl('{!} {R}Error: You can only input up to {G}%s {O}letters. Please try again.{W}' % remain)
+                            Color.pl('{!} {R}Error: {O}You can only input up to {G}%s {O}letters. Please try again.{W}' % remain)
                             Color.p('{?} {W}Enter the number of letters (up to {G}%s{W}):{C} ' % remain)
                         remain -= num_letters
                         Color.pl('{+} {W}The remaining password length is {C}%s{W}.' % remain)
@@ -87,7 +87,7 @@ class Generate():
                             num_symbols = int(input())
                             if num_symbols <= remain:
                                 break
-                            Color.pl('{!} {R}Error: You can only input up to {G}%s {O}symbols. Please try again.{W}' % remain)
+                            Color.pl('{!} {R}Error: {O}You can only input up to {G}%s {O}symbols. Please try again.{W}' % remain)
                             Color.p('{?} {W}Enter the number of symbols (up to {G}%s{W}):{C} ' % remain)
                         remain -= num_symbols
                         Color.pl('{+} {W}The remaining password length is {C}%s{W}.' % remain)

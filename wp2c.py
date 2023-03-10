@@ -12,15 +12,6 @@ import banner
 import os
 from util.color import Color
 from config import Configuration
-from model.result import CrackResult
-from model.handshake import Handshake
-from util.crack import CrackHelper
-from tools.properties import Properties
-from tools.speed import Speed
-from tools.password import Password
-from tools.generate import Generate
-from util.scanner import Scanner
-from attack.all import AttackAll
 
 # Check dependencies for report
 try:
@@ -47,7 +38,7 @@ class WP2C(object):
         1. Initializes WP2C.
         2. Checks the WP2C is running under root permissions and ensures dependencies are installed.
         '''
-
+        banner.print_banner()  # Print WP2C's banner
         Configuration.initialize(load_interface=False)
 
         if os.getuid() != 0:
@@ -59,6 +50,15 @@ class WP2C(object):
         '''
         Performs different actions depending on user input.
         '''
+        from model.result import CrackResult
+        from model.handshake import Handshake
+        from util.crack import CrackHelper
+        from tools.properties import Properties
+        from tools.speed import Speed
+        from tools.password import Password
+        from tools.generate import Generate
+
+
         if Configuration.show_cracked:  # Print previously-cracked access points
             CrackResult.display()
 
@@ -87,8 +87,9 @@ class WP2C(object):
     @staticmethod
     def scan_and_attack():
         '''Scans for targets, asks user to select targets.'''
+        from util.scanner import Scanner
+        from attack.all import AttackAll
         
-        Color.pl('')
 
         # Scan
         s = Scanner()
@@ -102,7 +103,6 @@ class WP2C(object):
 
 if __name__ == '__main__': #It Allows You to Execute Code When the File Runs as a Script, but Not When It’s Imported as a Module
     try:
-        banner.print_banner()  # Print WP2C's banner
         wp2c = WP2C()
         wp2c.start()
     except Exception as e:
