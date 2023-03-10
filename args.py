@@ -64,7 +64,11 @@ class Arguments(object):
         glob.add_argument('--generate',
                           action = 'store_true',
                           dest='generate',
-                          help=Color.s('Generate new password for you'))   
+                          help=Color.s('Generate new password for you'))
+        
+        glob.add_argument('New wordlist',
+                          action = 'store_true',
+                          help=Color.s('Add new wordlist into {C}./wordlist {W}folder')) 
                          
     def _add_wpa_args(self, wpa):
         wpa.add_argument('--new',

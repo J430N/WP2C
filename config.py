@@ -5,7 +5,7 @@
 # Program Name: config.py
 # Description: Stores configuration variables and functions for WP2C.
 # First Written On: 18 February 2023
-# Edited On: 9 March 2023 
+# Edited On: 10 March 2023 
 
 import os
 import re
@@ -72,11 +72,14 @@ class Configuration(object):
         for filename in os.listdir('./wordlist/'):
             # Get the full path of the file
             file_path = os.path.join('./wordlist/', filename)
-            # Check if the file path is a file (not a directory)
-            if os.path.isfile(file_path):
+            # Check if the file path is a file (not a directory) and if it has a .txt extension
+            if os.path.isfile(file_path) and filename.endswith('.txt'):
                 # Append the file path to the list
                 cls.wordlists.append(file_path)
-        
+            elif os.path.isfile(file_path):
+                # Print an error message if the file is not a txt file
+                Color.pl('{!} {R}Error: %s {O}is not a text file and cannot be used as a wordlist. Ignored!' % filename)
+
         # Default wordlist for generating passphrases
         cls.passphrases = './wordlist/for_passphases.txt'
 

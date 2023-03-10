@@ -48,8 +48,6 @@ class WP2C(object):
         2. Checks the WP2C is running under root permissions and ensures dependencies are installed.
         '''
 
-        banner.print_banner()  # Print WP2C's banner
-
         Configuration.initialize(load_interface=False)
 
         if os.getuid() != 0:
@@ -102,8 +100,9 @@ class WP2C(object):
 
         Color.pl('{+} Finished attacking {C}%d{W} target(s), exiting' % attacked_targets)
 
-def entry_point():
+if __name__ == '__main__': #It Allows You to Execute Code When the File Runs as a Script, but Not When It’s Imported as a Module
     try:
+        banner.print_banner()  # Print WP2C's banner
         wp2c = WP2C()
         wp2c.start()
     except Exception as e:
@@ -112,7 +111,3 @@ def entry_point():
     except KeyboardInterrupt:
         Color.pl('\n{!} {O}Interrupted, Shutting down...{W}')
     Configuration.exit_gracefully()
-
-
-if __name__ == '__main__': #It Allows You to Execute Code When the File Runs as a Script, but Not When It’s Imported as a Module
-    entry_point()
