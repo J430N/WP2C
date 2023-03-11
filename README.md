@@ -14,7 +14,7 @@ WP2C can check the strength of a Wi-Fi password. It analyzes the password to det
 ### Password Generation
 WP2C can generate new Wi-Fi passwords. It creates a random password based on specified parameters, such as length and user desired word.
 
-### Wi-Fi Properties and Connected Devices Display
+### Wi-Fi Properties and Devices Discovery
 WP2C can display Wi-Fi properties, such as SSID, channel, signal strength, and encryption type. It can also list devices connected to the Wi-Fi network, including their MAC addresses and IP addresses.
 
 ### Wi-Fi Speed Test
