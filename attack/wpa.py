@@ -46,14 +46,14 @@ class AttackWPA(Attack):
 
         # Check wordlist
         Color.p('\n')
-        for wordlist in Configuration.wordlists:
-            if wordlist is None:
-                Color.pl('{!} {O}Not cracking handshake because wordlist is not set')
+        if len(Configuration.wordlists) == 0:
+                Color.pl('{!} {O}Not cracking handshake because no wordlist found. Add a wordlist into the {C}wordlist {O}folder and retry again\n')
                 self.success = False
                 return False
-
-            elif not os.path.exists(wordlist):
-                Color.pl('{!} {O}Not cracking handshake because wordlist {R}%s{O} was not found' % wordlist)
+            
+        for wordlist in Configuration.wordlists:
+            if not os.path.exists(wordlist):
+                Color.pl('{!} {O}Not cracking handshake because wordlist {R}%s{O} was not found\n' % wordlist)
                 self.success = False
                 return False
 

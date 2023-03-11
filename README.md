@@ -38,7 +38,7 @@ git clone https://github.com/J430N/WP2C.git
 
 ## Adding New Wordlist
 Save the new wordlist in the [wordlist](https://github.com/J430N/WP2C/tree/master/wordlist) folder.
-**Important: Only plain text files (i.e., files with a `.txt` extension) are allowed to save in the `./wordlist` folder. Any other file types will be ignored by WP2C.**
+**Important: Only plain text files (i.e., files with a `.txt` extension) are allowed to save in the `wordlist` folder. Any other file types will be ignored by WP2C.**
 
 ## Attack WPA encrypted Wi-Fi
 Change to the WP2C directory:

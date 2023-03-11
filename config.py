@@ -5,7 +5,7 @@
 # Program Name: config.py
 # Description: Stores configuration variables and functions for WP2C.
 # First Written On: 18 February 2023
-# Edited On: 10 March 2023 
+# Edited On: 11 March 2023 
 
 import os
 import re
@@ -79,7 +79,7 @@ class Configuration(object):
                 Color.pl('{!} {R}Error: %s {O}is not a text file and cannot be used as a wordlist. Ignored!{W}\n' % filename)
 
         # Default wordlist for generating passphrases
-        cls.passphrases = './wordlist/for_passphases.txt'
+        cls.passphrases = './for_passphases.txt'
 
         if os.path.isfile('/usr/share/ieee-data/oui.txt'):
             manufacturers = '/usr/share/ieee-data/oui.txt'

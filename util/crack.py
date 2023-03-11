@@ -5,7 +5,7 @@
 # Program Name: crack.py
 # Description: Manages handshake retrieval, selection, and running the cracking commands when user includes --crack option
 # First Written On: 18 February 2023
-# Edited On: 5 March 2023 
+# Edited On: 11 March 2023 
 
 import os
 from json import loads
@@ -190,6 +190,8 @@ class CrackHelper:
             # Failed to crack
             Color.pl('{!} {R}Failed to crack {O}%s{R} ({O}%s{R}): Passphrase not in dictionary' % (
                 hs['essid'], hs['bssid']))
+        elif crack_result is False:
+            Color.pl('{!} {O}Not cracking handshake because no wordlist found. Add a wordlist into the {C}wordlist {O}folder and retry again\n')
         else:
             # Cracked, replace existing entry (if any), or add to
             Color.pl('{+} {G}Cracked{W} {C}%s{W} ({C}%s{W}). Key: "{G}%s{W}"' % (
@@ -209,6 +211,8 @@ class CrackHelper:
             return None
 
         if tool == 'aircrack':
+            if len(Configuration.wordlists) == 0:
+                return False
             for wordlist in Configuration.wordlists:
                 key = Aircrack.crack_handshake(wordlist, handshake, show_command=True)
                 if key is not None:

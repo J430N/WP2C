@@ -5,7 +5,7 @@
 # Program Name: generate.py
 # Description: Generate password and passphrase based on user requirements
 # First Written On: 1 March 2023
-# Edited On: 9 March 2023
+# Edited On: 11 March 2023
 
 import subprocess
 import random
@@ -13,14 +13,7 @@ import string
 from tools.password import Password
 from util.color import Color
 from config import Configuration
-
-try:
-    from zxcvbn import zxcvbn
-except ModuleNotFoundError:
-    Color.pl('{!} {R}zxcvbn{O} module not found. Installing it now...{W}\n')
-    subprocess.run(['pip', 'install', 'zxcvbn'])
-    Color.pl('\n{!} {O}Rerun the {R}WP2C.py {O}with {R}--password {O} argument again after the {R}zxcvbn {O}module installation is complete.{W}')
-    Configuration.exit_gracefully()
+from zxcvbn import zxcvbn
 
 
 class Generate():
@@ -31,7 +24,7 @@ class Generate():
         Color.p('{?} Do you want to {G}create new password(c) {W}or {B}modify existing password(m) {W}? ({G}c{W}/{B}m{W}):{C} ')
         choosen_ans = input()
         if choosen_ans == 'c' or choosen_ans == 'C': # Create new password
-            Color.p('{?} {W}Do you want to create new password {G}randomly suggested by WP2C(r) {W}or {B}tailor made(t){W}? ({G}r{W}/{B}t{W}):{C} ')
+            Color.p('{?} {W}Do you want to create new password {G}randomly suggested by WP2C(r) {W}or {B}customise(c){W}? ({G}r{W}/{B}c{W}):{C} ')
             method_ans = input()
             
             if method_ans == 'r' or method_ans == 'R': # Randomly suggested by WP2C
@@ -46,8 +39,11 @@ class Generate():
                     length = int(input())
                     
                     if length < 7:
-                        Color.pl('{!} {R}Error: {O}The password length should not less than 8, set password length to {C}default [8]{W}.')
-                        length = 8 
+                        Color.pl('{!} {R}Error: {O}The password length should not less than 8, set password length to {C}minimum length [8]{W}.')
+                        length = 8
+                    elif length > 20:
+                        Color.pl('{!} {R}Error: {O}The password length should not more than 20, set password length to {C}maximum length [20]{W}.')
+                        length = 20
                     remain = length    
                     while remain > 1:
                         Color.p('{?} {W}Enter the number of letters (up to {G}%s{W}):{C} ' % remain)
@@ -103,6 +99,9 @@ class Generate():
                     # prompt the user for the the number of words to include
                     Color.p('{?} {W}Enter the number of words in the passphrase:{C} ')
                     num_words = int(input())
+                    if num_words < 1 or num_words > 20:
+                            Color.pl('{!} {R}Error: {O}Please enter a value between 8 to 20.{W}')
+                            Generate.run()
                     # generate the passphrase and print it to the console
                     passphrase = Generate.random_passphrase(num_words)
                     Color.pl('{+} Your new passphrase is:{C} ' + passphrase)
@@ -112,7 +111,7 @@ class Generate():
                     Color.pl('{!} {R}Error: {O}Invalid option. Try again.{W}')
                     Generate.run()
                     
-            elif method_ans == 't' or method_ans == 'T': # Tailor made
+            elif method_ans == 'c' or method_ans == 'C': # Customise
                 Color.p(('{?} {W}Enter your {G}desired word {W}to add in password:{C} '))
                 user_passwd = input()
                 
@@ -128,7 +127,7 @@ class Generate():
                     except ValueError:
                         Color.pl('{!} {R}Error: {O}The password length must be an integer.{W}')
                         continue
-                Generate.print_tailor_passwords(user_passwd, passwd_length)
+                Generate.print_customise_passwords(user_passwd, passwd_length)
                 
             else: # Invalid option
                 Color.pl('{!} {R}Error: {O}Invalid option. Try again.{W}')
@@ -138,7 +137,7 @@ class Generate():
             Color.p(('{?} {W}Enter your {G}current password {W}to be modify:{C} '))
             user_passwd = input()
             passwd_length = len(user_passwd)
-            Generate.print_tailor_passwords(user_passwd, passwd_length)
+            Generate.print_customise_passwords(user_passwd, passwd_length)
             
         else: # Invalid option
             Color.pl('{!} {R}Error: {O}Invalid option. Try again.{W}')
@@ -149,14 +148,14 @@ class Generate():
         Configuration.exit_gracefully()
 
     @staticmethod
-    def print_tailor_passwords(user_passwd, passwd_length):
+    def print_customise_passwords(user_passwd, passwd_length):
         # Generate and print 3 different passwords for the user to choose from
         passwds = []
         count = 0
         Color.pl('{+} {W}Generating password...')
         Color.pl('{+} {W}Modify {G}desired word {W}or {G}current password {W}if waiting too long...')
         while count < 3:
-            passwd = Generate.tailor_password(user_passwd, passwd_length)
+            passwd = Generate.customise_password(user_passwd, passwd_length)
             strength = zxcvbn(passwd)
             if strength['score'] < 3: # Check the password strength
                 continue
@@ -196,7 +195,7 @@ class Generate():
             Color.pl(f'\n{{+}} {{R}}{passwd} {{O}}was not found to be leaked. Carry on!{{W}}')
     
     @staticmethod    
-    def tailor_password(passwd, length):
+    def customise_password(passwd, length):
         # List of characters to choose from
         characters = string.ascii_letters + string.digits + string.punctuation
 

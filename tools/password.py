@@ -5,7 +5,7 @@
 # Program Name: password.py
 # Description: Test user's password strength
 # First Written On: 3 March 2023
-# Edited On: 9 March 2023
+# Edited On: 11 March 2023
 
 import os
 import subprocess
@@ -14,15 +14,7 @@ import hashlib
 from getpass import getpass
 from config import Configuration
 from util.color import Color
-
-try:
-    from zxcvbn import zxcvbn
-except ModuleNotFoundError:
-    Color.pl('{!} {R}zxcvbn{O} module not found. Installing it now...{W}\n')
-    subprocess.run(['pip', 'install', 'zxcvbn'])
-    Color.pl('\n{!} {O}Rerun the {R}WP2C.py {O}with {R}--password {O} argument again after the {R}zxcvbn {O}module installation is complete.{W}')
-    Configuration.exit_gracefully()
-    
+from zxcvbn import zxcvbn
 from zxcvbn.matching import add_frequency_lists
 
 
@@ -55,11 +47,11 @@ class Password:
         Color.p('{?} Do you want to {G}hide {W}your password while typing? ({G}y{W}/{R}n{W}):{C} ')
         ans = input()
         if ans == 'y' or ans == 'Y':
-            Color.p(('{+} {W}Enter your password to be checked: '))
-            passwd = getpass()
+            Color.p('{?} {W}Enter your password to be checked: ')
+            passwd = getpass('') 
             Color.p('\n')
         elif ans == 'n' or ans == 'N':
-            Color.p(('{+} {W}Enter your password to be checked:{C} '))
+            Color.p(('{?} {W}Enter your password to be checked:{C} '))
             passwd = input()
             Color.p('\n')
         else:

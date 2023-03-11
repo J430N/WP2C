@@ -5,7 +5,7 @@
 # Program Name: wp2c.py
 # Description: Main program for WP2C and initializes WP2C
 # First Written On: 22 February 2023
-# Edited On: 6 March 2023 
+# Edited On: 11 March 2023 
 
 import subprocess
 import banner
@@ -30,13 +30,21 @@ except ModuleNotFoundError:
     Color.pl('\n{!} {O}Rerun the {R}WP2C.py {O}again after the {R}zxcvbn {O}module installation is complete.{W}')
     Configuration.exit_gracefully()
 
+try:
+    import speedtest
+except ModuleNotFoundError:
+    Color.pl('{!} {R}speedtest-cli{O} module not found. Installing it now...{W}\n')
+    subprocess.run(['pip', 'install', 'speedtest-cli'])
+    Color.pl('\n{!} {O}Rerun the {R}WP2C.py {O}with {R}--speed {O} argument again after the {R}speedtest-cli {O}module installation is complete.{W}')
+    Configuration.exit_gracefully()
+
 
 class WP2C(object):
 
     def __init__(self):
         '''
         1. Initializes WP2C.
-        2. Checks the WP2C is running under root permissions and ensures dependencies are installed.
+        2. Checks the WP2C is running under root permissions.
         '''
         banner.print_banner()  # Print WP2C's banner
         Configuration.initialize(load_interface=False)

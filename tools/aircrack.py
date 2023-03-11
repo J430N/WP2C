@@ -24,10 +24,10 @@ class Aircrack():
         key_file = Configuration.temp('wpakey.txt')
         command = [
             'aircrack-ng',
-            '-a', '2',
+            '-a', '2', # Force WPA/WPA2-PSK attack.
             '-w', wordlist,
             '--bssid', handshake.bssid,
-            '-l', key_file,
+            '-l', key_file, # Logs the key to the file specified.
             handshake.capfile
         ]
         if show_command:
