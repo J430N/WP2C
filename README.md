@@ -60,7 +60,7 @@ sudo python wp2c.py -h
 sudo python wp2c.py -v
 ```
 
-## Wi-Fi Properties
+## Wi-Fi Properties and Devices Discovery
 ```
 sudo python wp2c.py --properties
 ```
