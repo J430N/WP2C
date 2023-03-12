@@ -2,6 +2,10 @@
 WP2C is a command-line tool designed to crack and craft Wi-Fi passwords. It allows users to exploit the WPA Wi-Fi encryption flaw by capturing 4-way handshakes and performing dictionary attacks to crack the password from the captured handshake packets. 
 
 ## Features
+
+### Initialise WP2C
+Initialising WP2C means starting the program and preparing it for use. This process involves setting up the configuration variables and functions for WP2C and checks necessary Python modules and installs them if not found.
+
 ### Capture WPA 4-way Handshakes
 WP2C can capture WPA 4-way handshakes from Wi-Fi networks. A 4-way handshake is a process that occurs when a client connects to a Wi-Fi network protected by WPA encryption.
 
