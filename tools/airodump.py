@@ -39,10 +39,6 @@ class Airodump():
         self.output_file_prefix = output_file_prefix
         self.ivs_only = ivs_only
 
-        # For tracking decloaked APs (previously were hidden)
-        self.decloaking = False
-        self.decloaked_times = {}  # Map of BSSID(str) -> epoch(int) of last deauth
-
         self.delete_existing_files = delete_existing_files
 
     def __enter__(self):
@@ -176,7 +172,6 @@ class Airodump():
         new_targets.sort(key=lambda x: x.power, reverse=True)
 
         self.targets = new_targets
-        self.deauth_hidden_targets()
 
         return self.targets
 
@@ -245,45 +240,3 @@ class Airodump():
                         continue
 
         return targets
-
-    def deauth_hidden_targets(self):
-        """
-        Sends deauths (to broadcast and to each client) for all
-        targets (APs) that have unknown ESSIDs (hidden router names).
-        """
-        self.decloaking = False
-
-        if self.channel is None:
-            return  # Do not deauth if channel is not fixed.
-
-        # Reusable deauth command
-        deauth_cmd = [
-            'aireplay-ng',
-            '-0',  # Deauthentication
-            str(Configuration.num_deauths),  # Number of deauth packets to send
-            '--ignore-negative-one'
-        ]
-
-        for target in self.targets:
-            if target.essid_known:
-                continue
-
-            now = int(time.time())
-            secs_since_decloak = now - self.decloaked_times.get(target.bssid, 0)
-
-            if secs_since_decloak < 30:
-                continue  # Decloak every AP once every 30 seconds
-
-            self.decloaking = True
-            self.decloaked_times[target.bssid] = now
-            if Configuration.verbose > 1:
-                from util.color import Color
-                Color.pe('{C} [?] Deauthing %s (broadcast & %d clients){W}' % (target.bssid, len(target.clients)))
-
-            # Deauth broadcast
-            iface = Configuration.interface
-            Process(deauth_cmd + ['-a', target.bssid, iface])
-
-            # Deauth clients
-            for client in target.clients:
-                Process(deauth_cmd + ['-a', target.bssid, '-c', client.bssid, iface])

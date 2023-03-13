@@ -8,7 +8,6 @@
 # Edited On: 11 March 2023
 
 import os
-import subprocess
 import requests
 import hashlib
 from getpass import getpass

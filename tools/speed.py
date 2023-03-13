@@ -7,7 +7,6 @@
 # First Written On: 1 March 2023
 # Edited On: 11 March 2023
 
-import subprocess
 import speedtest
 from util.color import Color
 

@@ -7,12 +7,12 @@
 # First Written On: 2 March 2023
 # Edited On: 9 March 2023
 
-import subprocess
 import ipaddress
 import socket
 from .iw import Iw
 from util.color import Color
 from config import Configuration
+from util.process import Process
 
 
 class Properties:
@@ -160,11 +160,10 @@ class Properties:
                 dict['Wireless Interface'] = interface        
 
                 try:
-                    # Get WiFi properties using iwconfig
-                    output = subprocess.check_output(['iwconfig', interface])
-                    lines = output.decode().split('\n')  
-                    
-                    for line in lines:                       
+                    # Get WiFi properties using iwconfig         
+                    p = Process('iwconfig ' + interface)
+                    lines = p.stdout().split('\n')
+                    for line in lines:
                         if 'ESSID' in line:
                             ssid = line.split('ESSID:')[1].split('"')[1]
                             dict['SSID'] = ssid
@@ -208,10 +207,9 @@ class Properties:
         dict_cont = {}
             
         # Get WiFi properties using nmcli
-        output = subprocess.check_output(['nmcli', '-p', 'connection', 'show', ssid]) #Wifi name from the network interface
-        lines = output.decode().split('\n')
-
-        for line in lines:
+        p = Process('nmcli ' + '-p ' + 'connection ' + 'show ' + ssid)
+        lines = p.stdout().split('\n')
+        for line in lines:    
             if '802-11-wireless-security.key-mgmt' in line:
                 security = line.split(':')[1].strip()
                 dict_cont['Security Type'] = security
@@ -266,11 +264,11 @@ class Properties:
         # run the nmap -sn command to discover devices on the network
         Properties.network_ip = (f"{network.network_address}/{network.prefixlen}") 
         cmd = ['sudo', 'nmap', '-sn', Properties.network_ip]
-        output = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        p = Process(cmd)
 
         # parse the output to extract the list of devices
         devices = []
-        for line in output.stdout.decode().splitlines():
+        for line in p.stdout().splitlines():
             
             if 'Nmap scan report for' in line:
                 info = line.split()

@@ -43,7 +43,7 @@ class Arguments(object):
                           default=0,
                           dest='verbose',
                           help=Color.s(
-                              'Prints commands and outputs. Increase verbosity by increasing numbers of v e.g. {C}-vv{W} (default: {G}quiet{W})'))
+                              'Shows additional commands and outputs. Increase verbosity with {C}-vv{W} (default: {G}quiet{W})'))
         
         glob.add_argument('--properties',
                           action = 'store_true',

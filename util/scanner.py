@@ -54,8 +54,6 @@ class Scanner(object):
                     client_count = sum(len(t.clients) for t in self.targets)
 
                     outline = '\r{+} Scanning'
-                    if airodump.decloaking:
-                        outline += ' & decloaking'
                     outline += '. Found'
                     outline += ' {G}%d{W} target(s),' % target_count
                     outline += ' {G}%d{W} client(s).' % client_count

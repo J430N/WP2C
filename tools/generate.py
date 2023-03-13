@@ -35,20 +35,36 @@ class Generate():
                 ''' Generate a password '''
                 if choice == 'w' or choice == 'W':
                     # prompt the user for the length of the password and the number of letters, digits, and symbols to include
-                    Color.p('{?} {W}Enter the length of the password:{C} ')
-                    length = int(input())
-                    
-                    if length < 7:
-                        Color.pl('{!} {R}Error: {O}The password length should not less than 8, set password length to {C}minimum length [8]{W}.')
-                        length = 8
-                    elif length > 20:
-                        Color.pl('{!} {R}Error: {O}The password length should not more than 20, set password length to {C}maximum length [20]{W}.')
-                        length = 20
-                    remain = length    
+                    while True:
+                        try:
+                            Color.p('{?} {W}Enter the length of the password:{C} ')
+                            length = int(input())
+                            if length < 8 or length > 20:
+                                if length < 8:
+                                    Color.pl('{!} {R}Error: {O}The password length should not less than 8, set password length to {C}minimum length [8]{W}.')
+                                    length = 8
+                                elif length > 20:
+                                    Color.pl('{!} {R}Error: {O}The password length should not more than 20, set password length to {C}maximum length [20]{W}.')
+                                    length = 20
+                            break
+                        except KeyboardInterrupt:
+                            Color.pl('\n{!} {O}Interrupted, Shutting down...{W}')
+                            Configuration.exit_gracefully()
+                        except:
+                            Color.pl('{!} {R}Error: {O}The password length must be an integer.{W}')
+                    remain = length
                     while remain > 1:
                         Color.p('{?} {W}Enter the number of letters (up to {G}%s{W}):{C} ' % remain)
                         while True:
-                            num_letters = int(input())
+                            try:
+                                num_letters = int(input())
+                            except KeyboardInterrupt:
+                                Color.pl('\n{!} {O}Interrupted, Shutting down...{W}')
+                                Configuration.exit_gracefully()
+                            except:
+                                Color.pl('{!} {R}Error: {O}Please enter a valid number.{W}')
+                                Color.p('{?} {W}Enter the number of letters (up to {G}%s{W}):{C} ' % remain)
+                                continue  
                             if num_letters <= remain:
                                 break
                             Color.pl('{!} {R}Error: {O}You can only input up to {G}%s {O}letters. Please try again.{W}' % remain)
@@ -65,7 +81,15 @@ class Generate():
                         Color.p('{?} {W}Enter the number of digits (up to {G}%s{W}):{C} ' % remain)
                         
                         while True:
-                            num_digits = int(input())
+                            try:
+                                num_digits = int(input())
+                            except KeyboardInterrupt:
+                                Color.pl('\n{!} {O}Interrupted, Shutting down...{W}')
+                                Configuration.exit_gracefully()
+                            except:
+                                Color.pl('{!} {R}Error: {O}Please enter a valid number.{W}')
+                                Color.p('{?} {W}Enter the number of digits (up to {G}%s{W}):{C} ' % remain)
+                                continue  
                             if num_digits <= remain:
                                 break
                             Color.pl('{!} {R}Error: {O}You can only input up to {G}%s {O}digits. Please try again.{W}' % remain)
@@ -80,7 +104,15 @@ class Generate():
                         Color.p('{?} {W}Enter the number of symbols (up to {G}%s{W}):{C} ' % remain)
                         
                         while True:
-                            num_symbols = int(input())
+                            try:
+                                num_symbols = int(input())
+                            except KeyboardInterrupt:
+                                Color.pl('\n{!} {O}Interrupted, Shutting down...{W}')
+                                Configuration.exit_gracefully()
+                            except:
+                                Color.pl('{!} {R}Error: {O}Please enter a valid number.{W}')
+                                Color.p('{?} {W}Enter the number of symbols (up to {G}%s{W}):{C} ' % remain)
+                                continue
                             if num_symbols <= remain:
                                 break
                             Color.pl('{!} {R}Error: {O}You can only input up to {G}%s {O}symbols. Please try again.{W}' % remain)
@@ -97,11 +129,24 @@ class Generate():
                     ''' Generate a passphrase'''    
                 elif choice == 'p' or choice == 'P':
                     # prompt the user for the the number of words to include
-                    Color.p('{?} {W}Enter the number of words in the passphrase:{C} ')
-                    num_words = int(input())
-                    if num_words < 1 or num_words > 20:
-                            Color.pl('{!} {R}Error: {O}Please enter a value between 8 to 20.{W}')
-                            Generate.run()
+                    while True:
+                        try:
+                            Color.p('{?} {W}Enter the number of words in the passphrase:{C} ')
+                            num_words = int(input())
+                            if num_words < 2 or num_words > 10:
+                                if num_words < 2:
+                                    Color.pl('{!} {R}Error: {O}The passphrase length should not less than 2, set passphrase length to {C}minimum length [2]{W}.')
+                                    num_words = 2
+                                elif num_words > 10:
+                                    Color.pl('{!} {R}Error: {O}The passphrase length should not more than 20, set passphrase length to {C}maximum length [10]{W}.')
+                                    num_words = 10
+                            break
+                        except KeyboardInterrupt:
+                                Color.pl('\n{!} {O}Interrupted, Shutting down...{W}')
+                                Configuration.exit_gracefully()
+                        except:
+                            Color.pl('{!} {R}Error: {O}The passphrase length must be an integer.{W}')
+                            
                     # generate the passphrase and print it to the console
                     passphrase = Generate.random_passphrase(num_words)
                     Color.pl('{+} Your new passphrase is:{C} ' + passphrase)
@@ -115,20 +160,25 @@ class Generate():
                 Color.p(('{?} {W}Enter your {G}desired word {W}to add in password:{C} '))
                 user_passwd = input()
                 
-                # Prompt the user to enter the desired password length
+                # Prompt the user to enter the desired password length              
                 while True:
                     try:
-                        Color.p(('{?} {W}Enter the desired password length:{C} '))
+                        Color.p('{?} {W}Enter the length of the password:{C} ')
                         passwd_length = int(input())
-                        if passwd_length < 7 or passwd_length > 20:
-                            Color.pl('{!} {R}Error: {O}Please enter a value between 8 to 20.{W}')
-                            continue
+                        if passwd_length < 8 or passwd_length > 20:
+                            if passwd_length < 8:
+                                Color.pl('{!} {R}Error: {O}The password length should not less than 8, set password length to {C}minimum length [8]{W}.')
+                                passwd_length = 8
+                            elif length > 20:
+                                Color.pl('{!} {R}Error: {O}The password length should not more than 20, set password length to {C}maximum length [20]{W}.')
+                                passwd_length = 20
                         break
-                    except ValueError:
+                    except KeyboardInterrupt:
+                        Color.pl('\n{!} {O}Interrupted, Shutting down...{W}')
+                        Configuration.exit_gracefully()
+                    except:
                         Color.pl('{!} {R}Error: {O}The password length must be an integer.{W}')
-                        continue
                 Generate.print_customise_passwords(user_passwd, passwd_length)
-                
             else: # Invalid option
                 Color.pl('{!} {R}Error: {O}Invalid option. Try again.{W}')
                 Generate.run()
@@ -153,7 +203,7 @@ class Generate():
         passwds = []
         count = 0
         Color.pl('{+} {W}Generating password...')
-        Color.pl('{+} {W}Modify {G}desired word {W}or {G}current password {W}if waiting too long...')
+        Color.pl('{+} {W}Exit (Ctrl + c) and Modify {G}desired word {W}or {G}current password {W} if you wait too long...')
         while count < 3:
             passwd = Generate.customise_password(user_passwd, passwd_length)
             strength = zxcvbn(passwd)
@@ -169,14 +219,17 @@ class Generate():
         # Prompt the user to choose a password
         while True:
             try:
-                Color.p(('{+} {W}Enter the number of the password you want to use:{C} '))
+                Color.p(('{+} {W}Enter the option number of the password you want to use:{C} '))
                 choice = int(input())
                 if choice < 1 or choice > 3:
                     Color.pl('{+} {W}Please choose a number between {G}1 {W}and {G}3{W}.')
                 else:
                     break
-            except ValueError:
-                Color.pl('{!} {R}Error: {O}Please enter a valid number.{W}')
+            except KeyboardInterrupt:
+                        Color.pl('\n{!} {O}Interrupted, Shutting down...{W}')
+                        Configuration.exit_gracefully()
+            except:
+                Color.pl('{!} {R}Error: {O}The option number must be an integer.{W}')
 
         # Print the chosen password
         Color.pl('\n{W}----------------------------------- {G}Password Choosen {W}------------------------------------')
@@ -310,8 +363,8 @@ class Generate():
         # if there are more characters required than the sum of letters, digits and symbols
         # then add remaining number of random characters from the pool of possible characters
         if length > num_letters + num_digits + num_symbols:
-            Color.pl('{+} {W}The remaining password length will be {G}auto completed{W} by {G}random character(s){W}.')
             remaining = length - num_letters - num_digits - num_symbols
+            Color.pl('{+} {W}The remaining {C}%i {W}character(s) will be {G}auto completed{W} by {C}random character(s){W}.' % remaining)
             characters += random.sample(string.ascii_letters + string.digits + string.punctuation, remaining)
         # shuffle the list of characters to randomize their order
         random.shuffle(characters)
