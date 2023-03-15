@@ -5,7 +5,7 @@
 # Program Name: target.py
 # Description: Hold information of previous found targets
 # First Written On: 18 February 2023
-# Edited On: 7 March 2023 
+# Edited On: 15 March 2023 
 
 import re
 from util.color import Color
@@ -86,6 +86,10 @@ class Target(object):
         # In this case (len = 0), defaults to WPA (which is the most common)
         if 'WPA' in self.encryption or len(self.encryption) == 0:
             self.encryption = 'WPA'
+        elif 'WEP' in self.encryption:
+            self.encryption = 'WEP'
+        elif 'WPS' in self.encryption:
+            self.encryption = 'WPS'
 
         if len(self.encryption) > 4:
             self.encryption = self.encryption[:4].strip()
@@ -105,7 +109,7 @@ class Target(object):
                 self.essid == 'x00' * self.essid_len or \
                 self.essid.strip() == '':
             # Don't display '\x00...' for hidden ESSIDs
-            self.essid = None  # '(%s)' % self.bssid
+            self.essid = None
             self.essid_known = False
 
         # Will be set to true once this target will be attacked
@@ -196,13 +200,17 @@ class Target(object):
         channel = Color.s(f'{channel_color}{str(self.channel).ljust(3)}')
 
         encryption = self.encryption.ljust(3)
-        if 'WPA' in encryption:
+        if 'WEP' in encryption:
+            encryption = Color.s('{G}%s  ' % encryption)
+        elif 'WPA' in encryption:
             if 'PSK' in self.authentication:
                 encryption = Color.s('{O}%s-P' % encryption)
             elif 'MGT' in self.authentication:
                 encryption = Color.s('{R}%s-E' % encryption)
             else:
                 encryption = Color.s('{O}%s  ' % encryption)
+        else:
+                encryption = Color.s('%s  ' % encryption)
 
         power = f'{str(self.power).ljust(3)}db'
         if self.power > 50:

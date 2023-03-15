@@ -155,7 +155,7 @@ class Airodump():
             for old_target in old_targets:
                 # If the new_target is found in old_target copy attributes from old target
                 if old_target == new_target:
-                    # Identify decloaked targets
+                    # Identify decloaked targets (when the essid in the new target is known but not in the old target)
                     if new_target.essid_known and not old_target.essid_known:
                         # We decloaked a target!
                         new_target.decloaked = True

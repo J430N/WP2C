@@ -6,5 +6,13 @@
     "bssid": "58:D5:6E:A1:21:A6",
     "key": "huatAR777",
     "handshake_file": "hs/handshake_C208_58-D5-6E-A1-21-A6_2023-03-13T21-27-02.cap"
+  },
+  {
+    "type": "WPA",
+    "date": 1678858825,
+    "essid": "OnePlus 8T",
+    "bssid": "7A:6F:4C:1F:F4:58",
+    "key": "tp056181",
+    "handshake_file": "hs/handshake_OnePlus8T_7A-6F-4C-1F-F4-58_2023-03-15T13-39-50.cap"
   }
 ]

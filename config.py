@@ -54,10 +54,10 @@ class Configuration(object):
         cls.print_stack_traces = True # Print stack traces when exceptions occur
         cls.tx_power = 0  # Wifi transmit power (0 is default)
         cls.interface = None # Wireless interface to use
-        cls.num_deauths = 3  # Number of deauth packets to send to each target.
+        cls.num_deauths = 1  # Number of deauth packets to send to each target.
 
         # WPA variables
-        cls.wpa_deauth_timeout = 5  # Wait time between deauths
+        cls.wpa_deauth_timeout = 10  # Wait time between deauths
         cls.wpa_attack_timeout = 300  # Wait time before failing
         cls.wpa_handshake_dir = 'hs'  # Dir to store handshakes
         cls.wpa_strip_handshake = False  # Strip non-handshake packets
