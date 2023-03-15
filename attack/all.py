@@ -57,7 +57,7 @@ class AttackAll(object):
             attacks.append(AttackWPA(target))
 
         if not attacks:
-            Color.pl('{!} {R}Error: {O}Unable to attack: no attacks available')
+            Color.pl('{!} {R}Error: {O}Unable to attack {C}%s {W}. WP2C only support {C}WPA/WPA2-PSK {W}attack.' % target.encryption)
             return True  # Keep attacking other targets (skip)
 
         while attacks:

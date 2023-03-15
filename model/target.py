@@ -201,7 +201,7 @@ class Target(object):
 
         encryption = self.encryption.ljust(3)
         if 'WEP' in encryption:
-            encryption = Color.s('{G}%s  ' % encryption)
+            encryption = Color.s('{B}%s  ' % encryption)
         elif 'WPA' in encryption:
             if 'PSK' in self.authentication:
                 encryption = Color.s('{O}%s-P' % encryption)
