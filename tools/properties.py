@@ -77,9 +77,7 @@ class Properties:
                         
                     Color.p('\n{+} Summary            : ')
                     Color.pl('{C}Found {O}%d{C} devices on the {O}' % Properties.host + Properties.network_ip + '{C} network{W}')
-                        
-                    Color.p('\n{+} Summary            : ')
-                    Color.pl('{C}Found {O}%d{C} devices on the {W}' % Properties.host + Properties.network_ip + '{C} network{W}')
+
             Color.pl('{W}--------------------------------------- {G}Thank You {W}---------------------------------------')
             Configuration.exit_gracefully()
                     

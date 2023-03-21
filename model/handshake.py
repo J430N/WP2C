@@ -101,9 +101,12 @@ class Handshake(object):
 
     def analyze(self):
         """Prints analysis of handshake capfile"""
-        self.divide_bssid_and_essid()
-
-        Handshake.print_pairs(self.aircrack_handshakes(), 'aircrack')
+        try:
+            self.divide_bssid_and_essid()
+            Handshake.print_pairs(self.aircrack_handshakes(), 'aircrack')
+        except ValueError as e:
+                Color.pl('{!} {R}Error: {O}%s{W}' % e)
+                pass
 
     def strip(self, outfile=None):
         """

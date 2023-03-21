@@ -71,48 +71,51 @@ class CrackHelper:
 
         Color.pl('{+} Listing captured handshakes from {C}%s{W}:\n' % os.path.abspath(hs_dir))
         for hs_file in os.listdir(hs_dir):
-            if hs_file.count('_') != 3:
-                continue
+            try:
+                if hs_file.count('_') != 3:
+                    continue
 
-            if cls.is_cracked(hs_file):
-                skipped_cracked_files += 1
-                continue
+                if cls.is_cracked(hs_file):
+                    skipped_cracked_files += 1
+                    continue
 
-            if hs_file.endswith('.cap'):
-                # WPA Handshake
-                hs_type = '4-WAY'
-            else:
-                continue
+                if hs_file.endswith('.cap'):
+                    # WPA Handshake
+                    hs_type = '4-WAY'
+                else:
+                    continue
 
-            name, essid, bssid, date= hs_file.split('_')
-            date = date.rsplit('.', 1)[0]
-            days, hours = date.split('T')
-            hours = hours.replace('-', ':')
-            date = f'{days} {hours}'
+                name, essid, bssid, date= hs_file.split('_')
+                date = date.rsplit('.', 1)[0]
+                days, hours = date.split('T')
+                hours = hours.replace('-', ':')
+                date = f'{days} {hours}'
 
-            if hs_type == '4-WAY':
-                # Patch for essid with " " (zero) or dot "." in name
-                handshakenew = Handshake(os.path.join(hs_dir, hs_file))
-                handshakenew.divide_bssid_and_essid()
-                essid_discovery = handshakenew.essid
+                if hs_type == '4-WAY':
+                    # Patch for essid with " " (zero) or dot "." in name
+                    handshakenew = Handshake(os.path.join(hs_dir, hs_file))
+                    handshakenew.divide_bssid_and_essid()
+                    essid_discovery = handshakenew.essid
 
-                essid = essid if essid_discovery is None else essid_discovery
-            handshake = {
-                'filename': os.path.join(hs_dir, hs_file),
-                'bssid': bssid.replace('-', ':'),
-                'essid': essid,
-                'date': date,
-                'type': hs_type
-            }
+                    essid = essid if essid_discovery is None else essid_discovery
+                handshake = {
+                    'filename': os.path.join(hs_dir, hs_file),
+                    'bssid': bssid.replace('-', ':'),
+                    'essid': essid,
+                    'date': date,
+                    'type': hs_type
+                }
 
-            if hs_file.endswith('.cap'):
-                # WPA Handshake
-                handshake['type'] = '4-WAY'
-            else:
-                continue
+                if hs_file.endswith('.cap'):
+                    # WPA Handshake
+                    handshake['type'] = '4-WAY'
+                else:
+                    continue
 
-            handshakes.append(handshake)
-
+                handshakes.append(handshake)
+            except ValueError as e:
+                Color.pl('{!} {R}Error: {O}%s{W}' % e)
+                pass
         if skipped_cracked_files > 0:
             Color.pl('{!} {O}Skipping %d already cracked files.{W}\n' % skipped_cracked_files)
 
@@ -123,7 +126,7 @@ class CrackHelper:
     def print_handshakes(cls, handshakes):
         # Header
         max_essid_len = max([len(hs['essid']) for hs in handshakes] + [len('ESSID (truncated)')])
-        Color.p('{W}{D}  NUM')
+        Color.p('\n{W}{D}  NUM')
         Color.p('  ' + 'ESSID (truncated)'.ljust(max_essid_len))
         Color.p('  ' + 'BSSID'.ljust(17))
         Color.p('  ' + 'TYPE'.ljust(5))
