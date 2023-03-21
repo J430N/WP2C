@@ -5,10 +5,11 @@
 # Program Name: properties.py
 # Description: Display basic Wi-Fi properties and devices connected to the network
 # First Written On: 2 March 2023
-# Edited On: 9 March 2023
+# Edited On: 21 March 2023
 
 import ipaddress
 import socket
+import requests
 from .iw import Iw
 from util.color import Color
 from config import Configuration
@@ -20,12 +21,25 @@ class Properties:
     # Configuration.initialize(False)
  
     dict_list = []
-    ipv4_add_1 = None
-    ipv4_add_2 = None
+    local_ipv4_add = None
     
     @classmethod
     def run(cls):
-
+        """Run the properties module."""
+        
+        # Get the public IPv4 and IPv6 address
+        try:
+            response = requests.get('https://api.ipify.org')
+            Properties.pub_ipv4_add = response.text
+        except:
+            Properties.pub_ipv4_add = 'N/A'
+  
+        try:
+            response = requests.get('https://api64.ipify.org')
+            Properties.pub_ipv6_add = response.text
+        except:
+            Properties.pub_ipv6_add = 'N/A'
+        
         if not Properties.get_network_info() is False and len(Properties.dict_list) > 0:
             Color.pl('\n{W}------------------------------------{G} Wi-Fi Properties {W}-----------------------------------')
             for dict in cls.dict_list:
@@ -34,13 +48,13 @@ class Properties:
                     Color.pl('{C}%s' % str(value))
 
                 # print out the infomations of the founded devices and the summary               
-                if Properties.ipv4_add_1 is not None:
+                if Properties.local_ipv4_add is not None:
                     Color.pl('\n{+} {W}Discovering devices on the {C}%s {W}network...' % Properties.dict_list[0]['SSID'])               
                     Color.pl('\n{+} {W}Devices Connected to {G}%s {W}:' % Properties.dict_list[0]['SSID'])
                     attribute = ['Name', 'MAC Address', 'Manufacturer']
                     count = 0
                         
-                    for element in Properties.discovery(Properties.ipv4_add_1):
+                    for element in Properties.discovery(Properties.local_ipv4_add):
                         if Properties.valid_ip(element): # Check if the element is a IP address or not
                             Color.p('{+} IP Address         : ')
                             Color.pl('{C}%s' % element)
@@ -63,31 +77,6 @@ class Properties:
                         
                     Color.p('\n{+} Summary            : ')
                     Color.pl('{C}Found {O}%d{C} devices on the {O}' % Properties.host + Properties.network_ip + '{C} network{W}')
-                
-                if Properties.ipv4_add_2 is not None:
-                    attribute = ['Name', 'MAC Address', 'Manufacturer']
-                    count = 0
-                        
-                    for element in Properties.discovery(Properties.ipv4_add_2):
-                        if Properties.valid_ip(element): # Check if the element is a IP address or not
-                            Color.p('{+} IP Address         : ')
-                            Color.pl('{C}%s' % element)
-                            count = 1
-                            continue
-                        elif count == 1:
-                            Color.p('{+} %s               : ' % attribute[0])
-                            Color.pl('{C}%s' % element)
-                            count += 1
-                            continue
-                        elif count == 2:
-                            Color.p('{+} %s        : ' % attribute[1])
-                            Color.pl('{C}%s' % element)
-                            count += 1
-                            continue
-                        elif count == 3:
-                            Color.p('{+} %s       : ' % attribute[2])
-                            Color.pl('{C}%s' % element + '\n')
-                            continue
                         
                     Color.p('\n{+} Summary            : ')
                     Color.pl('{C}Found {O}%d{C} devices on the {W}' % Properties.host + Properties.network_ip + '{C} network{W}')
@@ -205,30 +194,24 @@ class Properties:
     @staticmethod
     def get_network_info_cont(ssid):  
         dict_cont = {}
-            
+        
         # Get WiFi properties using nmcli
         p = Process('nmcli ' + '-p ' + 'connection ' + 'show ' + ssid)
         lines = p.stdout().split('\n')
+        
         for line in lines:    
             if '802-11-wireless-security.key-mgmt' in line:
                 security = line.split(':')[1].strip()
                 dict_cont['Security Type'] = security
                 
             if 'IP4.ADDRESS[1]' in line:
-                Properties.ipv4_add_1 = line.split(':')[1].strip()
-                dict_cont['IPv4 Address[1]'] = Properties.ipv4_add_1
-                
-            if 'IP4.ADDRESS[2]' in line:
-                Properties.ipv4_add_2 = line.split(':')[1].strip()
-                dict_cont['IPv4 Address[2]'] = Properties.ipv4_add_2
+                Properties.local_ipv4_add = line.split(':')[1].strip()
+                dict_cont['Public IPv4'] = Properties.pub_ipv4_add
+                dict_cont['Private IPv4'] = Properties.local_ipv4_add
 
             if 'IP4.DNS[1]' in line:
                 ipv4_dns_1 = line.split(':')[1].strip()
                 dict_cont['IPv4 DNS[1]'] = ipv4_dns_1
-                
-            if 'IP4.DNS[2]' in line:
-                ipv4_dns_2 = line.split(':')[1].strip()
-                dict_cont['IPv4 DNS[2]'] = ipv4_dns_2
                 
             if 'IP4.DOMAIN[1]' in line:
                 ipv4_dom_1 = line.split(':')[1].strip()
@@ -239,12 +222,15 @@ class Properties:
                 dict_cont['IPv4 Domain[2]'] = ipv4_dom_2
                 
             if 'IP6.ADDRESS[1]' in line:
-                ipv6_add_1 = line.split()[1]
-                dict_cont['IPv6 Address[1]'] = ipv6_add_1
+                if Properties.pub_ipv6_add == 'N/A':
+                    ipv6_add_1 = line.split()[1]
+                    dict_cont['Public IPv6'] = ipv6_add_1
+                else:
+                    dict_cont['Public IPv6'] = Properties.pub_ipv6_add
                 
             if 'IP6.ADDRESS[2]' in line:
                 ipv6_add_2 = line.split()[1]
-                dict_cont['IPv6 Address[2]'] = ipv6_add_2
+                dict_cont['Link-local IPv6'] = ipv6_add_2
                 
             if 'IP6.DNS[1]' in line:
                 ipv6_dns_1 = line.split()[1]
