@@ -345,6 +345,5 @@ class Airmon():
                     Color.pl('{!} {O}STDERR> %s{W}' % err)
             else:
                 Color.pl('{+} {W}Started NetworkManager{W} ({C}%s{W})' % cmd)
-                return
         else:
             Color.pl('{!} {R}Cannot start NetworkManager: {O}systemctl{R} not found{W}')
