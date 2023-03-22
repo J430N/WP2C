@@ -8,6 +8,7 @@
 # Edited On: 11 March 2023
 
 import speedtest
+import psutil
 import socket
 import platform
 from util.color import Color
@@ -21,10 +22,17 @@ class Speed:
 
         # Get the device name and operating system information
         device_name = socket.gethostname()
-        os_info = platform.system() + ' ' + platform.release()
-
+        os_info = platform.system() + ' ' + platform.release() 
+        # Get the current network connection type
+        network_type = ""
+        for iface, nic in psutil.net_if_stats().items():
+            if nic.isup and not iface.startswith('lo'):
+                if nic.speed > 0:
+                    network_type = "ethernet"
+                else:
+                    network_type = "wireless"
         # Print the device name and operating system information
-        Color.pl(f'{{+}} {{W}}Testing network speed and ping of the network connected by {{G}}{device_name} {{C}}({os_info}){{W}}...')
+        Color.pl(f'{{+}} {{W}}Testing network speed and ping of the {{G}}{network_type} network {{W}}connected by {{C}}{device_name} ({os_info}){{W}}...')
         # Get the list of servers and choose the best one
         Color.pl('{+} Loading server list...')
         test.get_servers()
