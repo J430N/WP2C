@@ -203,7 +203,7 @@ class Generate():
         passwds = []
         count = 0
         Color.pl('{+} {W}Generating password...')
-        Color.pl('{+} {W}Exit (Ctrl + c) and Modify {G}desired word {W}or {G}current password {W} if you wait too long...')
+        Color.pl('{+} {W}Exit (Ctrl + c) and Modify {G}desired word {W}or {G}current password {W}if you wait too long...')
         while count < 3:
             passwd = Generate.customise_password(user_passwd, passwd_length)
             strength = zxcvbn(passwd)
