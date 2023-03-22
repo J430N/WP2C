@@ -21,8 +21,8 @@ WP2C can generate new Wi-Fi passwords. It creates a random password based on spe
 ### Wi-Fi Properties and Devices Discovery
 WP2C can display Wi-Fi properties, such as SSID, channel, signal strength, and encryption type. It can also list devices connected to the Wi-Fi network, including their MAC addresses and IP addresses.
 
-### Wi-Fi Speed Test
-WP2C can test the Wi-Fi upload and download speed and ping. It provides an easy way to verify the Wi-Fi network's performance.
+### Network Speed Test
+WP2C can test the network upload and download speed and ping time. It provides an easy way to verify the network's performance.
 
 ### Report Generation
 WP2C can generate a report after cracking a Wi-Fi. The report includes the network's SSID, MAC address, encryption type, password and other relevant information.
@@ -69,7 +69,7 @@ sudo python wp2c.py -v
 sudo python wp2c.py --properties
 ```
 
-## Wi-Fi Speed Test
+## Network Speed Test
 ```
 sudo python wp2c.py --speed
 ```

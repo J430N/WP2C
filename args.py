@@ -53,7 +53,7 @@ class Arguments(object):
         glob.add_argument('--speed',
                           action = 'store_true',
                           dest='speed',
-                          help=Color.s('Test current Wi-Fi upload and download speed'))
+                          help=Color.s('Test current network upload and download speed and ping time'))
         
         glob.add_argument('--password',
                           action = 'store_true',

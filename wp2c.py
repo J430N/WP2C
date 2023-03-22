@@ -79,7 +79,7 @@ class WP2C(object):
         elif Configuration.properties:  # Show wifi properties
             Properties.run()  
         
-        elif Configuration.speed: # Test internet speed
+        elif Configuration.speed: # Test network speed
             Speed.run()
 
         elif Configuration.password: # Test password strength
