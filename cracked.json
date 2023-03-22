@@ -1,0 +1,10 @@
+[
+  {
+    "type": "WPA",
+    "date": 1679465120,
+    "essid": "C208",
+    "bssid": "58:D5:6E:A1:21:A6",
+    "key": "huatAR777",
+    "handshake_file": "hs/handshake_C208_58-D5-6E-A1-21-A6_2023-03-13T21-27-02.cap"
+  }
+]

@@ -8,6 +8,8 @@
 # Edited On: 11 March 2023
 
 import speedtest
+import socket
+import platform
 from util.color import Color
 
 
@@ -17,6 +19,12 @@ class Speed:
         # Create a Speedtest object
         test = speedtest.Speedtest(secure=True)
 
+        # Get the device name and operating system information
+        device_name = socket.gethostname()
+        os_info = platform.system() + ' ' + platform.release()
+
+        # Print the device name and operating system information
+        Color.pl(f'{{+}} {{W}}Testing network speed and ping of the network connected by {{G}}{device_name} {{C}}({os_info}){{W}}...')
         # Get the list of servers and choose the best one
         Color.pl('{+} Loading server list...')
         test.get_servers()
