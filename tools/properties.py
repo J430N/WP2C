@@ -9,7 +9,7 @@
 
 import ipaddress
 import socket
-import requests
+import re
 from .iw import Iw
 from util.color import Color
 from config import Configuration
@@ -28,19 +28,6 @@ class Properties:
     def run(cls):
         """Run the properties module."""
         
-        # Get the public IPv4 and IPv6 address
-        try:
-            response = requests.get('https://api.ipify.org')
-            Properties.pub_ipv4_add = response.text
-        except:
-            Properties.pub_ipv4_add = 'N/A'
-  
-        try:
-            response = requests.get('https://api64.ipify.org')
-            Properties.pub_ipv6_add = response.text
-        except:
-            Properties.pub_ipv6_add = 'N/A'
-        
         if not Properties.get_network_info() is False and len(Properties.dict_list) > 0:
             Color.pl('\n{W}------------------------------------{G} Wi-Fi Properties {W}-----------------------------------')
             for dict in cls.dict_list:
@@ -51,7 +38,7 @@ class Properties:
                 # print out the infomations of the founded devices and the summary               
                 if Properties.local_ipv4_add is not None:
                     Color.pl('\n{+} {W}Discovering devices on the {C}%s {W}network...' % Properties.dict_list[0]['SSID'])               
-                    Color.pl('\n{+} {W}Devices Connected to {G}%s {W}:' % Properties.dict_list[0]['SSID'])
+                    Color.pl('\n{+} {W}Devices Connected to {G}%s{W}:' % Properties.dict_list[0]['SSID'])
                     attribute = ['Name', 'MAC Address', 'Manufacturer']
                     count = 0
                         
@@ -142,56 +129,100 @@ class Properties:
                 else:
                     Color.pl('    {!} {O}Invalid target index (%s)... ignoring' % choice)
                     continue
-            
-            # Get WiFi properties from chosen interfaces        
-            for interface in chosen_interfaces:
-                interface = interface.strip()
-  
-                dict = {} # Create a dict for each wireless interface
-                dict['Wireless Interface'] = interface        
+                
+        # Get the public IPv4 and IPv6 address
+        Color.pl('\n{+} {W}Getting network properties information...{W}')
 
-                try:
-                    # Get WiFi properties using iwconfig         
-                    p = Process('iwconfig ' + interface)
-                    lines = p.stdout().split('\n')
-                    for line in lines:
-                        if 'ESSID' in line:
-                            ssid = line.split('ESSID:')[1].split('"')[1]
-                            dict['SSID'] = ssid
-                            
-                        if '802.11' in line:
-                            protocol = line.split()[2]
-                            dict['Protocol'] = protocol
-                            
-                        if 'Frequency' in line:
-                            frequency = line.split('Frequency:')[1].split()[0]
-                            dict['Frequency'] = frequency + ' Ghz'
-                            
-                        if ('Frequendcy' in dict or 'Link Quality' in line or line == lines[-1]):
-                            dict.update(Properties.get_network_info_cont(ssid))
+        Properties.pub_ipv4_add = 'N/A'
+        Properties.pub_ipv6_add = 'N/A'
+        
+        # Try getting IPv4 address using api4.ipify.org
+        try:
+            output = Process(['curl', 'api4.ipify.org'])
+            Properties.pub_ipv4_add = output.stdout().strip()
+        except:
+            pass
+        
+        # # If IPv4 address not found, try using icanhazip.com
+        if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', Properties.pub_ipv4_add):
+            try:
+                output = Process(['curl', '-4', 'icanhazip.com'])
+                Properties.pub_ipv4_add = output.stdout().strip()
+            except:
+                pass
+        
+        # Check if the output is a valid IPv4 address
+        if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', Properties.pub_ipv4_add):
+            Properties.pub_ipv4_add = 'N/A'
+        
+        # Try getting IPv6 address using api6.ipify.org
+        try:
+            output = Process(['curl', 'api6.ipify.org'])
+            Properties.pub_ipv6_add = output.stdout().strip()
+        except:
+            pass
+        
+        # If IPv6 address not found, try using icanhazip.com
+        if not re.match(r'^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$', Properties.pub_ipv6_add):
+            try:
+                output = Process(['curl', '-6', 'icanhazip.com'])
+                Properties.pub_ipv6_add = output.stdout().strip()
+            except:
+                pass
+            
+        # Check if the IPv6 address is valid
+        if not re.match(r'^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$', Properties.pub_ipv6_add):
+            Properties.pub_ipv6_add = 'N/A'    
+            
+        # Get WiFi properties from chosen interfaces        
+        for interface in chosen_interfaces:
+            interface = interface.strip()
+
+            dict = {} # Create a dict for each wireless interface
+            dict['Wireless Interface'] = interface        
+
+            try:
+                # Get WiFi properties using iwconfig         
+                output = Process('iwconfig ' + interface)
+                lines = output.stdout().split('\n')
+                for line in lines:
+                    if 'ESSID' in line:
+                        ssid = line.split('ESSID:')[1].split('"')[1]
+                        dict['SSID'] = ssid
                         
-                        if 'Access Point' in line:
-                            mac = line.split('Access Point:')[1].strip()
-                            dict['MAC Address'] = mac
-                            
-                            oui = ''.join(mac.split(':')[:3]) # Use oui in MAC address to find manufacturer                       
-                            manufacturer = Configuration.manufacturers.get(oui, "")
-                            dict['Manufacturer'] = manufacturer 
-                            
-                        if 'Link Quality' in line:
-                            quality = line.split('Link Quality=')[1].split()[0]
-                            dict['Link Quality'] = quality
-                            
-                        if 'Signal level' in line:
-                            signal_level = line.split('Signal level=')[1].split()[0]
-                            dict['Signal Level'] = signal_level
-                            
-                    Properties.dict_list.append(dict) # Add dict to list
+                    if '802.11' in line:
+                        protocol = line.split()[2]
+                        dict['Protocol'] = protocol
+                        
+                    if 'Frequency' in line:
+                        frequency = line.split('Frequency:')[1].split()[0]
+                        dict['Frequency'] = frequency + ' Ghz'
+                        
+                    if ('Frequendcy' in dict or 'Link Quality' in line or line == lines[-1]):
+                        dict.update(Properties.get_network_info_cont(ssid))
                     
-                except:
-                    Color.pl('{!} {R}Error: {O}Unable to obtain Wi-Fi properties from {R}%s{O} wireless interface{W}' %interface)
-                    Properties.failure = True
-                    continue
+                    if 'Access Point' in line:
+                        mac = line.split('Access Point:')[1].strip()
+                        dict['MAC Address'] = mac
+                        
+                        oui = ''.join(mac.split(':')[:3]) # Use oui in MAC address to find manufacturer                       
+                        manufacturer = Configuration.manufacturers.get(oui, "")
+                        dict['Manufacturer'] = manufacturer 
+                        
+                    if 'Link Quality' in line:
+                        quality = line.split('Link Quality=')[1].split()[0]
+                        dict['Link Quality'] = quality
+                        
+                    if 'Signal level' in line:
+                        signal_level = line.split('Signal level=')[1].split()[0]
+                        dict['Signal Level'] = signal_level
+                        
+                Properties.dict_list.append(dict) # Add dict to list
+                
+            except:
+                Color.pl('{!} {R}Error: {O}Unable to obtain Wi-Fi properties from {R}%s{O} wireless interface{W}' %interface)
+                Properties.failure = True
+                continue
             
 
     @staticmethod
@@ -199,8 +230,8 @@ class Properties:
         dict_cont = {}
         
         # Get WiFi properties using nmcli
-        p = Process('nmcli ' + '-p ' + 'connection ' + 'show ' + ssid)
-        lines = p.stdout().split('\n')
+        output = Process('nmcli ' + '-p ' + 'connection ' + 'show ' + ssid)
+        lines = output.stdout().split('\n')
         
         for line in lines:    
             if '802-11-wireless-security.key-mgmt' in line:
@@ -253,11 +284,11 @@ class Properties:
         # run the nmap -sn command to discover devices on the network
         Properties.network_ip = (f"{network.network_address}/{network.prefixlen}") 
         cmd = ['sudo', 'nmap', '-sn', Properties.network_ip]
-        p = Process(cmd)
+        output = Process(cmd)
 
         # parse the output to extract the list of devices
         devices = []
-        for line in p.stdout().splitlines():
+        for line in output.stdout().splitlines():
             
             if 'Nmap scan report for' in line:
                 info = line.split()
