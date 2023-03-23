@@ -22,6 +22,7 @@ class Properties:
  
     dict_list = []
     local_ipv4_add = None
+    failure = None
     
     @classmethod
     def run(cls):
@@ -82,7 +83,10 @@ class Properties:
             Configuration.exit_gracefully()
                     
         else:
-            Color.pl('{!} {R}Error: WP2C {O}could not find any wireless interfaces{W}')
+            if Properties.failure:
+                Configuration.exit_gracefully()
+                
+            Color.pl('{!} {R}Error: {O}WP2C could not find any wireless interfaces{W}')
             Configuration.exit_gracefully()
 
                     
@@ -185,7 +189,8 @@ class Properties:
                     Properties.dict_list.append(dict) # Add dict to list
                     
                 except:
-                    Color.pl('{!} {R}Error: Unable to obtain Wi-Fi properties from {O}%s{R} wireless interface{W}' %interface)
+                    Color.pl('{!} {R}Error: {O}Unable to obtain Wi-Fi properties from {R}%s{O} wireless interface{W}' %interface)
+                    Properties.failure = True
                     continue
             
 

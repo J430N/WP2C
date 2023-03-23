@@ -5,7 +5,7 @@
 # Program Name: password.py
 # Description: Test user's password strength
 # First Written On: 3 March 2023
-# Edited On: 11 March 2023
+# Edited On: 23 March 2023
 
 import os
 import requests
@@ -235,5 +235,10 @@ class Password:
         sha1password = hashlib.sha1(passwd.encode('utf-8')).hexdigest().upper()
         first5_chars, rest = sha1password[:5], sha1password[5:]
         # passes the first five chars in the funct and receives matching responses
-        response = Password.request_api_data(first5_chars)
-        return Password.password_leak_count(response, rest)
+        try:
+            response = Password.request_api_data(first5_chars)
+            return Password.password_leak_count(response, rest)
+        except:
+            Color.pl('{!} {R}Error: {O}Connection error. Unable to check the new password\'s leaked times. Please check your {R}internet connection {O}and try again.{W}')
+            Color.pl('{W}--------------------------------------- {G}Thank You {W}---------------------------------------')
+            Configuration.exit_gracefully()

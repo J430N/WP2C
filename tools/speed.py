@@ -5,12 +5,13 @@
 # Program Name: speed.py
 # Description: GTest Wi-Fi upload and download speed and ping
 # First Written On: 1 March 2023
-# Edited On: 11 March 2023
+# Edited On: 23 March 2023
 
 import speedtest
 import psutil
 import socket
 import platform
+from config import Configuration
 from util.color import Color
 
 
@@ -18,7 +19,12 @@ class Speed:
 
     def run():
         # Create a Speedtest object
-        test = speedtest.Speedtest(secure=True)
+        try:
+            test = speedtest.Speedtest(secure=True)
+        except:
+            Color.pl('{!} {R}Error: {O}Connection error. Unable to run network speed test. Please check your {R}internet connection {O}and try again.{W}')
+            Configuration.exit_gracefully()
+        
 
         # Get the device name and operating system information
         device_name = socket.gethostname()
@@ -28,9 +34,9 @@ class Speed:
         for iface, nic in psutil.net_if_stats().items():
             if nic.isup and not iface.startswith('lo'):
                 if nic.speed > 0:
-                    network_type = "ethernet"
+                    network_type = "Ethernet"
                 else:
-                    network_type = "wireless"
+                    network_type = "Wireless"
         # Print the device name and operating system information
         Color.pl(f'{{+}} {{W}}Testing network speed and ping of the {{G}}{network_type} network {{W}}connected by {{C}}{device_name} ({os_info}){{W}}...')
         # Get the list of servers and choose the best one
@@ -53,12 +59,13 @@ class Speed:
 
         ping_result = ("%.2f" % test.results.ping)
 
-        # Color.pl the results
-        Color.pl('\n{W}----------------------------------- {G}Speedtest Results {W}-----------------------------------')
+        # Color.pl the results 
+        Color.pl('\n{W}-------------------------- {G}%s Network Speed Test Results {W}--------------------------' % network_type)
         Color.p('{+} Download speed '.ljust(19))
         Color.pl(':{C} %sMb/s' % '{:.2f}'.format(download_result_in_Mb).rjust(1))
         Color.p(f'{{+}} Upload speed '.ljust(19))
         Color.pl(':{C} %sMb/s' % '{:.2f}'.format(upload_result_in_Mb).rjust(1))
         Color.p(f'{{+}} Ping '.ljust(19))
         Color.pl(':{C} %sms' % str(ping_result).rjust(1))
-        Color.pl('{W}-------------------------------------- {G}Thank You {W}----------------------------------------') 
+        Color.pl('{W}-------------------------------------- {G}Thank You {W}----------------------------------------')
+        Configuration.exit_gracefully()
