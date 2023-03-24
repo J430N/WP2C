@@ -5,11 +5,13 @@
 # Program Name: report.py
 # Description: Generate a PDF report after cracking a Wi-Fi network
 # First Written On: 18 March 2023
-# Edited On: 9 March 2023 
+# Edited On: 24 March 2023 
 
 import json
 import time
 import os
+import requests
+import hashlib
 from util.color import Color
 from config import Configuration
 from reportlab.lib.pagesizes import letter
@@ -169,7 +171,15 @@ class Report:
             c.drawString(50, 390-num*20, 'WP2C: No matches found.')
             num += 1
 
-
+        # Check password exposure using Have I Been Pwned API
+        count = Report.pwned_api_check(cracked_data['key']) # pwned
+        if count:
+            c.drawString(50, 390-num*20, 'Have I Been Pwned: %s was found to be leaked %s times.  It is time to change it!' % (cracked_data['key'], count))
+            num += 1
+        else:
+            c.drawString(50, 390-num*20, 'Have I Been Pwned: %s was not found to be leaked. Carry on!' % cracked_data['key'])
+            num += 1
+        
         '''Comments and Recommendations for Weak Password'''
         # Feedback
         no_feedback = True
@@ -226,3 +236,33 @@ class Report:
         # Save the PDF file
         c.save()
         Color.pl(f'{{+}} Report saved to {{G}}{pdf_filename}{{W}}')
+
+    @staticmethod
+    def request_api_data(hash_char):
+        # fetches data from the url and stores it in res
+        res = requests.get('https://api.pwnedpasswords.com/range/'+hash_char)
+        if res.status_code != 200:
+            raise RuntimeError(
+                f'error fetching: {res.status_code}, check the API and try again.')
+        return res
+
+    @staticmethod
+    def password_leak_count(hashes, hash_to_check):
+        # sepetares the hash and count
+        hashes = (line.split(':') for line in hashes.text.splitlines())
+        for h, count in hashes:  # h stores the hash and count stores the number of times it's been cracked
+            if h == hash_to_check:
+                return count
+        return 0
+
+    @staticmethod
+    def pwned_api_check(passwd):
+        # encodes the password in sha1 hash
+        sha1password = hashlib.sha1(passwd.encode('utf-8')).hexdigest().upper()
+        first5_chars, rest = sha1password[:5], sha1password[5:]
+        # passes the first five chars in the funct and receives matching responses
+        try:
+            response = Report.request_api_data(first5_chars)
+            return Report.password_leak_count(response, rest)
+        except:
+            pass
