@@ -94,6 +94,12 @@ class CrackResult(object):
 
         results = sorted([cls.load(item) for item in cracked_targets], key=lambda x: x.date, reverse=True)
         longest_essid = max(len(result.essid or 'ESSID') for result in results)
+        if longest_essid < 5:
+            longest_essid = 5
+        
+        longest_key = max(len(result.key or 'KEY') for result in results)
+        if longest_key < 3:
+            longest_key = 3
 
         # Header
         Color.p('{D} ')
@@ -107,7 +113,7 @@ class CrackResult(object):
         Color.p('  ')
         Color.p('KEY')
         Color.pl('{D}')
-        Color.p(' ' + '-' * (longest_essid + 17 + 19 + 5 + 11 + 12))
+        Color.p(' ' + '-' * (longest_essid + 17 + 19 + 5 + 8 + longest_key))
         Color.pl('{W}')
         # Results
         for result in results:

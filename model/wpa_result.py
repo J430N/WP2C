@@ -37,7 +37,7 @@ class CrackResultWPA(CrackResult):
         self.print_single_line_prefix(longest_essid)
         Color.p('{G}%s{W}' % 'WPA'.ljust(5))
         Color.p('  ')
-        Color.p('Key: {G}%s{W}' % self.key)
+        Color.p('{G}%s{W}' % self.key)
         Color.pl('')
 
     def to_dict(self):
