@@ -67,7 +67,7 @@ class Arguments(object):
         
         glob.add_argument('New wordlist',
                           action = 'store_true',
-                          help=Color.s('Add new wordlist into {C}wordlist {W}folder')) 
+                          help=Color.s('Add new wordlist into {C}wordlist {W}folder directly. ({C}Note: {W}Please make sure the wordlist is in {C}.txt {W}format)'))
                          
     def _add_wpa_args(self, wpa):
         wpa.add_argument('--new',
