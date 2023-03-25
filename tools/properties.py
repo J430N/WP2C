@@ -10,6 +10,7 @@
 import ipaddress
 import socket
 import re
+import subprocess
 from .iw import Iw
 from util.color import Color
 from config import Configuration
@@ -18,12 +19,9 @@ from util.process import Process
 
 class Properties:
     """Get properties of WiFi networks."""
-    # Configuration.initialize(False)
  
     dict_list = []
-    local_ipv4_add = None
-    failure = None
-    
+
     @classmethod
     def run(cls):
         """Run the properties module."""
@@ -135,44 +133,44 @@ class Properties:
 
         Properties.pub_ipv4_add = 'N/A'
         Properties.pub_ipv6_add = 'N/A'
-        
+
         # Try getting IPv4 address using api4.ipify.org
         try:
-            output = Process(['curl', 'api4.ipify.org'])
-            Properties.pub_ipv4_add = output.stdout().strip()
+            output = subprocess.run(['curl', 'api4.ipify.org', '-m', '1'], capture_output=True, text=True, timeout=1)
+            Properties.pub_ipv4_add = output.stdout.strip()
         except:
             pass
-        
-        # # If IPv4 address not found, try using icanhazip.com
+
+        # If IPv4 address not found, try using icanhazip.com
         if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', Properties.pub_ipv4_add):
             try:
-                output = Process(['curl', '-4', 'icanhazip.com'])
-                Properties.pub_ipv4_add = output.stdout().strip()
+                output = subprocess.run(['curl', '-4', 'icanhazip.com', '-m', '1'], capture_output=True, text=True, timeout=1)
+                Properties.pub_ipv4_add = output.stdout.strip()
             except:
                 pass
-        
+
         # Check if the output is a valid IPv4 address
         if not re.match(r'^(\d{1,3}\.){3}\d{1,3}$', Properties.pub_ipv4_add):
             Properties.pub_ipv4_add = 'N/A'
-        
+
         # Try getting IPv6 address using api6.ipify.org
         try:
-            output = Process(['curl', 'api6.ipify.org'])
-            Properties.pub_ipv6_add = output.stdout().strip()
+            output = subprocess.run(['curl', 'api6.ipify.org', '-m', '1'], capture_output=True, text=True, timeout=1)
+            Properties.pub_ipv6_add = output.stdout.strip()
         except:
             pass
-        
+
         # If IPv6 address not found, try using icanhazip.com
         if not re.match(r'^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$', Properties.pub_ipv6_add):
             try:
-                output = Process(['curl', '-6', 'icanhazip.com'])
-                Properties.pub_ipv6_add = output.stdout().strip()
+                output = subprocess.run(['curl', '-6', 'icanhazip.com', '-m', '1'], capture_output=True, text=True, timeout=1)
+                Properties.pub_ipv6_add = output.stdout.strip()
             except:
                 pass
-            
+
         # Check if the IPv6 address is valid
         if not re.match(r'^([0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}$', Properties.pub_ipv6_add):
-            Properties.pub_ipv6_add = 'N/A'    
+            Properties.pub_ipv6_add = 'N/A'
             
         # Get WiFi properties from chosen interfaces        
         for interface in chosen_interfaces:
