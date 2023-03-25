@@ -21,6 +21,8 @@ class Properties:
     """Get properties of WiFi networks."""
  
     dict_list = []
+    local_ipv4_add = None
+    failure = None
 
     @classmethod
     def run(cls):
