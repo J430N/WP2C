@@ -35,6 +35,10 @@ class Report:
         if cracked_data is None:
             raise ValueError("ESSID '{}' not found in cracked data file.".format(essid))
 
+        # Create 'report' folder if it doesn't exist
+        if not os.path.exists('report'):
+            os.makedirs('report')
+    
         # Set the PDF filename based on the Wi-Fi name
         wifi_name = cracked_data['essid'].replace('@', '_')
         pdf_filename = 'report/{}_report.pdf'.format(wifi_name)
