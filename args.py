@@ -37,13 +37,12 @@ class Arguments(object):
         return parser.parse_args() # Reads the command-line arguments and returns an 'args' object containing the values of the parsed arguments.
 
     def _add_global_args(self, glob):
-        glob.add_argument('-v',
-                          '--verbose',
+        glob.add_argument('-vv',
                           action='count',
                           default=0,
                           dest='verbose',
                           help=Color.s(
-                              'Shows additional commands and outputs. Increase verbosity with {C}-vv{W} (default: {G}quiet{W})'))
+                              'Increase verbosity to show additional commands and outputs. (default: {G}quiet{W})'))
         
         glob.add_argument('--properties',
                           action = 'store_true',

@@ -22,29 +22,5 @@
     "bssid": "58:D5:6E:A1:21:A6",
     "key": "7",
     "handshake_file": "hs/handshake_C208_58-D5-6E-A1-21-A6_2023-03-13T21-27-02.cap"
-  },
-  {
-    "type": "WPA",
-    "date": 1679747463,
-    "essid": "OnePlus8T",
-    "bssid": "7A:6F:4C:1F:F4:58",
-    "key": "tp056181",
-    "handshake_file": "hs/handshake_OnePlus8T_7A-6F-4C-1F-F4-58_2023-03-15T13-39-50.cap"
-  },
-  {
-    "type": "WPA",
-    "date": 1679992158,
-    "essid": "C208",
-    "bssid": "58:D5:6E:A1:21:A6",
-    "key": "huatAR777",
-    "handshake_file": "hs/handshake_C208_58-D5-6E-A1-21-A6_2023-03-27T18-49-46.cap"
-  },
-  {
-    "type": "WPA",
-    "date": 1679992218,
-    "essid": "C208",
-    "bssid": "58:D5:6E:A1:21:A6",
-    "key": "huatAR777",
-    "handshake_file": "hs/handshake_C208_58-D5-6E-A1-21-A6_2023-03-27T21-48-32.cap"
   }
 ]
