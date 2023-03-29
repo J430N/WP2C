@@ -75,8 +75,7 @@ class Properties:
                 
             Color.pl('{!} {R}Error: {O}WP2C could not find any wireless interfaces{W}')
             Configuration.exit_gracefully()
-
-                    
+      
     @staticmethod
     def get_network_info():
         

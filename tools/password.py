@@ -209,8 +209,6 @@ class Password:
         else:
             Color.pl('    {+} {G}WP2C{W}   : No matches found.')
 
-        
-
     @staticmethod
     def request_api_data(hash_char):
         # fetches data from the url and stores it in res
