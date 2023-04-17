@@ -169,7 +169,7 @@ class Generate():
                             if passwd_length < 8:
                                 Color.pl('{!} {R}Error: {O}The password length should not less than 8, set password length to {C}minimum length [8]{W}.')
                                 passwd_length = 8
-                            elif length > 20:
+                            elif passwd_length > 20:
                                 Color.pl('{!} {R}Error: {O}The password length should not more than 20, set password length to {C}maximum length [20]{W}.')
                                 passwd_length = 20
                         break

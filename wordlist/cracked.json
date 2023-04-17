@@ -38,13 +38,5 @@
     "bssid": "58:D5:6E:A1:21:A6",
     "key": "huatAR777",
     "handshake_file": "hs/handshake_C208_58-D5-6E-A1-21-A6_2023-04-15T15-20-09.cap"
-  },
-  {
-    "type": "WPA",
-    "date": 1681730065,
-    "essid": "C-20-8",
-    "bssid": "58:D5:6E:A1:21:A6",
-    "key": "huatAR777",
-    "handshake_file": "hs/handshake_C208_58-D5-6E-A1-21-A6_2023-04-17T19-13-46.cap"
   }
 ]
